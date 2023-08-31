@@ -5,7 +5,6 @@ import {
   faBars,
   faChevronDown,
   faChevronUp,
-  faClose,
   faChartColumn,
   faUsers,
   faAddressCard,
@@ -39,9 +38,10 @@ export default function Sidebar({ isSidebarOpen, toggleSidebar }) {
     return (
       <>
         <div className={`sidebar-tab ${isTabActive(name) ? "active" : ""} row`} onClick={() => handleTabClick(name)}>
-          <div className={(isSidebarOpen ? "col-3" : "col-12") + " text-center"}>
-            <FontAwesomeIcon icon={iconName} />
+          <div className={(isSidebarOpen ? "col-3" : "col-12") + " text-center sidebar-icon"}>
+            <FontAwesomeIcon className="" icon={iconName} />
           </div>
+
           {isSidebarOpen && (
             <>
               <div className="col-7">{name}</div>
@@ -49,6 +49,7 @@ export default function Sidebar({ isSidebarOpen, toggleSidebar }) {
             </>
           )}
         </div>
+
         {isTabActive(name) &&
           isSidebarOpen &&
           nestedTabs.map((tabName) => {
@@ -66,18 +67,16 @@ export default function Sidebar({ isSidebarOpen, toggleSidebar }) {
 
   return (
     <>
-      <div className={`${isSidebarOpen ? "sidebar" : "closed"}`}>
-        <div className="row p-0 m-0">
-          {!isSidebarOpen ? (
-            <div className="toggle-btn p-3 text-center" onClick={toggleSidebar}>
-              <FontAwesomeIcon className="text-center" icon={faBars} />
-            </div>
-          ) : (
-            <div className="toggle-btn-open text-right" onClick={toggleSidebar}>
-              <FontAwesomeIcon className="text-center" icon={faClose} />
-            </div>
-          )}
+      {/* top fixed bar */}
+      <div className="top-bar">
+        <div className={`toggle-btn ${isSidebarOpen ? "active" : ""}`} onClick={toggleSidebar}>
+          <FontAwesomeIcon className="text-center" icon={faBars} />
+        </div>
 
+        <div className="heading">{activeTab}</div>
+      </div>
+      <div className={`sidebar ${isSidebarOpen ? "" : "closed"}`}>
+        <div className="row p-0 m-0">
           <SidebarTab name="Profile" iconName={faUser} nestedTabs={["Sales by item 1", "Sales by item 2", "Sales by item 3"]} />
           <SidebarTab name="Reports" iconName={faChartColumn} nestedTabs={["Sales by item 1", "Sales by item 2", "Sales by item 3"]} />
           <SidebarTab name="Customers" iconName={faUsers} nestedTabs={["Sales by item 1", "Sales by item 2"]} />
