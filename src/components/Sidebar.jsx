@@ -1,7 +1,20 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBars, faHome, faChevronDown, faChevronUp, faClose } from "@fortawesome/free-solid-svg-icons";
+import {
+  faBars,
+  faChevronDown,
+  faChevronUp,
+  faClose,
+  faChartColumn,
+  faUsers,
+  faAddressCard,
+  faWarehouse,
+  faCartArrowDown,
+  faStore,
+  faGear,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
 import "./Sidebar.css";
 
 export default function Sidebar({ isSidebarOpen, toggleSidebar }) {
@@ -60,13 +73,19 @@ export default function Sidebar({ isSidebarOpen, toggleSidebar }) {
               <FontAwesomeIcon className="text-center" icon={faBars} />
             </div>
           ) : (
-            <div className="toggle-btn-open p-3 text-right" onClick={toggleSidebar}>
+            <div className="toggle-btn-open text-right" onClick={toggleSidebar}>
               <FontAwesomeIcon className="text-center" icon={faClose} />
             </div>
           )}
 
-          <SidebarTab name="home" iconName={faHome} nestedTabs={["Sales by item 1", "Sales by item 2", "Sales by item 3"]} />
-          <SidebarTab name="profile" iconName={faHome} nestedTabs={["Sales by item 1", "Sales by item 2"]} />
+          <SidebarTab name="Profile" iconName={faUser} nestedTabs={["Sales by item 1", "Sales by item 2", "Sales by item 3"]} />
+          <SidebarTab name="Reports" iconName={faChartColumn} nestedTabs={["Sales by item 1", "Sales by item 2", "Sales by item 3"]} />
+          <SidebarTab name="Customers" iconName={faUsers} nestedTabs={["Sales by item 1", "Sales by item 2"]} />
+          <SidebarTab name="Employees" iconName={faAddressCard} nestedTabs={["Sales by item 1", "Sales by item 2"]} />
+          <SidebarTab name="Inventory Management" iconName={faWarehouse} nestedTabs={["Sales by item 1", "Sales by item 2"]} />
+          <SidebarTab name="Items" iconName={faCartArrowDown} nestedTabs={["Sales by item 1", "Sales by item 2"]} />
+          <SidebarTab name="Online Orders" iconName={faStore} nestedTabs={["Sales by item 1", "Sales by item 2"]} />
+          <SidebarTab name="Settings" iconName={faGear} nestedTabs={["Sales by item 1", "Sales by item 2"]} />
         </div>
       </div>
     </>
