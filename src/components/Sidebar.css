@@ -75,6 +75,7 @@
 }
 
 .top-bar {
+  z-index: 1;
   background-color: #6495c6;
   position: fixed;
   top: 0;

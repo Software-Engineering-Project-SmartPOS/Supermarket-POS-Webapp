@@ -45,7 +45,9 @@ export default function Sidebar({ isSidebarOpen, toggleSidebar }) {
           {isSidebarOpen && (
             <>
               <div className="col-7">{name}</div>
-              <div className="col-2">{isTabActive(name) ? <FontAwesomeIcon icon={faChevronUp} /> : <FontAwesomeIcon icon={faChevronDown} />}</div>
+              {nestedTabs.length > 0 && (
+                <div className="col-2">{isTabActive(name) ? <FontAwesomeIcon icon={faChevronUp} /> : <FontAwesomeIcon icon={faChevronDown} />}</div>
+              )}
             </>
           )}
         </div>

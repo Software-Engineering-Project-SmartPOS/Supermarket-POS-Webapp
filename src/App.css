@@ -2,3 +2,11 @@
 .container {
   width: 100vw;
 }
+
+.view-area {
+  position: relative;
+  padding-left: 110px;
+  padding-top: 60px;
+  font-size: 16px;
+  height: 100vh;
+}
