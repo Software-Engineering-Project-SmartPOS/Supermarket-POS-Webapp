@@ -1,0 +1,83 @@
+/* Sidebar.css */
+/* sidebar is fixed at the right side and scrollable */
+/* sidebar is closed by default */
+/* sidebar is opened when toggle button is clicked */
+/* sidebar is closed when toggle button is clicked again */
+/* sidebar is closed when user clicks outside of sidebar */
+/* scrollbar is shown only when the content is overflowed */
+.sidebar {
+  width: fit-content;
+  height: 100vh;
+  max-width: 300px;
+  background-color: #163656;
+  color: white;
+  transition: width 0.3s ease;
+  font-size: 18px;
+  padding: 0;
+  margin: 0;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  overflow-x: hidden;
+  overflow-y: visible;
+}
+
+.closed {
+  width: 100px;
+  height: 100vh;
+  max-width: 300px;
+  background-color: #163656;
+  color: white;
+  transition: width 0.3s ease;
+  font-size: 18px;
+  padding: 0;
+  margin: 0;
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: 1;
+  overflow-x: hidden;
+
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+}
+
+.toggle-btn-open {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  cursor: pointer;
+}
+
+.sidebar-tab {
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-bottom: 5px;
+  margin-left: 0px;
+  padding: 12px;
+}
+
+.sidebar-tab:hover {
+  background-color: #61798e;
+}
+.sidebar-tab.active {
+  background-color: #507ba1;
+}
+
+.nested-tab {
+  background-color: #184875;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-bottom: 5px;
+  margin-right: 5px;
+}
+
+/* change nested tab color while hovering */
+.nested-tab:hover {
+  background-color: #5b93c5;
+}
+.nested-tab.active {
+  background-color: #5b93c5;
+}
