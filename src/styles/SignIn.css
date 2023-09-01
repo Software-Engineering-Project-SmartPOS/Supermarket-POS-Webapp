@@ -3,3 +3,32 @@
   background-position: top center !important;
   background-image: url("../assets/img/signin.svg");
 }
+
+.user-avatar.large-avatar {
+  border: 2px solid #ffffff;
+  height: 12rem;
+  width: 12rem;
+  min-height: 10rem;
+  min-width: 10rem;
+}
+
+.user-avatar {
+  height: 2.5rem;
+  width: 2.5rem;
+  min-height: 2.5rem;
+  min-width: 2.5rem;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+  border-radius: 50%;
+}
+
+.profile-img {
+  border-radius: 50%;
+  height: 10rem;
+  width: 10rem;
+  min-height: 10rem;
+  min-width: 10rem;
+}
