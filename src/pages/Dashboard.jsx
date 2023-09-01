@@ -1,18 +1,18 @@
 import { useState } from "react";
-import Sidebar from "../components/Sidebar";
+import SideBar from "../components/SideBar";
 
 export default function Dashboard() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSideBarOpen, setIsSideBarOpen] = useState(false);
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
+  const toggleSideBar = () => {
+    setIsSideBarOpen(!isSideBarOpen);
   };
 
   return (
     <div className="container-fluid">
       <div className="row">
-        <Sidebar isSidebarOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-        <div className="view-area" onClick={() => setIsSidebarOpen(false)}></div>
+        <SideBar isSideBarOpen={isSideBarOpen} toggleSideBar={toggleSideBar} />
+        <div className="view-area" onClick={() => setIsSideBarOpen(false)}></div>
       </div>
     </div>
   );

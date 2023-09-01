@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import "../styles/SideBar.css";
 import {
   faBars,
   faChevronDown,
@@ -14,9 +15,9 @@ import {
   faGear,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
-import "./Sidebar.css";
+import PropTypes from "prop-types";
 
-export default function Sidebar({ isSidebarOpen, toggleSidebar }) {
+export default function SideBar({ isSideBarOpen, toggleSideBar }) {
   const [activeTab, setActiveTab] = useState(null);
 
   const isTabActive = (tabName) => {
@@ -29,20 +30,20 @@ export default function Sidebar({ isSidebarOpen, toggleSidebar }) {
     } else {
       setActiveTab(tabName);
     }
-    if (!isSidebarOpen) {
-      toggleSidebar();
+    if (!isSideBarOpen) {
+      toggleSideBar();
     }
   };
 
-  const SidebarTab = ({ name, iconName, nestedTabs }) => {
+  const SideBarTab = ({ name, iconName, nestedTabs }) => {
     return (
       <>
         <div className={`sidebar-tab ${isTabActive(name) ? "active" : ""} row`} onClick={() => handleTabClick(name)}>
-          <div className={(isSidebarOpen ? "col-3" : "col-12") + " text-center sidebar-icon"}>
+          <div className={(isSideBarOpen ? "col-3" : "col-12") + " text-center sidebar-icon"}>
             <FontAwesomeIcon className="" icon={iconName} />
           </div>
 
-          {isSidebarOpen && (
+          {isSideBarOpen && (
             <>
               <div className="col-7">{name}</div>
               {nestedTabs.length > 0 && (
@@ -53,7 +54,7 @@ export default function Sidebar({ isSidebarOpen, toggleSidebar }) {
         </div>
 
         {isTabActive(name) &&
-          isSidebarOpen &&
+          isSideBarOpen &&
           nestedTabs.map((tabName) => {
             return (
               <div key={tabName} className="row py-2 mx-0 nested-tab">
@@ -65,30 +66,35 @@ export default function Sidebar({ isSidebarOpen, toggleSidebar }) {
       </>
     );
   };
-  /* sidebar is closed when user clicks outside of sidebar */
 
   return (
     <>
       {/* top fixed bar */}
       <div className="top-bar">
-        <div className={`toggle-btn ${isSidebarOpen ? "active" : ""}`} onClick={toggleSidebar}>
+        <div className={`toggle-btn ${isSideBarOpen ? "active" : ""}`} onClick={toggleSideBar}>
           <FontAwesomeIcon className="text-center" icon={faBars} />
         </div>
-
         <div className="heading">{activeTab}</div>
       </div>
-      <div className={`sidebar ${isSidebarOpen ? "" : "closed"}`}>
+
+      {/* sidebar tabs */}
+      <div className={`sidebar ${isSideBarOpen ? "" : "closed"}`}>
         <div className="row p-0 m-0">
-          <SidebarTab name="Profile" iconName={faUser} nestedTabs={["Sales by item 1", "Sales by item 2", "Sales by item 3"]} />
-          <SidebarTab name="Reports" iconName={faChartColumn} nestedTabs={["Sales by item 1", "Sales by item 2", "Sales by item 3"]} />
-          <SidebarTab name="Customers" iconName={faUsers} nestedTabs={["Sales by item 1", "Sales by item 2"]} />
-          <SidebarTab name="Employees" iconName={faAddressCard} nestedTabs={["Sales by item 1", "Sales by item 2"]} />
-          <SidebarTab name="Inventory Management" iconName={faWarehouse} nestedTabs={["Sales by item 1", "Sales by item 2"]} />
-          <SidebarTab name="Items" iconName={faCartArrowDown} nestedTabs={["Sales by item 1", "Sales by item 2"]} />
-          <SidebarTab name="Online Orders" iconName={faStore} nestedTabs={["Sales by item 1", "Sales by item 2"]} />
-          <SidebarTab name="Settings" iconName={faGear} nestedTabs={["Sales by item 1", "Sales by item 2"]} />
+          <SideBarTab name="Profile" iconName={faUser} nestedTabs={["Sales by item 1", "Sales by item 2", "Sales by item 3"]} />
+          <SideBarTab name="Reports" iconName={faChartColumn} nestedTabs={["Sales by item 1", "Sales by item 2", "Sales by item 3"]} />
+          <SideBarTab name="Customers" iconName={faUsers} nestedTabs={["Sales by item 1", "Sales by item 2"]} />
+          <SideBarTab name="Employees" iconName={faAddressCard} nestedTabs={["Sales by item 1", "Sales by item 2"]} />
+          <SideBarTab name="Inventory Management" iconName={faWarehouse} nestedTabs={["Sales by item 1", "Sales by item 2"]} />
+          <SideBarTab name="Items" iconName={faCartArrowDown} nestedTabs={["Sales by item 1", "Sales by item 2"]} />
+          <SideBarTab name="Online Orders" iconName={faStore} nestedTabs={["Sales by item 1", "Sales by item 2"]} />
+          <SideBarTab name="Settings" iconName={faGear} nestedTabs={["Sales by item 1", "Sales by item 2"]} />
         </div>
       </div>
     </>
   );
 }
+
+SideBar.propTypes = {
+  isSideBarOpen: PropTypes.bool.isRequired, // isSideBarOpen should be a boolean and is required
+  toggleSideBar: PropTypes.func.isRequired, // toggleSideBar should be a function and is required
+};
