@@ -7,7 +7,7 @@ import "../styles/SignIn.css";
 
 export default function SignIn() {
   return (
-    <main style={{ minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
+    <main className="main">
       <section className="d-flex align-items-center my-5 mt-lg-6 mb-lg-5">
         <Container>
           <Row className="justify-content-center form-bg-image">
@@ -46,7 +46,7 @@ export default function SignIn() {
                       <Card.Link className="small text-end">Lost password?</Card.Link>
                     </div>
                   </Form.Group>
-                  <Button variant="primary" type="submit" className="w-100">
+                  <Button variant="primary" type="submit" className="btn w-100">
                     Sign in
                   </Button>
                 </Form>

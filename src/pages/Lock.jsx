@@ -17,7 +17,7 @@ export default function Lock() {
   };
 
   return (
-    <main style={{ minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
+    <main className="main">
       <section className="vh-lg-100 bg-soft d-flex align-items-center my-4">
         <Container>
           <Row className="justify-content-center form-bg-image" style={{ backgroundImage: `url(${BgImg})` }}>
@@ -43,7 +43,7 @@ export default function Lock() {
                       </InputGroup.Text>
                     </InputGroup>
                   </Form.Group>
-                  <Button variant="primary" type="submit" className="w-100">
+                  <Button variant="primary" type="submit" className="btn w-100">
                     Unlock
                   </Button>
                 </Form>

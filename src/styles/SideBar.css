@@ -85,13 +85,14 @@
   padding: 0;
   flex-direction: row;
   align-items: center;
-  align-content: center;
+  justify-content: space-between;
   font-size: 24px;
 }
 
 .toggle-btn {
   width: 100px;
   text-align: center;
+  color: #10263c;
 }
 
 .toggle-btn.active {
@@ -105,4 +106,17 @@
   100% {
     transform: rotate(180deg);
   }
+}
+
+.lock-btn {
+  width: 100px;
+  text-align: center;
+  color: #10263c;
+}
+
+#tooltip-id .tooltip-inner {
+  background-color: #10263c;
+}
+#tooltip-id .tooltip {
+  background-color: #10263c;
 }

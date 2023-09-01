@@ -1,3 +1,11 @@
+.main {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #10263c;
+}
 .form-bg-image {
   background-repeat: no-repeat !important;
   background-position: top center !important;
@@ -31,4 +39,8 @@
   width: 10rem;
   min-height: 10rem;
   min-width: 10rem;
+}
+
+.btn {
+  background-color: #10263c;
 }
