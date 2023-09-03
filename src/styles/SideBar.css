@@ -28,12 +28,21 @@
   font-size: 24px;
 }
 
+.view-tab {
+  background-color: #184875;
+  border-radius: 10px;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+}
+
 .sidebar-tab {
   border-radius: 10px;
   cursor: pointer;
   transition: background-color 0.3s;
   margin-bottom: 5px;
   margin-left: 0px;
+  margin-right: 0px;
   padding: 12px;
 }
 

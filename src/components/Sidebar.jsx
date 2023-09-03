@@ -2,6 +2,7 @@ import { SiShopify } from "react-icons/si";
 import { MdOutlineShoppingCartCheckout } from "react-icons/md";
 import {
   FaAddressCard,
+  FaAngleRight,
   FaBars,
   FaChartBar,
   FaChevronDown,
@@ -16,7 +17,7 @@ import {
 import { AiFillSetting } from "react-icons/ai";
 import "../styles/SideBar.css";
 import { useSelector, useDispatch } from "react-redux";
-import { toggleSideBar, setActiveTab } from "../state/reducers/sideBar";
+import { toggleSideBar, setSelectedTab, setActiveTab } from "../state/reducers/sideBar";
 import PropTypes from "prop-types";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useNavigate } from "react-router";
@@ -25,49 +26,67 @@ export default function SideBar() {
   const dispatch = useDispatch();
   const isSideBarOpen = useSelector((state) => state.sideBar.isSideBarOpen);
   const activeTab = useSelector((state) => state.sideBar.activeTab);
+  const selectedMainTab = useSelector((state) => state.sideBar.selectedTab.mainTab);
+  const selectedNestedTab = useSelector((state) => state.sideBar.selectedTab.nestedTab);
   const handleToggleSideBar = () => dispatch(toggleSideBar());
   const navigate = useNavigate();
+
+  const isMainTab = (tabName) => {
+    return selectedMainTab === tabName;
+  };
+
   const isTabActive = (tabName) => {
     return activeTab === tabName;
   };
 
   const handleTabClick = (tabName) => {
-    if (activeTab === tabName) {
+    if (!isSideBarOpen) {
+      dispatch(toggleSideBar());
+      dispatch(setActiveTab(tabName));
+    } else if (activeTab === tabName) {
       dispatch(setActiveTab(null));
     } else {
       dispatch(setActiveTab(tabName));
     }
-    if (!isSideBarOpen) {
-      dispatch(toggleSideBar());
-    }
   };
 
-  const SideBarTab = ({ name, reactIcon, nestedTabs }) => {
+  const handleNestedTabClick = (mainTab, nestedTab) => {
+    dispatch(setSelectedTab({ mainTab, nestedTab }));
+    dispatch(toggleSideBar());
+  };
+
+  const SideBarTab = ({ mainTab, reactIcon, nestedTabs }) => {
     return (
-      <>
-        <OverlayTrigger trigger={["hover", "focus"]} placement="right" overlay={!isSideBarOpen ? <Tooltip id="tooltip-id">{name}</Tooltip> : <></>}>
-          <div className={`sidebar-tab ${isTabActive(name) ? "active" : ""} row`} onClick={() => handleTabClick(name)}>
+      <div className={isTabActive(mainTab) ? "view-tab" : "p-0"}>
+        <OverlayTrigger
+          trigger={["hover", "focus"]}
+          placement="right"
+          overlay={!isSideBarOpen ? <Tooltip id="tooltip-id">{mainTab}</Tooltip> : <></>}
+        >
+          <div className={`sidebar-tab ${isMainTab(mainTab) ? "active" : ""} row`} onClick={() => handleTabClick(mainTab)}>
             <div className={(isSideBarOpen ? "col-3" : "col-12") + " text-center sidebar-icon"}>{reactIcon}</div>
 
             {isSideBarOpen && (
               <>
-                <div className="col-7">{name}</div>
-                {nestedTabs.length > 0 && <div className="col-2">{isTabActive(name) ? <FaChevronUp /> : <FaChevronDown />}</div>}
+                <div className="col-7">{mainTab}</div>
+                {nestedTabs.length > 0 && <div className="col-2">{isTabActive(mainTab) && activeTab ? <FaChevronUp /> : <FaChevronDown />}</div>}
               </>
             )}
           </div>
         </OverlayTrigger>
-        {isTabActive(name) &&
+
+        {isTabActive(mainTab) &&
+          activeTab &&
           isSideBarOpen &&
-          nestedTabs.map((tabName) => {
+          nestedTabs.map((nestedTab) => {
             return (
-              <div key={tabName} className="row py-2 mx-0 nested-tab">
+              <div key={nestedTab} className="row py-2 mx-0 nested-tab" onClick={() => handleNestedTabClick(mainTab, nestedTab)}>
                 <div className="col-3 "></div>
-                <div className="col-9 ">{tabName}</div>
+                <div className="col-9 ">{nestedTab}</div>
               </div>
             );
           })}
-      </>
+      </div>
     );
   };
 
@@ -75,11 +94,14 @@ export default function SideBar() {
     <>
       {/* top fixed bar */}
       <div className="top-bar justify-content-between">
-        <div className="d-flex">
+        <div className="d-flex align-items-center">
           <div className={`toggle-btn ${isSideBarOpen ? "active" : ""}`} onClick={handleToggleSideBar}>
             <FaBars />
           </div>
-          <div>{activeTab}</div>
+          <div className="d-flex align-items-center">
+            {selectedMainTab} <FaAngleRight />
+            {selectedNestedTab}
+          </div>
         </div>
 
         <div className="lock-btn">
@@ -102,19 +124,15 @@ export default function SideBar() {
       {/* sidebar tabs */}
       <div className={`sidebar ${isSideBarOpen ? "" : "closed"}`}>
         <div className="row p-0 m-0">
-          <SideBarTab name="Profile" reactIcon={<FaUser />} nestedTabs={["Sales by item 1", "Sales by item 2", "Sales by item 3"]} />
-          <SideBarTab
-            name="Sales"
-            reactIcon={<MdOutlineShoppingCartCheckout />}
-            nestedTabs={["Sales by item 1", "Sales by item 2", "Sales by item 3"]}
-          />
-          <SideBarTab name="Reports" reactIcon={<FaChartBar />} nestedTabs={["Sales by item 1", "Sales by item 2", "Sales by item 3"]} />
-          <SideBarTab name="Customers" reactIcon={<FaUsers />} nestedTabs={["Sales by item 1", "Sales by item 2"]} />
-          <SideBarTab name="Employees" reactIcon={<FaAddressCard />} nestedTabs={["Sales by item 1", "Sales by item 2"]} />
-          <SideBarTab name="Inventory Management" reactIcon={<FaWarehouse />} nestedTabs={["Sales by item 1", "Sales by item 2"]} />
-          <SideBarTab name="Items" reactIcon={<FaShoppingBasket />} nestedTabs={["Sales by item 1", "Sales by item 2"]} />
-          <SideBarTab name="Online Orders" reactIcon={<SiShopify />} nestedTabs={["Sales by item 1", "Sales by item 2"]} />
-          <SideBarTab name="Settings" reactIcon={<AiFillSetting />} iconType="react" nestedTabs={["Sales by item 1", "Sales by item 2"]} />
+          <SideBarTab mainTab="Sales" reactIcon={<MdOutlineShoppingCartCheckout />} nestedTabs={["Checkout", "Receipts", "Refund & Returns"]} />
+          <SideBarTab mainTab="Profile" reactIcon={<FaUser />} nestedTabs={["Sales by item 1", "Sales by item 2", "Sales by item 3"]} />
+          <SideBarTab mainTab="Reports" reactIcon={<FaChartBar />} nestedTabs={["Sales by item 1", "Sales by item 2", "Sales by item 3"]} />
+          <SideBarTab mainTab="Customers" reactIcon={<FaUsers />} nestedTabs={["Sales by item 1", "Sales by item 2"]} />
+          <SideBarTab mainTab="Employees" reactIcon={<FaAddressCard />} nestedTabs={["Sales by item 1", "Sales by item 2"]} />
+          <SideBarTab mainTab="Inventory Management" reactIcon={<FaWarehouse />} nestedTabs={["Sales by item 1", "Sales by item 2"]} />
+          <SideBarTab mainTab="Items" reactIcon={<FaShoppingBasket />} nestedTabs={["Sales by item 1", "Sales by item 2"]} />
+          <SideBarTab mainTab="Online Orders" reactIcon={<SiShopify />} nestedTabs={["Sales by item 1", "Sales by item 2"]} />
+          <SideBarTab mainTab="Settings" reactIcon={<AiFillSetting />} iconType="react" nestedTabs={["Sales by item 1", "Sales by item 2"]} />
         </div>
       </div>
     </>
@@ -122,7 +140,7 @@ export default function SideBar() {
 }
 
 SideBar.propTypes = {
-  name: PropTypes.string,
+  mainTab: PropTypes.string,
   reactIcon: PropTypes.element,
   nestedTabs: PropTypes.array,
 };
