@@ -1,6 +1,3 @@
-/* eslint-disable react/prop-types */
-import { useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { SiShopify } from "react-icons/si";
 import { MdOutlineShoppingCartCheckout } from "react-icons/md";
 import {
@@ -18,32 +15,37 @@ import {
 } from "react-icons/fa";
 import { AiFillSetting } from "react-icons/ai";
 import "../styles/SideBar.css";
-
+import { useSelector, useDispatch } from "react-redux";
+import { toggleSideBar, setActiveTab } from "../state/reducers/sideBar";
 import PropTypes from "prop-types";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { useNavigate } from "react-router";
 
-export default function SideBar({ isSideBarOpen, toggleSideBar }) {
-  const [activeTab, setActiveTab] = useState(null);
-
+export default function SideBar() {
+  const dispatch = useDispatch();
+  const isSideBarOpen = useSelector((state) => state.sideBar.isSideBarOpen);
+  const activeTab = useSelector((state) => state.sideBar.activeTab);
+  const handleToggleSideBar = () => dispatch(toggleSideBar());
+  const navigate = useNavigate();
   const isTabActive = (tabName) => {
     return activeTab === tabName;
   };
 
   const handleTabClick = (tabName) => {
     if (activeTab === tabName) {
-      setActiveTab(null);
+      dispatch(setActiveTab(null));
     } else {
-      setActiveTab(tabName);
+      dispatch(setActiveTab(tabName));
     }
     if (!isSideBarOpen) {
-      toggleSideBar();
+      dispatch(toggleSideBar());
     }
   };
 
   const SideBarTab = ({ name, reactIcon, nestedTabs }) => {
     return (
       <>
-        <OverlayTrigger trigger={"hover"} placement="right" overlay={!isSideBarOpen ? <Tooltip id="tooltip-id">{name}</Tooltip> : <></>}>
+        <OverlayTrigger trigger={["hover", "focus"]} placement="right" overlay={!isSideBarOpen ? <Tooltip id="tooltip-id">{name}</Tooltip> : <></>}>
           <div className={`sidebar-tab ${isTabActive(name) ? "active" : ""} row`} onClick={() => handleTabClick(name)}>
             <div className={(isSideBarOpen ? "col-3" : "col-12") + " text-center sidebar-icon"}>{reactIcon}</div>
 
@@ -74,7 +76,7 @@ export default function SideBar({ isSideBarOpen, toggleSideBar }) {
       {/* top fixed bar */}
       <div className="top-bar justify-content-between">
         <div className="d-flex">
-          <div className={`toggle-btn ${isSideBarOpen ? "active" : ""}`} onClick={toggleSideBar}>
+          <div className={`toggle-btn ${isSideBarOpen ? "active" : ""}`} onClick={handleToggleSideBar}>
             <FaBars />
           </div>
           <div>{activeTab}</div>
@@ -83,13 +85,13 @@ export default function SideBar({ isSideBarOpen, toggleSideBar }) {
         <div className="lock-btn">
           <div className="d-flex justify-content-around">
             <OverlayTrigger placement="bottom" overlay={<Tooltip id="tooltip-id">Lock</Tooltip>}>
-              <span className="my-2">
+              <span className="my-2" onClick={() => navigate("/lock")}>
                 <FaLock />
               </span>
             </OverlayTrigger>
 
             <OverlayTrigger placement="bottom" overlay={<Tooltip id="tooltip-id">Logout</Tooltip>}>
-              <span className="my-2">
+              <span className="my-2" onClick={() => navigate("/signin")}>
                 <FaSignOutAlt />
               </span>
             </OverlayTrigger>
@@ -120,6 +122,7 @@ export default function SideBar({ isSideBarOpen, toggleSideBar }) {
 }
 
 SideBar.propTypes = {
-  isSideBarOpen: PropTypes.bool.isRequired, // isSideBarOpen should be a boolean and is required
-  toggleSideBar: PropTypes.func.isRequired, // toggleSideBar should be a function and is required
+  name: PropTypes.string,
+  reactIcon: PropTypes.element,
+  nestedTabs: PropTypes.array,
 };
