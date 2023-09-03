@@ -5,6 +5,7 @@ import SignUp from "./pages/SignUp";
 import Lock from "./pages/Lock";
 import DashboardLayout from "./layouts/DashBoardLayout";
 import PathConstants from "./constants/pathConstants";
+import PageNotFound from "./pages/PageNotFound";
 function App() {
   // defining routes for the application using react router
   return (
@@ -12,9 +13,11 @@ function App() {
       <Routes>
         <Route path={PathConstants.SIGN_IN} element={<SignIn />} />
         <Route path={PathConstants.SIGN_UP} element={<SignUp />} />
+        <Route path={PathConstants.LOCK} element={<Lock />} />
         <Route path={PathConstants.HOME} element={<DashboardLayout />}>
-          <Route path={PathConstants.LOCK} element={<Lock />} />
+          <Route path={PathConstants.CHECKOUT} element={<div>Checkout</div>} />
         </Route>
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>
   );

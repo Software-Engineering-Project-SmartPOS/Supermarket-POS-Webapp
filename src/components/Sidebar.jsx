@@ -21,6 +21,7 @@ import { toggleSideBar, setSelectedTab, setActiveTab } from "../state/reducers/s
 import PropTypes from "prop-types";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useNavigate } from "react-router";
+import PathConstants from "../constants/pathConstants";
 
 export default function SideBar() {
   const dispatch = useDispatch();
@@ -53,6 +54,10 @@ export default function SideBar() {
   const handleNestedTabClick = (mainTab, nestedTab) => {
     dispatch(setSelectedTab({ mainTab, nestedTab }));
     dispatch(toggleSideBar());
+    // const url = PathConstants[nestedTab.toUpperCase()];
+    const url = `/${mainTab.toLowerCase().replace(" ", "-")}/${nestedTab.toLowerCase().replace(" ", "-")}`;
+    console.log(url);
+    navigate(url);
   };
 
   const SideBarTab = ({ mainTab, reactIcon, nestedTabs }) => {
