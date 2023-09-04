@@ -16,10 +16,7 @@ const Payment = () => {
 
   return (
     <Col>
-      <div className="title">
-        <h2>Payment Method</h2>
-      </div>
-      <Row>
+      <Row className="p-1">
         <span className={`pay-icon ${paymentMethod === "cash" ? "active" : ""}`} onClick={() => handlePaymentMethodClick("cash")}>
           <BsCash />
           <h5>Cash</h5>

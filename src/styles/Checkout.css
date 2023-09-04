@@ -50,3 +50,8 @@
   color: #c8d7e6;
   border: #c8d7e6 solid 1px;
 }
+
+.search-box {
+  background-color: #c8d7e6;
+  padding: 12px;
+}

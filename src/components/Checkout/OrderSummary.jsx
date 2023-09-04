@@ -41,9 +41,9 @@ const OrderSumary = () => {
         </div>
       </div>
 
-      <Button variant="primary">Add Customer</Button>
+      {/* <Button variant="primary">Add Customer</Button>
       <Button variant="success">Add Product Manually</Button>
-      <Button variant="warning">Checkout</Button>
+      <Button variant="warning">Checkout</Button> */}
     </div>
   );
 };
