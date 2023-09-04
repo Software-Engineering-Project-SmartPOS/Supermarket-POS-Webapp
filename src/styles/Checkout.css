@@ -26,3 +26,27 @@
   padding-top: 3px;
   margin: 5px 0;
 }
+
+.pay-icon {
+  background-color: #c8d7e6;
+  color: #002a54;
+  width: 47%;
+  height: fit-content;
+  border: #002a54 1px;
+  border-style: outset;
+  font-size: 32px;
+  text-align: center;
+  margin: 6px;
+}
+
+.pay-icon:hover {
+  background-color: #002a54;
+  color: #c8d7e6;
+  border: #c8d7e6 solid 1px;
+}
+
+.pay-icon.active {
+  background-color: #002a54;
+  color: #c8d7e6;
+  border: #c8d7e6 solid 1px;
+}
