@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faUnlockAlt } from "@fortawesome/free-solid-svg-icons";
-import { Col, Row, Form, Card, Image, Button, Container, InputGroup } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
+import { Col, Row, Form, Image, Button, Container, InputGroup } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import ProfileImg from "../assets/img/profile.jpg";
 import BgImg from "../assets/img/signin.svg";
 import { useState } from "react";
@@ -35,6 +35,7 @@ export default function Lock() {
                 <Formik
                   initialValues={{ password: "" }}
                   onSubmit={(values) => {
+                    console.log(values);
                     navigate(PathConstants.HOME);
                   }}
                 >

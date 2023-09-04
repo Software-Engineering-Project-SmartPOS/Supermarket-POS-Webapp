@@ -1,4 +1,4 @@
-import { Container, Row, Col, Table, Button, Form } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import { TransactionsTable } from "../components/Checkout/TransactionTable";
 import "../styles/Checkout.css";
 import OrderSumary from "../components/Checkout/OrderSummary";

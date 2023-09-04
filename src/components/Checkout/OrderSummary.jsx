@@ -1,4 +1,3 @@
-import { Container, Row, Col, Table, Button, Form } from "react-bootstrap";
 import { TbDiscount2 } from "react-icons/tb";
 import { BsCashCoin } from "react-icons/bs";
 const OrderSumary = () => {

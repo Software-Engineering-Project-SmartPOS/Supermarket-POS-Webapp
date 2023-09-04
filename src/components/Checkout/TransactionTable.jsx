@@ -1,20 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faAngleDown,
-  faAngleUp,
-  faArrowDown,
-  faArrowUp,
-  faEdit,
-  faEllipsisH,
-  faExternalLinkAlt,
-  faEye,
-  faTrashAlt,
-} from "@fortawesome/free-solid-svg-icons";
-import { Col, Row, Nav, Card, Image, Button, Table, Dropdown, ProgressBar, Pagination, ButtonGroup } from "react-bootstrap";
-import moment from "moment-timezone";
-import { Link } from "react-router-dom";
+import { faEdit, faEllipsisH, faEye, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { Card, Button, Table, Dropdown, ButtonGroup } from "react-bootstrap";
+import PropTypes from "prop-types";
 
-export const TransactionsTable = () => {
+export function TransactionsTable() {
   const transactions = [
     {
       productName: "Product A",
@@ -179,11 +168,8 @@ export const TransactionsTable = () => {
     // Add more transactions as needed
   ];
 
-  const totalTransactions = transactions.length;
-
   const TableRow = (props) => {
     const { productName, unitPrice, quantity, discount, subtotal, index } = props;
-    const statusVariant = status === "Paid" ? "success" : status === "Due" ? "warning" : status === "Canceled" ? "danger" : "primary";
 
     return (
       <tr>
@@ -230,6 +216,15 @@ export const TransactionsTable = () => {
     );
   };
 
+  TableRow.propTypes = {
+    productName: PropTypes.string.isRequired,
+    unitPrice: PropTypes.number.isRequired,
+    quantity: PropTypes.number.isRequired,
+    discount: PropTypes.number.isRequired,
+    subtotal: PropTypes.number.isRequired,
+    index: PropTypes.number.isRequired,
+  };
+
   return (
     <>
       <div className="title">
@@ -238,7 +233,7 @@ export const TransactionsTable = () => {
       <Card border="light" className="table-responsive shadow table-view">
         <Card.Body className="pt-0">
           <Table hover className="align-items-center">
-            <thead>
+            <thead className="table-head">
               <tr>
                 <th className="border-bottom">#</th>
                 <th className="border-bottom">Product Name</th>
@@ -259,4 +254,4 @@ export const TransactionsTable = () => {
       </Card>
     </>
   );
-};
+}

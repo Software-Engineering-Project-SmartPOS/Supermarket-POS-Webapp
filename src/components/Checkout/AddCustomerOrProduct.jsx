@@ -1,7 +1,7 @@
 import { BiUserCircle } from "react-icons/bi";
 import { FaShoppingBasket } from "react-icons/fa";
 import { GrClose } from "react-icons/gr";
-import React, { useState } from "react"; // Import React and useState
+import { useState } from "react"; // Import React and useState
 import ReactSearchBox from "react-search-box";
 import ProfileImg from "../../assets/img/profile.jpg";
 
