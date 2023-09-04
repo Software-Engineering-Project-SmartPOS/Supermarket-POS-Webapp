@@ -56,7 +56,7 @@ export default function SignIn() {
                           <Card.Link className="small text-end">Lost password?</Card.Link>
                         </div>
                       </Form.Group>
-                      <Button variant="primary" type="submit" className="btn w-100">
+                      <Button variant="primary" type="submit" className="button w-100">
                         Sign in
                       </Button>
                     </Form>

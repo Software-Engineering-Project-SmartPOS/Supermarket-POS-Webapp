@@ -68,7 +68,7 @@ export default function SignUp() {
                         </FormCheck.Label>
                       </FormCheck>
 
-                      <Button variant="primary" type="submit" className="btn w-100">
+                      <Button variant="primary" type="submit" className="button w-100">
                         Sign up
                       </Button>
                     </Form>

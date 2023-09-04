@@ -3,8 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   isSideBarOpen: false,
   selectedTab: {
-    mainTab: "",
-    nestedTab: "",
+    mainTab: "Sales",
+    nestedTab: "Checkout",
   },
   activeTab: null,
 };

@@ -5,6 +5,7 @@
 /* sidebar is closed when toggle button is clicked again */
 /* sidebar is closed when user clicks outside of sidebar */
 /* scrollbar is shown only when the content is overflowed */
+
 .sidebar {
   width: 300px;
   height: 100vh;

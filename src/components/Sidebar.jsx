@@ -54,9 +54,7 @@ export default function SideBar() {
   const handleNestedTabClick = (mainTab, nestedTab) => {
     dispatch(setSelectedTab({ mainTab, nestedTab }));
     dispatch(toggleSideBar());
-    // const url = PathConstants[nestedTab.toUpperCase()];
-    const url = `/${mainTab.toLowerCase().replace(" ", "-")}/${nestedTab.toLowerCase().replace(" ", "-")}`;
-    console.log(url);
+    const url = PathConstants[nestedTab.toUpperCase()];
     navigate(url);
   };
 

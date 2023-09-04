@@ -52,7 +52,7 @@ export default function Lock() {
                           </InputGroup.Text>
                         </InputGroup>
                       </Form.Group>
-                      <Button variant="primary" type="submit" className="btn w-100">
+                      <Button variant="primary" type="submit" className="button w-100">
                         Unlock
                       </Button>
                     </Form>
