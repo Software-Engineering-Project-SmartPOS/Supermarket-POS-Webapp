@@ -34,6 +34,12 @@ const Payment = () => {
           <h5>Online Payment</h5>
         </span>
       </Row>
+      {/* full width checkout button */}
+      <Row className="p-2">
+        <Button variant="success" size="lg" block disabled={!paymentMethod}>
+          {paymentMethod ? `Checkout` : "Select Payment Method"}
+        </Button>
+      </Row>
     </Col>
   );
 };

@@ -7,7 +7,7 @@ import AddCustomerOrProduct from "../components/Checkout/AddCustomerOrProduct";
 
 const Checkout = () => {
   return (
-    <Container>
+    <Container fluid>
       <Row>
         <Col md={8}>
           <TransactionsTable />
