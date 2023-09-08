@@ -7,6 +7,7 @@ import DashboardLayout from "./layouts/DashBoardLayout";
 import PathConstants from "./constants/pathConstants";
 import PageNotFound from "./pages/PageNotFound";
 import Checkout from "./pages/Checkout";
+
 function App() {
   // defining routes for the application using react router
   return (

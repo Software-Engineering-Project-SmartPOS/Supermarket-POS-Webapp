@@ -1,13 +1,20 @@
 import { BiUserCircle } from "react-icons/bi";
 import { FaShoppingBasket } from "react-icons/fa";
 import { GrClose } from "react-icons/gr";
-import { useState } from "react"; // Import React and useState
+import { useEffect, useState } from "react"; // Import React and useState
 import ReactSearchBox from "react-search-box";
 import ProfileImg from "../../assets/img/profile.jpg";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCustomers } from "../../state/reducers/customer";
 
 function AddCustomerOrProduct() {
-  // State to keep track of the selected customer
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchCustomers());
+  }, []);
+
   const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const { customers, loading, error } = useSelector((state) => state.customer);
 
   // Function to handle customer selection
   const handleCustomerSelect = (record) => {
@@ -38,31 +45,31 @@ function AddCustomerOrProduct() {
           <div className="search-box">
             <ReactSearchBox
               placeholder="Search Customers"
-              data={[
-                {
-                  key: "john",
-                  value: "John Doe",
-                },
-                {
-                  key: "jane",
-                  value: "Jane Doe",
-                },
-                {
-                  key: "mary",
-                  value: "Mary Phillips",
-                },
-                {
-                  key: "robert",
-                  value: "Robert",
-                },
-                {
-                  key: "karius",
-                  value: "Karius",
-                },
-              ]}
+              // data={[
+              //   {
+              //     key: "john",
+              //     value: "John Doe",
+              //   },
+              //   {
+              //     key: "jane",
+              //     value: "Jane Doe",
+              //   },
+              //   {
+              //     key: "mary",
+              //     value: "Mary Phillips",
+              //   },
+              //   {
+              //     key: "robert",
+              //     value: "Robert",
+              //   },
+              //   {
+              //     key: "karius",
+              //     value: "Karius",
+              //   },
+              // ]}
               onSelect={handleCustomerSelect}
               onFocus={() => {
-                console.log("This function is called when is focussed");
+                // console.log("This function is called when is focussed");
               }}
               onChange={(value) => console.log(value)}
               autoFocus

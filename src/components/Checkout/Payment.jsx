@@ -4,6 +4,7 @@ import { BsCash, BsFillCreditCardFill, BsGiftFill } from "react-icons/bs";
 import { MdBookOnline } from "react-icons/md";
 import PaymentModal from "./PaymentModal";
 import GiftCardModal from "./GiftCardModal";
+import DeleteModal from "./DeleteModal";
 const Payment = () => {
   const [paymentMethod, setPaymentMethod] = useState();
   const [showModal, setShowModal] = useState(false);
@@ -35,6 +36,11 @@ const Payment = () => {
     setShowModal(false);
   };
 
+  const handleDelete = () => {
+    setPaymentMethod("");
+    setShowModal(true);
+  };
+
   return (
     <Col>
       <Row className="p-1">
@@ -57,7 +63,7 @@ const Payment = () => {
       </Row>
       {/* full width checkout button */}
       <Row className="p-2">
-        <Button variant="danger" size="lg">
+        <Button variant="danger" size="lg" onClick={handleDelete}>
           Delete
         </Button>
       </Row>
@@ -66,8 +72,9 @@ const Payment = () => {
           {paymentMethod ? `Charge` : "Select Payment Method"}
         </Button>
       </Row>
-      <PaymentModal show={showModal} onHide={handleModalClose} onCharge={handleChargeConfirm} />
-      <GiftCardModal show={showModal} onHide={handleModalClose} onCharge={handleChargeConfirm} />
+      {paymentMethod === "cash" && <PaymentModal show={showModal} onHide={handleModalClose} onCharge={handleChargeConfirm} />}
+      {paymentMethod === "gift" && <GiftCardModal show={showModal} onHide={handleModalClose} onCharge={handleChargeConfirm} />}
+      {paymentMethod === "" && <DeleteModal show={showModal} onHide={handleModalClose} onCharge={handleChargeConfirm} />}
     </Col>
   );
 };
