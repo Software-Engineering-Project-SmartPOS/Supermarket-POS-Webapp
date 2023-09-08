@@ -2,17 +2,37 @@ import { useState } from "react";
 import { Row, Col, Button } from "react-bootstrap";
 import { BsCash, BsFillCreditCardFill, BsGiftFill } from "react-icons/bs";
 import { MdBookOnline } from "react-icons/md";
-
+import PaymentModal from "./PaymentModal";
+import GiftCardModal from "./GiftCardModal";
 const Payment = () => {
   const [paymentMethod, setPaymentMethod] = useState();
-  const handlePaymentMethodClick = (method) => {
-    // Handle the selected payment method (e.g., Cash, Card, Gift Card, Online Payment)
+  const [showModal, setShowModal] = useState(false);
+  const [amountReceived, setAmountReceived] = useState("");
 
+  const handlePaymentMethodClick = (method) => {
     if (paymentMethod === method) {
       setPaymentMethod("");
     } else {
       setPaymentMethod(method);
     }
+  };
+
+  const handleChargeClick = () => {
+    setShowModal(true);
+  };
+
+  const handleModalClose = () => {
+    setShowModal(false);
+  };
+
+  const handleAmountReceivedChange = (event) => {
+    setAmountReceived(event.target.value);
+  };
+
+  const handleChargeConfirm = (amount) => {
+    // Perform the charge operation here and use the "amount" parameter
+    // For now, just close the modal
+    setShowModal(false);
   };
 
   return (
@@ -37,10 +57,17 @@ const Payment = () => {
       </Row>
       {/* full width checkout button */}
       <Row className="p-2">
-        <Button variant="success" size="lg" disabled={!paymentMethod}>
-          {paymentMethod ? `Checkout` : "Select Payment Method"}
+        <Button variant="danger" size="lg">
+          Delete
         </Button>
       </Row>
+      <Row className="p-2">
+        <Button variant="success" size="lg" disabled={!paymentMethod} onClick={handleChargeClick}>
+          {paymentMethod ? `Charge` : "Select Payment Method"}
+        </Button>
+      </Row>
+      <PaymentModal show={showModal} onHide={handleModalClose} onCharge={handleChargeConfirm} />
+      <GiftCardModal show={showModal} onHide={handleModalClose} onCharge={handleChargeConfirm} />
     </Col>
   );
 };
