@@ -8,7 +8,7 @@ const Receipts = () => {
   // Sample data for past receipts
   const [receipts, setReceipts] = useState([
     {
-      id: 1,
+      id: 111,
       shop: { name: "Keels-Moratuws", address: "Moratuwa", phoneNumber: "011-2345678" },
       cashier: "Kobin",
       date: "2021-09-01",
@@ -20,7 +20,7 @@ const Receipts = () => {
       ],
     },
     {
-      id: 2,
+      id: 202,
       shop: { name: "SuperMart", address: "Colombo", phoneNumber: "011-9876543" },
       cashier: "Sara",
       date: "2021-09-05",
@@ -32,7 +32,7 @@ const Receipts = () => {
       ],
     },
     {
-      id: 3,
+      id: 300,
       shop: { name: "FreshGrocery", address: "Galle", phoneNumber: "091-1234567" },
       cashier: "David",
       date: "2021-09-10",
@@ -84,8 +84,8 @@ const Receipts = () => {
           <div className="search-box">
             <ReactSearchBox
               placeholder="Search Receipts"
-              data={[]}
-              onSelect={handleReceiptSelect}
+              data={receipts.map((receipt) => ({ key: receipt.id, value: receipt.id, obj: receipt }))}
+              onSelect={(data) => handleReceiptSelect(data.item.obj)}
               onFocus={() => {
                 // console.log("This function is called when is focussed");
               }}

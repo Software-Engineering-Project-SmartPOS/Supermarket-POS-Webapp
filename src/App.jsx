@@ -9,6 +9,7 @@ import PageNotFound from "./pages/PageNotFound";
 import Checkout from "./pages/sales/Checkout";
 import Refund from "./components/Receipts/Refund";
 import Receipts from "./pages/Sales/Receipts";
+import Customer from "./pages/Customer";
 
 function App() {
   // defining routes for the application using react router
@@ -22,6 +23,7 @@ function App() {
           <Route path={PathConstants.CHECKOUT} element={<Checkout />} />
           <Route path={PathConstants.RECEIPTS} element={<Receipts />} />
           <Route path={PathConstants.REFUND} element={<Refund />} />
+          <Route path={PathConstants.ADD_CUSTOMER} element={<Customer />} />
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>
