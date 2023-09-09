@@ -30,6 +30,16 @@ const CustomerList = () => {
       totalSpent: 400,
       pointsBalance: 80,
     },
+    {
+      id: 3,
+      name: "Jane Smith",
+      email: "janesmith@example.com",
+      firstVisitDate: "2023-02-15",
+      lastVisitDate: "2023-08-28",
+      totalVisits: 8,
+      totalSpent: 400,
+      pointsBalance: 80,
+    },
     // Add more customer data as needed
   ];
 
@@ -53,11 +63,16 @@ const CustomerList = () => {
   };
   return (
     <Container>
-      <h2>Customer List</h2>
-      <Form.Group>
-        <Form.Control type="text" placeholder="Search by name or email" value={searchTerm} onChange={handleSearch} />
-      </Form.Group>
-      <Table striped bordered hover>
+      <div className="title">
+        <h3>Customer List</h3>
+      </div>
+      <div className="search-box">
+        <Form.Group>
+          <Form.Control type="text" placeholder="Search by name or email" value={searchTerm} onChange={handleSearch} />
+        </Form.Group>
+      </div>
+
+      <Table responsive hover>
         <thead>
           <tr>
             <th>#</th>

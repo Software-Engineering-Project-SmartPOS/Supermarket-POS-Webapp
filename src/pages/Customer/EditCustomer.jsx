@@ -62,7 +62,7 @@ export default function EditCustomer() {
                   navigate("/" + PathConstants.CUSTOMER_LIST);
                 }}
               >
-                {({ handleSubmit, handleChange, errors, touched }) => (
+                {({ handleSubmit, handleChange, values, errors, touched }) => (
                   <Form className="mt-4" onSubmit={handleSubmit}>
                     <Row>
                       <Col xs={12} lg={6}>
@@ -79,7 +79,7 @@ export default function EditCustomer() {
                               placeholder="Enter customer name"
                               name="name"
                               onChange={handleChange}
-                              value={customerData.name}
+                              value={values.name}
                             />
                           </InputGroup>
                           {touched.name && errors.name && <div className="text-danger">{errors.name}</div>}
@@ -99,7 +99,7 @@ export default function EditCustomer() {
                               placeholder="example@company.com"
                               name="email"
                               onChange={handleChange}
-                              value={customerData.email}
+                              value={values.email}
                             />
                           </InputGroup>
                           {touched.email && errors.email && <div className="text-danger">{errors.email}</div>}
@@ -119,7 +119,7 @@ export default function EditCustomer() {
                               placeholder="Enter customer telephone"
                               name="telephone"
                               onChange={handleChange}
-                              value={customerData.telephone}
+                              value={values.telephone}
                             />
                           </InputGroup>
                           {touched.telephone && errors.telephone && <div className="text-danger">{errors.telephone}</div>}
@@ -133,7 +133,7 @@ export default function EditCustomer() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faUsers} />
                             </InputGroup.Text>
-                            <Form.Control as="select" required name="customer_type" onChange={handleChange} value={customerData.customer_type}>
+                            <Form.Control as="select" required name="customer_type" onChange={handleChange} value={values.customer_type}>
                               <option value="">Select customer type</option>
                               <option value="1">Type 1</option>
                               <option value="2">Type 2</option>
@@ -153,7 +153,7 @@ export default function EditCustomer() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faBuilding} />
                             </InputGroup.Text>
-                            <Form.Control as="select" required name="loyalty_program" onChange={handleChange} value={customerData.loyalty_program}>
+                            <Form.Control as="select" required name="loyalty_program" onChange={handleChange} value={values.loyalty_program}>
                               <option value="">Select loyalty program</option>
                               {loyaltyPrograms.map((program, index) => (
                                 <option key={index} value={program}>
@@ -179,7 +179,7 @@ export default function EditCustomer() {
                               placeholder="Enter customer address"
                               name="address"
                               onChange={handleChange}
-                              value={customerData.address}
+                              value={values.address}
                             />
                           </InputGroup>
                           {touched.address && errors.address && <div className="text-danger">{errors.address}</div>}
@@ -193,14 +193,7 @@ export default function EditCustomer() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faMapMarker} />
                             </InputGroup.Text>
-                            <Form.Control
-                              required
-                              type="text"
-                              placeholder="Enter city"
-                              name="city"
-                              onChange={handleChange}
-                              value={customerData.city}
-                            />
+                            <Form.Control required type="text" placeholder="Enter city" name="city" onChange={handleChange} value={values.city} />
                           </InputGroup>
                           {touched.city && errors.city && <div className="text-danger">{errors.city}</div>}
                         </Form.Group>
@@ -219,7 +212,7 @@ export default function EditCustomer() {
                               placeholder="Enter district"
                               name="district"
                               onChange={handleChange}
-                              value={customerData.district}
+                              value={values.district}
                             />
                           </InputGroup>
                           {touched.district && errors.district && <div className="text-danger">{errors.district}</div>}
@@ -238,8 +231,8 @@ export default function EditCustomer() {
                               type="text"
                               placeholder="Enter postal code"
                               name="postal_code"
-                              onChange={handleChange}
-                              value={customerData.postal_code}
+                              onChange={values.postal_code}
+                              value={values.postal_code}
                             />
                           </InputGroup>
                           {touched.postal_code && errors.postal_code && <div className="text-danger">{errors.postal_code}</div>}

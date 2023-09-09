@@ -9,9 +9,9 @@ import PageNotFound from "./pages/PageNotFound";
 import Checkout from "./pages/sales/Checkout";
 import Refund from "./components/Receipts/Refund";
 import Receipts from "./pages/Sales/Receipts";
-import Customer from "./pages/Customer";
-import CustomerList from "./components/Customer/CustomerList";
-import EditCustomer from "./components/Customer/EditCustomer";
+import CustomerList from "./pages/Customer/CustomerList";
+import EditCustomer from "./pages/Customer/EditCustomer";
+import AddCustomer from "./pages/Customer/AddCustomer";
 
 function App() {
   // defining routes for the application using react router
@@ -25,7 +25,7 @@ function App() {
           <Route path={PathConstants.CHECKOUT} element={<Checkout />} />
           <Route path={PathConstants.RECEIPTS} element={<Receipts />} />
           <Route path={PathConstants.REFUND} element={<Refund />} />
-          <Route path={PathConstants.ADD_CUSTOMER} element={<Customer />} />
+          <Route path={PathConstants.ADD_CUSTOMER} element={<AddCustomer />} />
           <Route path={PathConstants.CUSTOMER_LIST} element={<CustomerList />} />
           <Route path={PathConstants.EDIT_CUSTOMER} element={<EditCustomer />} />
         </Route>
