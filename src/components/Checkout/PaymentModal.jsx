@@ -12,37 +12,40 @@ const PaymentModal = ({ show, onHide, onCharge }) => {
   };
 
   return (
-    <div className={`modal fade ${show ? "show" : ""}`} style={{ display: show ? "block" : "none" }}>
-      <div className="modal-dialog modal-dialog-centered">
-        <div className="modal-content">
-          <div className="modal-header">
-            <h5 className="modal-title">Enter Amount Received</h5>
-            <button type="button" className="btn-close" onClick={onHide} />
-          </div>
-          <div className="modal-body">
-            <div className="form-group">
-              <label htmlFor="amountReceived">Amount Received</label>
-              <input
-                type="number"
-                className="form-control"
-                id="amountReceived"
-                placeholder="Enter amount"
-                value={amountReceived}
-                onChange={handleAmountReceivedChange}
-              />
+    <>
+      <div className={`modal fade ${show ? "show" : ""}`} style={{ display: show ? "block" : "none" }}>
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Enter Amount Received</h5>
+              <button type="button" className="btn-close" onClick={onHide} />
             </div>
-          </div>
-          <div className="modal-footer">
-            <button type="button" className="btn btn-secondary" onClick={onHide}>
-              Cancel
-            </button>
-            <button type="button" className="btn btn-success" onClick={handleChargeConfirm}>
-              Charge
-            </button>
+            <div className="modal-body">
+              <div className="form-group">
+                <label htmlFor="amountReceived">Amount Received</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  id="amountReceived"
+                  placeholder="Enter amount"
+                  value={amountReceived}
+                  onChange={handleAmountReceivedChange}
+                />
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-secondary" onClick={onHide}>
+                Cancel
+              </button>
+              <button type="button" className="btn btn-success" onClick={handleChargeConfirm}>
+                Charge
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      {show && <div className="modal-backdrop fade show"></div>}
+    </>
   );
 };
 

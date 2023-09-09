@@ -1,8 +1,15 @@
-function Receipt({ selectedReceipt }) {
+function Receipt({ selectedReceipt, handleRefund }) {
   return (
-    <div>
+    <div className="card shadow-sm p-2">
       {/* Shop Details */}
-      <h2>Shop Details</h2>
+      <div className="d-flex justify-content-between gap-2">
+        <span>
+          <h4>Shop Details</h4>
+        </span>
+        <button type="button" name="" id="" className="btn btn-success" onClick={handleRefund}>
+          Refund
+        </button>
+      </div>
       <p>Supermarket Name: {selectedReceipt.shop.name}</p>
       <p>Store Address: {selectedReceipt.shop.address}</p>
       <p>Store Phone Number: {selectedReceipt.shop.phoneNumber}</p>
@@ -10,14 +17,14 @@ function Receipt({ selectedReceipt }) {
       <hr />
 
       {/* Cashier and Billing Timestamp */}
-      <h3>Cashier: {selectedReceipt.cashier}</h3>
+      <h4>Cashier: {selectedReceipt.cashier}</h4>
       <p>Billing Timestamp: {selectedReceipt.date}</p>
 
       <hr />
 
       {/* Items List */}
       <h4>Items:</h4>
-      <table className="table">
+      <table className="table table-striped">
         <thead>
           <tr>
             <th>Name</th>

@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Container, Row, Col, Form } from "react-bootstrap";
 import { FaReceipt } from "react-icons/fa";
 import ReactSearchBox from "react-search-box";
-import Receipt from "../components/Receipts/Receipt";
+import Receipt from "../../components/Receipts/Receipt";
+import Refund from "../../components/Receipts/Refund";
 const Receipts = () => {
   // Sample data for past receipts
   const [receipts, setReceipts] = useState([
@@ -43,13 +44,17 @@ const Receipts = () => {
       ],
     },
   ]);
-
   const [selectedReceipt, setSelectedReceipt] = useState(null);
+  const [selectedRefundReceipt, setSelectedRefundReceipt] = useState(null);
   const [searchText, setSearchText] = useState("");
 
   // Handle selecting a receipt
   const handleReceiptSelect = (receipt) => {
     setSelectedReceipt(receipt);
+  };
+
+  const handleRefund = () => {
+    setSelectedRefundReceipt(selectedReceipt);
   };
 
   // Filter receipts based on search text
@@ -60,12 +65,17 @@ const Receipts = () => {
       <Row>
         {/* Col-8: Detailed Receipt */}
         <Col md={8}>
-          <div className="title">
-            <h3>Receipt Details</h3>
-          </div>
-          {selectedReceipt ? <Receipt selectedReceipt={selectedReceipt} /> : <p>Please select a receipt</p>}
+          {!selectedRefundReceipt ? (
+            <>
+              <div className="title">
+                <h3>Receipt Details</h3>
+              </div>
+              {selectedReceipt ? <Receipt selectedReceipt={selectedReceipt} handleRefund={handleRefund} /> : <p>Please select a receipt</p>}
+            </>
+          ) : (
+            <Refund selectedReceipt={selectedRefundReceipt} />
+          )}
         </Col>
-
         {/* Col-4: Receipt List */}
         <Col md={4}>
           <div className="title">

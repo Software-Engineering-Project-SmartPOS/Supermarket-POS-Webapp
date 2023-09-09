@@ -5,5 +5,6 @@ const PathConstants = {
   LOCK: "/lock",
   CHECKOUT: "sales/checkout",
   RECEIPTS: "sales/receipts",
+  REFUND: "sales/refund",
 };
 export default PathConstants;
