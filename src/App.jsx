@@ -7,6 +7,7 @@ import DashboardLayout from "./layouts/DashBoardLayout";
 import PathConstants from "./constants/pathConstants";
 import PageNotFound from "./pages/PageNotFound";
 import Checkout from "./pages/Checkout";
+import Receipts from "./pages/Receipts";
 
 function App() {
   // defining routes for the application using react router
@@ -18,6 +19,7 @@ function App() {
         <Route path={PathConstants.LOCK} element={<Lock />} />
         <Route path={PathConstants.HOME} element={<DashboardLayout />}>
           <Route path={PathConstants.CHECKOUT} element={<Checkout />} />
+          <Route path={PathConstants.RECEIPTS} element={<Receipts />} />
         </Route>
         <Route path="*" element={<PageNotFound />} />
       </Routes>
