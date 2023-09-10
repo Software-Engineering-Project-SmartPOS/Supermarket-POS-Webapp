@@ -1,7 +1,11 @@
-import React, { useState, useEffect } from "react";
+import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useState, useEffect } from "react";
 import { Container, Table } from "react-bootstrap";
+import { useNavigate } from "react-router";
 
 const PurchaseHistory = ({ customerId }) => {
+  const navigate = useNavigate();
   const [purchaseHistory, setPurchaseHistory] = useState([
     {
       id: 1,
@@ -66,6 +70,10 @@ const PurchaseHistory = ({ customerId }) => {
           ))}
         </tbody>
       </Table>
+      <button type="button" className="btn btn-outline-primary" onClick={() => navigate(-1)}>
+        <FontAwesomeIcon icon={faChevronLeft} />
+        &nbsp;Back
+      </button>
     </Container>
   );
 };

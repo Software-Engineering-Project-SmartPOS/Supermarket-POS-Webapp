@@ -2,9 +2,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { Col, Row, Card, Image, Button, Container } from "react-bootstrap";
 
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import NotFoundImage from "../assets/img/404.svg";
-import PathConstants from "../constants/pathConstants";
 
 export default function PageNotFound() {
   const navigate = useNavigate();

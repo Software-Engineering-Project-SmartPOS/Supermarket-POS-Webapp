@@ -3,14 +3,18 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useEffect } from "react";
 import { Container, Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router";
+import { Formik } from "formik"; // Import Formik
+import * as Yup from "yup"; // Import Yup for validation
+import PathConstants from "../../../constants/pathConstants";
 
 const EditLoyaltyProgram = ({ loyaltyProgramId }) => {
   const navigate = useNavigate();
   const [programDetails, setProgramDetails] = useState({
-    name: "",
-    description: "",
-    rewardsStructure: "",
-    eligibilityCriteria: "",
+    id: 1,
+    name: "Gold Membership",
+    description: "Exclusive rewards for loyal customers",
+    rewardsStructure: "5% cashback on every purchase",
+    eligibilityCriteria: "Minimum purchase amount of $1000",
   });
 
   // Fetch loyalty program details based on the loyaltyProgramId
@@ -33,15 +37,14 @@ const EditLoyaltyProgram = ({ loyaltyProgramId }) => {
     fetchLoyaltyProgramDetails();
   }, [loyaltyProgramId]);
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setProgramDetails({
-      ...programDetails,
-      [name]: value,
-    });
-  };
+  const validationSchema = Yup.object({
+    name: Yup.string().required("Name is required"),
+    description: Yup.string().required("Description is required"),
+    rewardsStructure: Yup.string().required("Rewards Structure is required"),
+    eligibilityCriteria: Yup.string().required("Eligibility Criteria is required"),
+  });
 
-  const handleEditProgram = async () => {
+  const handleEditProgram = async (values) => {
     // Implement logic to send updated programDetails to the server to edit the loyalty program
     try {
       const response = await fetch(`/api/loyalty-programs/${loyaltyProgramId}`, {
@@ -49,7 +52,7 @@ const EditLoyaltyProgram = ({ loyaltyProgramId }) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(programDetails),
+        body: JSON.stringify(values),
       });
 
       if (response.ok) {
@@ -68,7 +71,7 @@ const EditLoyaltyProgram = ({ loyaltyProgramId }) => {
       <Container>
         <div className="bg-white shadow-lg border rounded border-light px-5 py-2 w-100">
           <div className="d-flex">
-            <div className="text-start" onClick={() => navigate(-1)}>
+            <div className="text-start" onClick={() => navigate("/" + PathConstants.LOYALTY_PROGRAMS)}>
               <button type="button" className="btn btn-outline-primary">
                 <FontAwesomeIcon icon={faChevronLeft} /> Back
               </button>
@@ -77,29 +80,61 @@ const EditLoyaltyProgram = ({ loyaltyProgramId }) => {
               <h3 className="mb-0">Edit Loyalty Program</h3>
             </div>
           </div>
-          <Form>
-            <Form.Group controlId="name">
-              <Form.Label>Name</Form.Label>
-              <Form.Control type="text" name="name" value={programDetails.name} onChange={handleInputChange} />
-            </Form.Group>
-            <Form.Group controlId="description">
-              <Form.Label>Description</Form.Label>
-              <Form.Control type="text" name="description" value={programDetails.description} onChange={handleInputChange} />
-            </Form.Group>
-            <Form.Group controlId="rewardsStructure">
-              <Form.Label>Rewards Structure</Form.Label>
-              <Form.Control type="text" name="rewardsStructure" value={programDetails.rewardsStructure} onChange={handleInputChange} />
-            </Form.Group>
-            <Form.Group controlId="eligibilityCriteria">
-              <Form.Label>Eligibility Criteria</Form.Label>
-              <Form.Control type="text" name="eligibilityCriteria" value={programDetails.eligibilityCriteria} onChange={handleInputChange} />
-            </Form.Group>
-            <div className="d-flex justify-content-end">
-              <Button variant="primary" onClick={handleEditProgram}>
-                Save Changes
-              </Button>
-            </div>
-          </Form>
+
+          {/* Wrap your form with Formik */}
+          <Formik initialValues={programDetails} validationSchema={validationSchema} onSubmit={handleEditProgram}>
+            {(formik) => (
+              <Form>
+                <Form.Group controlId="name" className="mb-4">
+                  <Form.Label>Name</Form.Label>
+                  <Form.Control type="text" name="name" value={formik.values.name} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                  {formik.touched.name && formik.errors.name && <div className="text-danger">{formik.errors.name}</div>}
+                </Form.Group>
+                <Form.Group controlId="description" className="mb-4">
+                  <Form.Label>Description</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="description"
+                    value={formik.values.description}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                  {formik.touched.description && formik.errors.description && <div className="text-danger">{formik.errors.description}</div>}
+                </Form.Group>
+                <Form.Group controlId="rewardsStructure" className="mb-4">
+                  <Form.Label>Rewards Structure</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="rewardsStructure"
+                    value={formik.values.rewardsStructure}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                  {formik.touched.rewardsStructure && formik.errors.rewardsStructure && (
+                    <div className="text-danger">{formik.errors.rewardsStructure}</div>
+                  )}
+                </Form.Group>
+                <Form.Group controlId="eligibilityCriteria" className="mb-4">
+                  <Form.Label>Eligibility Criteria</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="eligibilityCriteria"
+                    value={formik.values.eligibilityCriteria}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                  {formik.touched.eligibilityCriteria && formik.errors.eligibilityCriteria && (
+                    <div className="text-danger">{formik.errors.eligibilityCriteria}</div>
+                  )}
+                </Form.Group>
+                <div className="d-flex justify-content-end">
+                  <Button variant="primary" type="submit">
+                    Save Changes
+                  </Button>
+                </div>
+              </Form>
+            )}
+          </Formik>
         </div>
       </Container>
     </section>

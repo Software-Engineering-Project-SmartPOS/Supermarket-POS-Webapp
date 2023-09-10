@@ -1,19 +1,10 @@
 import { Form, Col, Row, Container, InputGroup, Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faEnvelope,
-  faUser,
-  faPhone,
-  faBuilding,
-  faCity,
-  faMapMarker,
-  faLocationArrow,
-  faBackward,
-  faChevronLeft,
-} from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faUser, faPhone, faBuilding, faCity, faMapMarker, faLocationArrow, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import PathConstants from "../../constants/pathConstants";
 
 export default function AddEmployee() {
   const navigate = useNavigate();
@@ -62,7 +53,7 @@ export default function AddEmployee() {
           <Col xs={12} lg={6} className="d-flex align-items-center justify-content-center">
             <div className="bg-white shadow-lg border rounded border-light px-5 py-2 w-100">
               <div className="d-flex">
-                <div className="text-start" onClick={() => navigate(-1)}>
+                <div className="text-start" onClick={() => navigate("/" + PathConstants.EMPLOYEE_LIST)}>
                   <button type="button" className="btn btn-outline-primary">
                     <FontAwesomeIcon icon={faChevronLeft} /> Back
                   </button>

@@ -9,10 +9,29 @@
   padding-top: 60px;
   font-size: 16px;
   height: 100vh;
+  background-color: #e3eeff8a;
 }
 
 .text-link:hover {
   color: #007bff;
   text-decoration: underline;
   cursor: pointer;
+}
+
+/* timecards */
+.timecard-calender {
+  width: fit-content;
+  border: 1px solid #8db0d3;
+}
+.timecard-calender-overlay {
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #011852;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  padding: 10px;
+  top: 120px; /* Adjust the top position as needed */
+  right: 0;
+  left: 110px;
 }

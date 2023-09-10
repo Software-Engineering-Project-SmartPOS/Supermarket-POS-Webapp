@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Container, Table, Button, Form } from "react-bootstrap";
+import { useState } from "react";
+import { Container, Table, Button, Form, Card } from "react-bootstrap";
 import { useNavigate } from "react-router";
 import PathConstants from "../../constants/pathConstants";
 
@@ -78,48 +78,51 @@ const CustomerList = () => {
           <Form.Control type="text" placeholder="Search by name or email" value={searchTerm} onChange={handleSearch} />
         </Form.Group>
       </div>
-
-      <Table responsive hover>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Customer</th>
-            <th>Contacts</th>
-            <th>First Visit</th>
-            <th>Last Visit</th>
-            <th className="text-right">Total Visits</th>
-            <th className="text-right">Total Spent</th>
-            <th className="text-right">Points Balance</th>
-            <th className="text-center">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {displayCustomers.map((customer, index) => (
-            <tr key={customer.id}>
-              <td>{index + 1}</td>
-              <td onClick={handleCustomerClick} className="text-link">
-                <strong>{customer.name}</strong>
-                <br />
-                {customer.email}
-              </td>
-              <td>{customer.telephone}</td>
-              <td>{customer.firstVisitDate}</td>
-              <td>{customer.lastVisitDate}</td>
-              <td className="text-right">{customer.totalVisits}</td>
-              <td className="text-right">{customer.totalSpent}</td>
-              <td className="text-right">{customer.pointsBalance}</td>
-              <td className="text-center">
-                <Button variant="info" size="sm" className="mx-1" onClick={handleEditCusomer}>
-                  Edit
-                </Button>
-                <Button variant="danger" size="sm" className="mx-1">
-                  Delete
-                </Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+      <Card border="light" className="table-responsive shadow">
+        <Card.Body className="pt-0">
+          <Table responsive hover>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Customer</th>
+                <th>Contacts</th>
+                <th>First Visit</th>
+                <th>Last Visit</th>
+                <th className="text-right">Total Visits</th>
+                <th className="text-right">Total Spent</th>
+                <th className="text-right">Points Balance</th>
+                <th className="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {displayCustomers.map((customer, index) => (
+                <tr key={customer.id}>
+                  <td>{index + 1}</td>
+                  <td onClick={handleCustomerClick} className="text-link">
+                    <strong>{customer.name}</strong>
+                    <br />
+                    {customer.email}
+                  </td>
+                  <td>{customer.telephone}</td>
+                  <td>{customer.firstVisitDate}</td>
+                  <td>{customer.lastVisitDate}</td>
+                  <td className="text-right">{customer.totalVisits}</td>
+                  <td className="text-right">{customer.totalSpent}</td>
+                  <td className="text-right">{customer.pointsBalance}</td>
+                  <td className="text-center">
+                    <Button variant="info" size="sm" className="mx-1" onClick={handleEditCusomer}>
+                      Edit
+                    </Button>
+                    <Button variant="danger" size="sm" className="mx-1">
+                      Delete
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </Card.Body>
+      </Card>
     </Container>
   );
 };

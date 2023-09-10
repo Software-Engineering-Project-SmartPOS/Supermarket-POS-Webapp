@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Container, Table, Button } from "react-bootstrap";
+import { Container, Table, Button, Card } from "react-bootstrap";
 import { useNavigate } from "react-router";
 import PathConstants from "../../../constants/pathConstants";
 
@@ -64,38 +64,41 @@ const LoyaltyProgramList = () => {
           Add Loyalty Program
         </Button>
       </div>
-
-      <Table responsive hover>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Rewards Structure</th>
-            <th>Eligibility Criteria</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {loyaltyPrograms.map((program, index) => (
-            <tr key={program.id}>
-              <td>{index + 1}</td>
-              <td>{program.name}</td>
-              <td>{program.description}</td>
-              <td>{program.rewardsStructure}</td>
-              <td>{program.eligibilityCriteria}</td>
-              <td>
-                <Button variant="info" size="sm" className="mx-1" onClick={handlEditLoyaltyProgram}>
-                  Edit
-                </Button>
-                <Button variant="danger" size="sm" className="mx-1">
-                  Delete
-                </Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+      <Card border="light" className="table-responsive shadow">
+        <Card.Body className="pt-0">
+          <Table responsive hover>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Rewards Structure</th>
+                <th>Eligibility Criteria</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {loyaltyPrograms.map((program, index) => (
+                <tr key={program.id}>
+                  <td>{index + 1}</td>
+                  <td>{program.name}</td>
+                  <td>{program.description}</td>
+                  <td>{program.rewardsStructure}</td>
+                  <td>{program.eligibilityCriteria}</td>
+                  <td>
+                    <Button variant="info" size="sm" className="mx-1" onClick={handlEditLoyaltyProgram}>
+                      Edit
+                    </Button>
+                    <Button variant="danger" size="sm" className="mx-1">
+                      Delete
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </Card.Body>
+      </Card>
     </Container>
   );
 };

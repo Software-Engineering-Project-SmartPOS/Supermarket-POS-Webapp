@@ -3,6 +3,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import { Container, Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router";
+import { Formik } from "formik"; // Import Formik
+import * as Yup from "yup"; // Import Yup
+import PathConstants from "../../../constants/pathConstants";
 
 const AddLoyaltyProgram = () => {
   const navigate = useNavigate();
@@ -13,15 +16,15 @@ const AddLoyaltyProgram = () => {
     eligibilityCriteria: "",
   });
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setProgramDetails({
-      ...programDetails,
-      [name]: value,
-    });
-  };
+  // Validation schema using Yup
+  const validationSchema = Yup.object({
+    name: Yup.string().required("Name is required"),
+    description: Yup.string().required("Description is required"),
+    rewardsStructure: Yup.string().required("Rewards Structure is required"),
+    eligibilityCriteria: Yup.string().required("Eligibility Criteria is required"),
+  });
 
-  const handleAddProgram = async () => {
+  const handleAddProgram = async (values) => {
     // Implement logic to send programDetails to the server to create a new loyalty program
     try {
       const response = await fetch("/api/loyalty-programs", {
@@ -29,7 +32,7 @@ const AddLoyaltyProgram = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(programDetails),
+        body: JSON.stringify(values), // Use Formik's form values
       });
 
       if (response.ok) {
@@ -48,7 +51,7 @@ const AddLoyaltyProgram = () => {
       <Container>
         <div className="bg-white shadow-lg border rounded border-light px-5 py-2 w-100">
           <div className="d-flex">
-            <div className="text-start" onClick={() => navigate(-1)}>
+            <div className="text-start" onClick={() => navigate("/" + PathConstants.LOYALTY_PROGRAMS)}>
               <button type="button" className="btn btn-outline-primary">
                 <FontAwesomeIcon icon={faChevronLeft} /> Back
               </button>
@@ -58,29 +61,60 @@ const AddLoyaltyProgram = () => {
             </div>
           </div>
 
-          <Form>
-            <Form.Group controlId="name" className="mb-4">
-              <Form.Label>Name</Form.Label>
-              <Form.Control type="text" name="name" value={programDetails.name} onChange={handleInputChange} />
-            </Form.Group>
-            <Form.Group controlId="description" className="mb-4">
-              <Form.Label>Description</Form.Label>
-              <Form.Control type="text" name="description" value={programDetails.description} onChange={handleInputChange} />
-            </Form.Group>
-            <Form.Group controlId="rewardsStructure" className="mb-4">
-              <Form.Label>Rewards Structure</Form.Label>
-              <Form.Control type="text" name="rewardsStructure" value={programDetails.rewardsStructure} onChange={handleInputChange} />
-            </Form.Group>
-            <Form.Group controlId="eligibilityCriteria" className="mb-4">
-              <Form.Label>Eligibility Criteria</Form.Label>
-              <Form.Control type="text" name="eligibilityCriteria" value={programDetails.eligibilityCriteria} onChange={handleInputChange} />
-            </Form.Group>
-            <div className="d-flex justify-content-end">
-              <Button variant="primary" onClick={handleAddProgram}>
-                Add Program
-              </Button>
-            </div>
-          </Form>
+          {/* Wrap your form with Formik */}
+          <Formik initialValues={programDetails} validationSchema={validationSchema} onSubmit={handleAddProgram}>
+            {(formik) => (
+              <Form>
+                <Form.Group controlId="name" className="mb-4">
+                  <Form.Label>Name</Form.Label>
+                  <Form.Control type="text" name="name" value={formik.values.name} onChange={formik.handleChange} onBlur={formik.handleBlur} />
+                  {formik.touched.name && formik.errors.name && <div className="text-danger">{formik.errors.name}</div>}
+                </Form.Group>
+                <Form.Group controlId="description" className="mb-4">
+                  <Form.Label>Description</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="description"
+                    value={formik.values.description}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                  {formik.touched.description && formik.errors.description && <div className="text-danger">{formik.errors.description}</div>}
+                </Form.Group>
+                <Form.Group controlId="rewardsStructure" className="mb-4">
+                  <Form.Label>Rewards Structure</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="rewardsStructure"
+                    value={formik.values.rewardsStructure}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                  {formik.touched.rewardsStructure && formik.errors.rewardsStructure && (
+                    <div className="text-danger">{formik.errors.rewardsStructure}</div>
+                  )}
+                </Form.Group>
+                <Form.Group controlId="eligibilityCriteria" className="mb-4">
+                  <Form.Label>Eligibility Criteria</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="eligibilityCriteria"
+                    value={formik.values.eligibilityCriteria}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                  {formik.touched.eligibilityCriteria && formik.errors.eligibilityCriteria && (
+                    <div className="text-danger">{formik.errors.eligibilityCriteria}</div>
+                  )}
+                </Form.Group>
+                <div className="d-flex justify-content-end">
+                  <Button variant="primary" type="submit">
+                    Add Program
+                  </Button>
+                </div>
+              </Form>
+            )}
+          </Formik>
         </div>
       </Container>
     </section>
