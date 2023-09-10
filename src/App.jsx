@@ -25,6 +25,7 @@ import EmployeeList from "./pages/Employee/EmployeeList/EmployeeList";
 import AddEmployee from "./pages/Employee/EmployeeList/AddEmployee";
 import EditEmployee from "./pages/Employee/EmployeeList/EditEmployee";
 import Timecards from "./pages/Employee/Timecards/Timecards";
+import AddTimeCard from "./pages/Employee/Timecards/AddTimecard";
 
 function App() {
   // defining routes for the application using react router
@@ -55,7 +56,9 @@ function App() {
           <Route path={PathConstants.EMPLOYEE_LIST} element={<EmployeeList />} />
           <Route path={PathConstants.EDIT_EMPLOYEE} element={<EditEmployee />} />
           <Route path={PathConstants.EDIT_EMPLOYEE} element={<EditEmployee />} />
+
           <Route path={PathConstants.TIMECARDS} element={<Timecards />} />
+          <Route path={PathConstants.ADD_TIMECARD} element={<AddTimeCard />} />
         </Route>
       </Routes>
     </BrowserRouter>

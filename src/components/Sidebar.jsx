@@ -53,7 +53,7 @@ export default function SideBar() {
 
   const handleNestedTabClick = (mainTab, nestedTab) => {
     dispatch(setSelectedTab({ mainTab, nestedTab }));
-    dispatch(toggleSideBar());
+    // dispatch(toggleSideBar());
     const url = PathConstants[nestedTab.toUpperCase().replace(" ", "_")];
     navigate(url);
   };
@@ -130,10 +130,10 @@ export default function SideBar() {
           <SideBarTab mainTab="Sales" reactIcon={<MdOutlineShoppingCartCheckout />} nestedTabs={["Checkout", "Receipts"]} />
           <SideBarTab mainTab="Customers" reactIcon={<FaUsers />} nestedTabs={["Customer List", "Loyalty Programs"]} />
           <SideBarTab mainTab="Employees" reactIcon={<FaAddressCard />} nestedTabs={["Employee List", "Timecards"]} />
+          <SideBarTab mainTab="Items" reactIcon={<FaShoppingBasket />} nestedTabs={["Item List", "Categories"]} />
           <SideBarTab mainTab="Account" reactIcon={<FaUser />} nestedTabs={["Sales by item 1", "Sales by item 2", "Sales by item 3"]} />
           <SideBarTab mainTab="Reports" reactIcon={<FaChartBar />} nestedTabs={["Sales by item 1", "Sales by item 2", "Sales by item 3"]} />
           <SideBarTab mainTab="Inventory Management" reactIcon={<FaWarehouse />} nestedTabs={["Sales by item 1", "Sales by item 2"]} />
-          <SideBarTab mainTab="Items" reactIcon={<FaShoppingBasket />} nestedTabs={["Item List", "Categories"]} />
           <SideBarTab mainTab="Online Orders" reactIcon={<SiShopify />} nestedTabs={["Sales by item 1", "Sales by item 2"]} />
           <SideBarTab mainTab="Settings" reactIcon={<AiFillSetting />} iconType="react" nestedTabs={["Sales by item 1", "Sales by item 2"]} />
         </div>

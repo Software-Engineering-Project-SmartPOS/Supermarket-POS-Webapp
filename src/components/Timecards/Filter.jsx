@@ -4,8 +4,11 @@ import { DateRangePicker } from "react-date-range";
 import { MultiSelect } from "react-multi-select-component";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendar } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router";
+import PathConstants from "../../constants/pathConstants";
 
 const Filters = ({ onFilter }) => {
+  const navigate = useNavigate();
   const [employeeName, setEmployeeName] = useState([
     // Include all employee options by default
     { label: "John Doe", value: "John Doe" },
@@ -105,7 +108,7 @@ const Filters = ({ onFilter }) => {
             Apply Filters
           </button>
           &nbsp;
-          <button className="btn btn-success" onClick={handleFilter}>
+          <button className="btn btn-success" onClick={() => navigate("/" + PathConstants.ADD_TIMECARD)}>
             Add Timecard
           </button>
         </div>

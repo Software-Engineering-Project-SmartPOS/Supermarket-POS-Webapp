@@ -17,5 +17,6 @@ const PathConstants = {
   ADD_LOYALTY_PROGRAM: "loyalty/add-loyalty-program",
   EDIT_LOYALTY_PROGRAM: "loyalty/edit-loyalty-program",
   TIMECARDS: "employees/timecards",
+  ADD_TIMECARD: "employees/add-timecard",
 };
 export default PathConstants;
