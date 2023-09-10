@@ -3,9 +3,9 @@ import { faEnvelope, faUnlockAlt } from "@fortawesome/free-solid-svg-icons";
 import { Col, Row, Form, Card, Button, FormCheck, Container, InputGroup } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 
-import "../styles/SignIn.css";
+import "../../styles/SignIn.css";
 import { Formik } from "formik";
-import PathConstants from "../constants/pathConstants";
+import PathConstants from "../../constants/pathConstants";
 
 export default function SignIn() {
   const navigate = useNavigate();

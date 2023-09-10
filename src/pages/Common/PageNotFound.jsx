@@ -3,7 +3,7 @@ import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { Col, Row, Card, Image, Button, Container } from "react-bootstrap";
 
 import { useNavigate } from "react-router-dom";
-import NotFoundImage from "../assets/img/404.svg";
+import NotFoundImage from "../../assets/img/404.svg";
 
 export default function PageNotFound() {
   const navigate = useNavigate();

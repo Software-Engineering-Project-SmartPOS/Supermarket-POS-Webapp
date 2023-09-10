@@ -2,10 +2,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faUnlockAlt } from "@fortawesome/free-solid-svg-icons";
 import { Col, Row, Form, Card, Button, FormCheck, Container, InputGroup } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import "../styles/SignIn.css";
+import "../../styles/SignIn.css";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import PathConstants from "../constants/pathConstants";
+import PathConstants from "../../constants/pathConstants";
 export default function SignUp() {
   const navigate = useNavigate();
   return (

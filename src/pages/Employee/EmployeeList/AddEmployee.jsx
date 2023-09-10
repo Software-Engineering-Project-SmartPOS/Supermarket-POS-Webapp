@@ -4,7 +4,7 @@ import { faEnvelope, faUser, faPhone, faBuilding, faCity, faMapMarker, faLocatio
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import PathConstants from "../../constants/pathConstants";
+import PathConstants from "../../../constants/pathConstants";
 
 export default function AddEmployee() {
   const navigate = useNavigate();

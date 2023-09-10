@@ -1,8 +1,7 @@
-import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faUser,
   faEnvelope,
+  faUser,
   faPhone,
   faUsers,
   faBuilding,
@@ -12,36 +11,16 @@ import {
   faChevronLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import { Col, Row, Form, Button, Container, InputGroup } from "react-bootstrap";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import PathConstants from "../../constants/pathConstants";
+import PathConstants from "../../../constants/pathConstants";
 
-export default function EditCustomer() {
-  const { customerId } = useParams();
+export default function AddCustomer() {
   const navigate = useNavigate();
 
   // Define a list of loyalty programs
   const loyaltyPrograms = ["Program A", "Program B", "Program C", "Program D"];
-
-  // Sample customer data (replace with actual customer data retrieval logic)
-  const [customerData, setCustomerData] = useState({
-    name: "John Doe",
-    email: "johndoe@example.com",
-    telephone: "123-456-7890",
-    customer_type: "1",
-    loyalty_program: "Program A",
-    address: "123 Main St",
-    city: "Cityville",
-    district: "District A",
-    postal_code: "12345",
-  });
-
-  // Effect to fetch customer data when the component mounts
-  useEffect(() => {
-    // Replace this with actual data retrieval logic based on customerId
-    // Example API call: fetchCustomerData(customerId).then((data) => setCustomerData(data));
-  }, [customerId]);
 
   return (
     <section className="d-flex align-items-center my-5 mt-lg-6 mb-lg-5">
@@ -56,11 +35,21 @@ export default function EditCustomer() {
                   </button>
                 </div>
                 <div className="text-center text-md-center mt-md-0 flex-grow-1">
-                  <h3 className="mb-0">Edit Customer</h3>
+                  <h3 className="mb-0">Add Customer</h3>
                 </div>
               </div>
               <Formik
-                initialValues={customerData}
+                initialValues={{
+                  name: "",
+                  email: "",
+                  telephone: "",
+                  customer_type: "",
+                  loyalty_program: "",
+                  address: "",
+                  city: "",
+                  district: "",
+                  postal_code: "",
+                }}
                 validationSchema={Yup.object({
                   name: Yup.string().required("Required"),
                   email: Yup.string().email("Invalid email address"),
@@ -74,12 +63,12 @@ export default function EditCustomer() {
                 })}
                 onSubmit={(values) => {
                   console.log(values);
-                  // Add your logic to update customer data here
-                  // After updating the customer, you can navigate to a success page or another route
-                  navigate("/" + PathConstants.CUSTOMER_LIST);
+                  // Add your logic to submit customer data here
+                  // After adding the customer, you can navigate to a success page or another route
+                  navigate(PathConstants.HOME);
                 }}
               >
-                {({ handleSubmit, handleChange, values, errors, touched }) => (
+                {({ handleSubmit, handleChange, errors, touched }) => (
                   <Form className="mt-4" onSubmit={handleSubmit}>
                     <Row>
                       <Col xs={12} lg={6}>
@@ -89,15 +78,7 @@ export default function EditCustomer() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faUser} />
                             </InputGroup.Text>
-                            <Form.Control
-                              autoFocus
-                              required
-                              type="text"
-                              placeholder="Enter customer name"
-                              name="name"
-                              onChange={handleChange}
-                              value={values.name}
-                            />
+                            <Form.Control autoFocus required type="text" placeholder="Enter customer name" name="name" onChange={handleChange} />
                           </InputGroup>
                           {touched.name && errors.name && <div className="text-danger">{errors.name}</div>}
                         </Form.Group>
@@ -110,14 +91,7 @@ export default function EditCustomer() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faEnvelope} />
                             </InputGroup.Text>
-                            <Form.Control
-                              required
-                              type="email"
-                              placeholder="example@company.com"
-                              name="email"
-                              onChange={handleChange}
-                              value={values.email}
-                            />
+                            <Form.Control required type="email" placeholder="example@company.com" name="email" onChange={handleChange} />
                           </InputGroup>
                           {touched.email && errors.email && <div className="text-danger">{errors.email}</div>}
                         </Form.Group>
@@ -130,14 +104,7 @@ export default function EditCustomer() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faPhone} />
                             </InputGroup.Text>
-                            <Form.Control
-                              required
-                              type="text"
-                              placeholder="Enter customer telephone"
-                              name="telephone"
-                              onChange={handleChange}
-                              value={values.telephone}
-                            />
+                            <Form.Control required type="text" placeholder="Enter customer telephone" name="telephone" onChange={handleChange} />
                           </InputGroup>
                           {touched.telephone && errors.telephone && <div className="text-danger">{errors.telephone}</div>}
                         </Form.Group>
@@ -150,7 +117,7 @@ export default function EditCustomer() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faUsers} />
                             </InputGroup.Text>
-                            <Form.Control as="select" required name="customer_type" onChange={handleChange} value={values.customer_type}>
+                            <Form.Control as="select" required name="customer_type" onChange={handleChange}>
                               <option value="">Select customer type</option>
                               <option value="1">Type 1</option>
                               <option value="2">Type 2</option>
@@ -170,7 +137,7 @@ export default function EditCustomer() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faBuilding} />
                             </InputGroup.Text>
-                            <Form.Control as="select" required name="loyalty_program" onChange={handleChange} value={values.loyalty_program}>
+                            <Form.Control as="select" required name="loyalty_program" onChange={handleChange}>
                               <option value="">Select loyalty program</option>
                               {loyaltyPrograms.map((program, index) => (
                                 <option key={index} value={program}>
@@ -190,14 +157,7 @@ export default function EditCustomer() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faCity} />
                             </InputGroup.Text>
-                            <Form.Control
-                              required
-                              type="text"
-                              placeholder="Enter customer address"
-                              name="address"
-                              onChange={handleChange}
-                              value={values.address}
-                            />
+                            <Form.Control required type="text" placeholder="Enter customer address" name="address" onChange={handleChange} />
                           </InputGroup>
                           {touched.address && errors.address && <div className="text-danger">{errors.address}</div>}
                         </Form.Group>
@@ -210,7 +170,7 @@ export default function EditCustomer() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faMapMarker} />
                             </InputGroup.Text>
-                            <Form.Control required type="text" placeholder="Enter city" name="city" onChange={handleChange} value={values.city} />
+                            <Form.Control required type="text" placeholder="Enter city" name="city" onChange={handleChange} />
                           </InputGroup>
                           {touched.city && errors.city && <div className="text-danger">{errors.city}</div>}
                         </Form.Group>
@@ -223,14 +183,7 @@ export default function EditCustomer() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faLocationArrow} />
                             </InputGroup.Text>
-                            <Form.Control
-                              required
-                              type="text"
-                              placeholder="Enter district"
-                              name="district"
-                              onChange={handleChange}
-                              value={values.district}
-                            />
+                            <Form.Control required type="text" placeholder="Enter district" name="district" onChange={handleChange} />
                           </InputGroup>
                           {touched.district && errors.district && <div className="text-danger">{errors.district}</div>}
                         </Form.Group>
@@ -243,14 +196,7 @@ export default function EditCustomer() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faLocationArrow} />
                             </InputGroup.Text>
-                            <Form.Control
-                              required
-                              type="text"
-                              placeholder="Enter postal code"
-                              name="postal_code"
-                              onChange={values.postal_code}
-                              value={values.postal_code}
-                            />
+                            <Form.Control required type="text" placeholder="Enter postal code" name="postal_code" onChange={handleChange} />
                           </InputGroup>
                           {touched.postal_code && errors.postal_code && <div className="text-danger">{errors.postal_code}</div>}
                         </Form.Group>
@@ -258,7 +204,7 @@ export default function EditCustomer() {
                     </Row>
 
                     <Button variant="primary" type="submit" className="button w-100">
-                      Update Customer
+                      Add Customer
                     </Button>
                   </Form>
                 )}

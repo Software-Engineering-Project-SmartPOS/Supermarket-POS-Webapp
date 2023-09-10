@@ -2,12 +2,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faUnlockAlt } from "@fortawesome/free-solid-svg-icons";
 import { Col, Row, Form, Image, Button, Container, InputGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import ProfileImg from "../assets/img/profile.jpg";
-import BgImg from "../assets/img/signin.svg";
+import ProfileImg from "../../assets/img/profile.jpg";
+import BgImg from "../../assets/img/signin.svg";
 import { useState } from "react";
-import "../styles/SignIn.css";
+import "../../styles/SignIn.css";
 import { Formik } from "formik";
-import PathConstants from "../constants/pathConstants";
+import PathConstants from "../../constants/pathConstants";
 
 export default function Lock() {
   const [showPassword, setShowPassword] = useState(false);

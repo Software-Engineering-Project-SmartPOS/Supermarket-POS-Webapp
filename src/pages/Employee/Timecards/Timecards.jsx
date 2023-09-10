@@ -1,6 +1,6 @@
 import { useState } from "react";
-import TimecardsTable from "../../components/Timecards/TimecardsTable";
-import Filters from "../../components/Timecards/Filter";
+import TimecardsTable from "../../../components/Timecards/TimecardsTable";
+import Filters from "../../../components/Timecards/Filter";
 function Timecards() {
   const [filteredTimecards, setFilteredTimecards] = useState([
     {

@@ -5,7 +5,7 @@ import { Col, Row, Form, Button, Container, InputGroup } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import PathConstants from "../../constants/pathConstants";
+import PathConstants from "../../../constants/pathConstants";
 
 export default function EditEmployee() {
   const { employeeId } = useParams();

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Container, Table, Button, Form, Card } from "react-bootstrap";
 import { useNavigate } from "react-router";
-import PathConstants from "../../constants/pathConstants";
+import PathConstants from "../../../constants/pathConstants";
 
 const CustomerList = () => {
   const navigate = useNavigate();
