@@ -10,3 +10,9 @@
   font-size: 16px;
   height: 100vh;
 }
+
+.text-link:hover {
+  color: #007bff;
+  text-decoration: underline;
+  cursor: pointer;
+}

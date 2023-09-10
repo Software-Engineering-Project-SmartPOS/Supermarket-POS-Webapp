@@ -8,6 +8,13 @@ const PathConstants = {
   REFUND: "sales/refund",
   ADD_CUSTOMER: "customers/add-customer",
   CUSTOMER_LIST: "customers/customer-list",
+  PURCHASE_HISTORY: "customers/purchase-history",
   EDIT_CUSTOMER: "customers/edit-customer",
+  ADD_EMPLOYEE: "employees/add-employee",
+  EMPLOYEE_LIST: "employees/employee-list",
+  EDIT_EMPLOYEE: "employees/edit-employee",
+  LOYALTY_PROGRAMS: "loyalty/loyalty-programs",
+  ADD_LOYALTY_PROGRAM: "loyalty/add-loyalty-program",
+  EDIT_LOYALTY_PROGRAM: "loyalty/edit-loyalty-program",
 };
 export default PathConstants;

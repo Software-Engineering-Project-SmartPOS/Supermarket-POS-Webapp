@@ -61,10 +61,17 @@ const CustomerList = () => {
   const handleEditCusomer = () => {
     navigate("/" + PathConstants.EDIT_CUSTOMER);
   };
+
+  const handleCustomerClick = () => {
+    navigate("/" + PathConstants.PURCHASE_HISTORY);
+  };
   return (
     <Container>
-      <div className="title">
+      <div className="title d-flex justify-content-between pe-2">
         <h3>Customer List</h3>
+        <Button variant="success" size="sm" onClick={() => navigate("/" + PathConstants.ADD_CUSTOMER)}>
+          Add Customer
+        </Button>
       </div>
       <div className="search-box">
         <Form.Group>
@@ -90,7 +97,7 @@ const CustomerList = () => {
           {displayCustomers.map((customer, index) => (
             <tr key={customer.id}>
               <td>{index + 1}</td>
-              <td>
+              <td onClick={handleCustomerClick} className="text-link">
                 <strong>{customer.name}</strong>
                 <br />
                 {customer.email}

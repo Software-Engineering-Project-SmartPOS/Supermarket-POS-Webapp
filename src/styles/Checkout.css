@@ -39,6 +39,12 @@
   padding: 12px;
 }
 
+.search-box .form-control {
+  border: 1px solid #002a54;
+  border-radius: 4px;
+  background-color: #ffffff;
+}
+
 .customer-row {
   background-color: #c8d7e6;
   margin: 0;

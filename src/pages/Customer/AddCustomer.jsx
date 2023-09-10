@@ -1,5 +1,15 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope, faUser, faPhone, faUsers, faBuilding, faCity, faMapMarker, faLocationArrow } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEnvelope,
+  faUser,
+  faPhone,
+  faUsers,
+  faBuilding,
+  faCity,
+  faMapMarker,
+  faLocationArrow,
+  faChevronLeft,
+} from "@fortawesome/free-solid-svg-icons";
 import { Col, Row, Form, Button, Container, InputGroup } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
@@ -18,8 +28,15 @@ export default function AddCustomer() {
         <Row className="justify-content-center form-bg-image">
           <Col xs={12} lg={6} className="d-flex align-items-center justify-content-center">
             <div className="bg-white shadow-lg border rounded border-light p-4 p-lg-5 w-100">
-              <div className="text-center text-md-center mb-4 mt-md-0">
-                <h3 className="mb-0">Add Customer</h3>
+              <div className="d-flex">
+                <div className="text-start" onClick={() => navigate(-1)}>
+                  <button type="button" className="btn btn-outline-primary">
+                    <FontAwesomeIcon icon={faChevronLeft} /> Back
+                  </button>
+                </div>
+                <div className="text-center text-md-center mt-md-0 flex-grow-1">
+                  <h3 className="mb-0">Add Customer</h3>
+                </div>
               </div>
               <Formik
                 initialValues={{

@@ -2,11 +2,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { Col, Row, Card, Image, Button, Container } from "react-bootstrap";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import NotFoundImage from "../assets/img/404.svg";
 import PathConstants from "../constants/pathConstants";
 
 export default function PageNotFound() {
+  const navigate = useNavigate();
   return (
     <main>
       <section className="vh-100 d-flex align-items-center justify-content-center">
@@ -21,7 +22,7 @@ export default function PageNotFound() {
                   Page not <span className="fw-bolder">found</span>
                 </h1>
                 <p className="lead my-4">Oops! Looks like you followed a bad link. If you think this is a problem with us, please tell us.</p>
-                <Button as={Link} variant="primary" className="animate-hover" to={PathConstants.HOME}>
+                <Button variant="primary" className="animate-hover" onClick={() => navigate(-1)}>
                   <FontAwesomeIcon icon={faChevronLeft} className="animate-left-3 me-3 ms-2" />
                   Go back home
                 </Button>
