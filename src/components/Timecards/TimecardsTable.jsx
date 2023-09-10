@@ -1,5 +1,8 @@
-import { Card, Container, Table } from "react-bootstrap";
+import { Card, Container, Table, Button } from "react-bootstrap";
+import { useNavigate } from "react-router";
+import PathConstants from "../../constants/pathConstants";
 const TimecardsTable = ({ timecards }) => {
+  const navigate = useNavigate();
   return (
     <Container>
       <Card border="light" className="table-responsive shadow">
@@ -12,6 +15,7 @@ const TimecardsTable = ({ timecards }) => {
                 <th>Employee Name</th>
                 <th>Store</th>
                 <th>Total Hours Worked</th>
+                <th className="text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -23,6 +27,14 @@ const TimecardsTable = ({ timecards }) => {
                     <td>{timecard.employeeName}</td>
                     <td>{timecard.store}</td>
                     <td>{timecard.totalHours}</td>
+                    <td className="text-center">
+                      <Button variant="info" size="sm" className="mx-1" onClick={() => navigate("/" + PathConstants.EDIT_TIMECARD)}>
+                        Edit
+                      </Button>
+                      <Button variant="danger" size="sm" className="mx-1">
+                        Delete
+                      </Button>
+                    </td>
                   </tr>
                 );
               })}
