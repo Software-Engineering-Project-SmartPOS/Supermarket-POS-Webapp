@@ -19,5 +19,8 @@ const PathConstants = {
   TIMECARDS: "employees/timecards",
   ADD_TIMECARD: "employees/add-timecard",
   EDIT_TIMECARD: "employees/edit-timecard",
+  CATEGORIES: "items/category-list",
+  ADD_CATEGORY: "items/add-category",
+  EDIT_CATEGORY: "items/edit-category",
 };
 export default PathConstants;

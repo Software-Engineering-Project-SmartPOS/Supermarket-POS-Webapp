@@ -10,7 +10,7 @@ export default function AddTimeCard() {
 
   return (
     <section className="d-flex align-items-center my-5 mt-lg-6 mb-lg-5">
-      <Container className="m">
+      <Container>
         <Row className="justify-content-center form-bg-image">
           <Col xs={12} lg={6} className="d-flex align-items-center justify-content-center">
             <div className="bg-white shadow-lg border rounded border-light p-4 p-lg-5 w-100">

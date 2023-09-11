@@ -29,7 +29,7 @@ export default function AddCustomer() {
           <Col xs={12} lg={6} className="d-flex align-items-center justify-content-center">
             <div className="bg-white shadow-lg border rounded border-light p-4 p-lg-5 w-100">
               <div className="d-flex">
-                <div className="text-start" onClick={() => navigate(-1)}>
+                <div className="text-start" onClick={() => navigate("/" + PathConstants.CUSTOMER_LIST)}>
                   <button type="button" className="btn btn-outline-primary">
                     <FontAwesomeIcon icon={faChevronLeft} /> Back
                   </button>
