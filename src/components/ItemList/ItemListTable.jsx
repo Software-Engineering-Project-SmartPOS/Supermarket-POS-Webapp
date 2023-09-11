@@ -71,7 +71,7 @@ const ItemListTable = ({ items, categories, onUpdateItem }) => {
                   <td>{calculateMargin(item.price, item.cost)}</td>
                   <td>{item.inStock}</td>
                   <td className="text-center">
-                    <Button variant="info" size="sm" className="mx-1" onClick={() => navigate(`/${PathConstants.EDIT_ITEM}/${item.id}`)}>
+                    <Button variant="info" size="sm" className="mx-1" onClick={() => navigate(`/${PathConstants.EDIT_ITEM}`)}>
                       Edit
                     </Button>
                     <Button variant="danger" size="sm" className="mx-1">

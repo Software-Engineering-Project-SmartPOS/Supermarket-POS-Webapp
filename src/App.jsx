@@ -35,6 +35,7 @@ import EditCategory from "./pages/Items/Categories/EditCategory";
 
 import ItemList from "./pages/Items/ItemList/ItemList";
 import AddItem from "./pages/Items/ItemList/AddItem";
+import EditItem from "./pages/Items/ItemList/EditItem";
 
 function App() {
   // defining routes for the application using react router
@@ -76,6 +77,7 @@ function App() {
           {/* ItemList */}
           <Route path={PathConstants.ITEM_LIST} element={<ItemList />} />
           <Route path={PathConstants.ADD_ITEM} element={<AddItem />} />
+          <Route path={PathConstants.EDIT_ITEM} element={<EditItem />} />
         </Route>
       </Routes>
     </BrowserRouter>

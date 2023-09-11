@@ -2,30 +2,44 @@ import { useState } from "react";
 import { Container, Card, Table, Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router";
 import PathConstants from "../../../constants/pathConstants";
-
+import { GET_EMPLOYEES } from "../../../graphql/employees";
+import { useQuery } from "@apollo/client";
 const EmployeeList = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredEmployees, setFilteredEmployees] = useState([]);
+  // Use the useQuery hook to fetch employees
+  const { data, loading, error } = useQuery(GET_EMPLOYEES);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error.message}</p>;
+  }
+
+  const employees = data.allEmployees;
+  console.log(data);
 
   // Sample employee data
-  const employees = [
-    {
-      id: 1,
-      name: "John Doe",
-      email: "johndoe@example.com",
-      phone: "123-456-7890",
-      role: "Manager",
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      email: "janesmith@example.com",
-      phone: "987-654-3210",
-      role: "Developer",
-    },
-    // Add more employee data as needed
-  ];
+  // const employees = [
+  //   {
+  //     id: 1,
+  //     name: "John Doe",
+  //     email: "johndoe@example.com",
+  //     phone: "123-456-7890",
+  //     role: "Manager",
+  //   },
+  //   {
+  //     id: 2,
+  //     name: "Jane Smith",
+  //     email: "janesmith@example.com",
+  //     phone: "987-654-3210",
+  //     role: "Developer",
+  //   },
+  //   // Add more employee data as needed
+  // ];
 
   // Function to handle search
   const handleSearch = (e) => {
@@ -80,13 +94,13 @@ const EmployeeList = () => {
               </tr>
             </thead>
             <tbody>
-              {displayEmployees.map((employee, index) => (
+              {employees.map((employee, index) => (
                 <tr key={employee.id}>
                   <td>{index + 1}</td>
-                  <td>{employee.name}</td>
+                  <td>{employee.firstName}</td>
                   <td>{employee.email}</td>
-                  <td>{employee.phone}</td>
-                  <td>{employee.role}</td>
+                  <td>{employee.number}</td>
+                  <td>{employee.jobRole}</td>
                   <td className="text-center">
                     <Button variant="info" size="sm" className="mx-1" onClick={handleEditEmployee}>
                       Edit
