@@ -6,9 +6,9 @@ const Categories = () => {
   const navigate = useNavigate();
   // Sample category data
   const categories = [
-    { id: 1, description: "Category A" },
-    { id: 2, description: "Category B" },
-    { id: 3, description: "Category C" },
+    { id: 1, description: "Category A", quantity: 10 },
+    { id: 2, description: "Category B", quantity: 20 },
+    { id: 3, description: "Category C", quantity: 30 },
     // Add more category data as needed
   ];
 
@@ -27,6 +27,7 @@ const Categories = () => {
               <tr>
                 <th>#</th>
                 <th>Description</th>
+                <th>Quantity</th>
                 <th className="text-center">Actions</th>
               </tr>
             </thead>
@@ -35,6 +36,7 @@ const Categories = () => {
                 <tr key={category.id}>
                   <td>{index + 1}</td>
                   <td>{category.description}</td>
+                  <td>{category.quantity}</td>
                   <td className="text-center">
                     <Button variant="info" size="sm" className="mx-1" onClick={() => navigate("/" + PathConstants.EDIT_CATEGORY)}>
                       Edit

@@ -22,5 +22,6 @@ const PathConstants = {
   CATEGORIES: "items/category-list",
   ADD_CATEGORY: "items/add-category",
   EDIT_CATEGORY: "items/edit-category",
+  ITEM_LIST: "items/item-list",
 };
 export default PathConstants;

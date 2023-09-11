@@ -30,6 +30,7 @@ import EditTimeCard from "./pages/Employee/Timecards/EditTimecard";
 import Categories from "./pages/Items/Categories/Categories";
 import AddCategory from "./pages/Items/Categories/AddCategory";
 import EditCategory from "./pages/Items/Categories/EditCategory";
+import ItemList from "./pages/Items/ItemList/ItemList";
 
 function App() {
   // defining routes for the application using react router
@@ -68,6 +69,7 @@ function App() {
           <Route path={PathConstants.CATEGORIES} element={<Categories />} />
           <Route path={PathConstants.ADD_CATEGORY} element={<AddCategory />} />
           <Route path={PathConstants.EDIT_CATEGORY} element={<EditCategory />} />
+          <Route path={PathConstants.ITEM_LIST} element={<ItemList />} />
         </Route>
       </Routes>
     </BrowserRouter>
