@@ -1,4 +1,4 @@
-import { Form, Col, Row, Container, InputGroup, Button } from "react-bootstrap";
+import { Container, Row, Col, Form, InputGroup, Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faUser, faPhone, faBuilding, faCity, faMapMarker, faLocationArrow, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
@@ -25,18 +25,18 @@ export default function AddEmployee() {
   };
 
   const validationSchema = Yup.object({
-    title: Yup.string().required("Required"),
-    first_name: Yup.string().required("Required"),
+    title: Yup.string().required("Title is required"),
+    first_name: Yup.string().required("First Name is required"),
     middle_name: Yup.string(),
-    last_name: Yup.string().required("Required"),
-    job_role: Yup.string().required("Required"),
-    salary_type: Yup.string().required("Required"),
+    last_name: Yup.string().required("Last Name is required"),
+    job_role: Yup.string().required("Job Role is required"),
+    salary_type: Yup.string().required("Salary Type is required"),
     email: Yup.string().email("Invalid email address"),
-    phone_number: Yup.string().required("Required"),
-    address: Yup.string().required("Required"),
-    city: Yup.string().required("Required"),
-    district: Yup.string().required("Required"),
-    postal_code: Yup.string().required("Required"),
+    phone_number: Yup.string().required("Phone Number is required"),
+    address: Yup.string().required("Address is required"),
+    city: Yup.string().required("City is required"),
+    district: Yup.string().required("District is required"),
+    postal_code: Yup.string().required("Postal Code is required"),
   });
 
   const handleSubmit = (values) => {
@@ -73,7 +73,7 @@ export default function AddEmployee() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faUser} />
                             </InputGroup.Text>
-                            <Form.Control as="select" name="title" onChange={handleChange} value={values.title}>
+                            <Form.Control as="select" name="title" onChange={handleChange} value={values.title} placeholder="Select Title">
                               <option value="">Select title</option>
                               <option value="Mr.">Mr.</option>
                               <option value="Mrs.">Mrs.</option>
@@ -92,7 +92,13 @@ export default function AddEmployee() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faUser} />
                             </InputGroup.Text>
-                            <Form.Control type="text" name="first_name" onChange={handleChange} value={values.first_name} />
+                            <Form.Control
+                              type="text"
+                              name="first_name"
+                              onChange={handleChange}
+                              value={values.first_name}
+                              placeholder="Enter First Name"
+                            />
                           </InputGroup>
                           {touched.first_name && errors.first_name && <div className="text-danger">{errors.first_name}</div>}
                         </Form.Group>
@@ -107,7 +113,13 @@ export default function AddEmployee() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faUser} />
                             </InputGroup.Text>
-                            <Form.Control type="text" name="middle_name" onChange={handleChange} value={values.middle_name} />
+                            <Form.Control
+                              type="text"
+                              name="middle_name"
+                              onChange={handleChange}
+                              value={values.middle_name}
+                              placeholder="Enter Middle Name"
+                            />
                           </InputGroup>
                         </Form.Group>
                       </Col>
@@ -119,7 +131,13 @@ export default function AddEmployee() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faUser} />
                             </InputGroup.Text>
-                            <Form.Control type="text" name="last_name" onChange={handleChange} value={values.last_name} />
+                            <Form.Control
+                              type="text"
+                              name="last_name"
+                              onChange={handleChange}
+                              value={values.last_name}
+                              placeholder="Enter Last Name"
+                            />
                           </InputGroup>
                           {touched.last_name && errors.last_name && <div className="text-danger">{errors.last_name}</div>}
                         </Form.Group>
@@ -134,7 +152,7 @@ export default function AddEmployee() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faBuilding} />
                             </InputGroup.Text>
-                            <Form.Control as="select" name="job_role" onChange={handleChange} value={values.job_role}>
+                            <Form.Control as="select" name="job_role" onChange={handleChange} value={values.job_role} placeholder="Select Job Role">
                               <option value="">Select job role</option>
                               <option value="Role 1">Role 1</option>
                               <option value="Role 2">Role 2</option>
@@ -152,7 +170,13 @@ export default function AddEmployee() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faBuilding} />
                             </InputGroup.Text>
-                            <Form.Control as="select" name="salary_type" onChange={handleChange} value={values.salary_type}>
+                            <Form.Control
+                              as="select"
+                              name="salary_type"
+                              onChange={handleChange}
+                              value={values.salary_type}
+                              placeholder="Select Salary Type"
+                            >
                               <option value="">Select salary type</option>
                               <option value="Type 1">Type 1</option>
                               <option value="Type 2">Type 2</option>
@@ -172,7 +196,7 @@ export default function AddEmployee() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faEnvelope} />
                             </InputGroup.Text>
-                            <Form.Control type="email" name="email" onChange={handleChange} value={values.email} />
+                            <Form.Control type="email" name="email" onChange={handleChange} value={values.email} placeholder="Enter Email" />
                           </InputGroup>
                           {touched.email && errors.email && <div className="text-danger">{errors.email}</div>}
                         </Form.Group>
@@ -185,7 +209,13 @@ export default function AddEmployee() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faPhone} />
                             </InputGroup.Text>
-                            <Form.Control type="text" name="phone_number" onChange={handleChange} value={values.phone_number} />
+                            <Form.Control
+                              type="text"
+                              name="phone_number"
+                              onChange={handleChange}
+                              value={values.phone_number}
+                              placeholder="Enter Phone Number"
+                            />
                           </InputGroup>
                           {touched.phone_number && errors.phone_number && <div className="text-danger">{errors.phone_number}</div>}
                         </Form.Group>
@@ -200,7 +230,7 @@ export default function AddEmployee() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faMapMarker} />
                             </InputGroup.Text>
-                            <Form.Control type="text" name="address" onChange={handleChange} value={values.address} />
+                            <Form.Control type="text" name="address" onChange={handleChange} value={values.address} placeholder="Enter Address" />
                           </InputGroup>
                           {touched.address && errors.address && <div className="text-danger">{errors.address}</div>}
                         </Form.Group>
@@ -213,7 +243,7 @@ export default function AddEmployee() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faCity} />
                             </InputGroup.Text>
-                            <Form.Control type="text" name="city" onChange={handleChange} value={values.city} />
+                            <Form.Control type="text" name="city" onChange={handleChange} value={values.city} placeholder="Enter City" />
                           </InputGroup>
                           {touched.city && errors.city && <div className="text-danger">{errors.city}</div>}
                         </Form.Group>
@@ -228,7 +258,7 @@ export default function AddEmployee() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faLocationArrow} />
                             </InputGroup.Text>
-                            <Form.Control type="text" name="district" onChange={handleChange} value={values.district} />
+                            <Form.Control type="text" name="district" onChange={handleChange} value={values.district} placeholder="Enter District" />
                           </InputGroup>
                           {touched.district && errors.district && <div className="text-danger">{errors.district}</div>}
                         </Form.Group>
@@ -241,7 +271,13 @@ export default function AddEmployee() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faLocationArrow} />
                             </InputGroup.Text>
-                            <Form.Control type="text" name="postal_code" onChange={handleChange} value={values.postal_code} />
+                            <Form.Control
+                              type="text"
+                              name="postal_code"
+                              onChange={handleChange}
+                              value={values.postal_code}
+                              placeholder="Enter Postal Code"
+                            />
                           </InputGroup>
                           {touched.postal_code && errors.postal_code && <div className="text-danger">{errors.postal_code}</div>}
                         </Form.Group>

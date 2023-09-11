@@ -36,6 +36,14 @@ import EditCategory from "./pages/Items/Categories/EditCategory";
 import ItemList from "./pages/Items/ItemList/ItemList";
 import AddItem from "./pages/Items/ItemList/AddItem";
 import EditItem from "./pages/Items/ItemList/EditItem";
+import Brands from "./pages/Items/Brands/Brands";
+import AddBrand from "./pages/Items/Brands/AddBrand";
+import EditBrand from "./pages/Items/Brands/EditBrand";
+import Suppliers from "./pages/Inventory/Suppliers/Suppliers";
+import AddSupplier from "./pages/Inventory/Suppliers/AddSupplier";
+import EditSupplier from "./pages/Inventory/Suppliers/EditSupplier";
+import PurchaseOrders from "./pages/Inventory/PurchaseOrder/PurchaseOrders";
+import AddPurchaseOrder from "./pages/Inventory/PurchaseOrder/AddPurchaseOrder";
 
 function App() {
   // defining routes for the application using react router
@@ -57,7 +65,6 @@ function App() {
           <Route path={PathConstants.CUSTOMER_LIST} element={<CustomerList />} />
           <Route path={PathConstants.EDIT_CUSTOMER} element={<EditCustomer />} />
           <Route path={PathConstants.PURCHASE_HISTORY} element={<PurchaseHistory />} />
-
           <Route path={PathConstants.LOYALTY_PROGRAMS} element={<LoyaltyProgramList />} />
           <Route path={PathConstants.ADD_LOYALTY_PROGRAM} element={<AddLoyaltyProgram />} />
           <Route path={PathConstants.EDIT_LOYALTY_PROGRAM} element={<EditLoyaltyProgram />} />
@@ -78,6 +85,17 @@ function App() {
           <Route path={PathConstants.ITEM_LIST} element={<ItemList />} />
           <Route path={PathConstants.ADD_ITEM} element={<AddItem />} />
           <Route path={PathConstants.EDIT_ITEM} element={<EditItem />} />
+          {/* Brands */}
+          <Route path={PathConstants.BRANDS} element={<Brands />} />
+          <Route path={PathConstants.ADD_BRAND} element={<AddBrand />} />
+          <Route path={PathConstants.EDIT_BRAND} element={<EditBrand />} />
+          {/* Suppliers */}
+          <Route path={PathConstants.SUPPLIERS} element={<Suppliers />} />
+          <Route path={PathConstants.ADD_SUPPLIER} element={<AddSupplier />} />
+          <Route path={PathConstants.EDIT_SUPPLIER} element={<EditSupplier />} />
+
+          <Route path={PathConstants.PURCHASE_ORDERS} element={<PurchaseOrders />} />
+          <Route path={PathConstants.ADD_PURCHASE_ORDER} element={<AddPurchaseOrder />} />
         </Route>
       </Routes>
     </BrowserRouter>

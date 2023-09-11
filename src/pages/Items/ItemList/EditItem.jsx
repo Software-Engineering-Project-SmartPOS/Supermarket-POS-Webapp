@@ -21,7 +21,7 @@ export default function EditItem() {
                   </button>
                 </div>
                 <div className="text-center text-md-center mt-md-0 flex-grow-1">
-                  <h3 className="mb-0">Add Item</h3>
+                  <h3 className="mb-0">Edit Item</h3>
                 </div>
               </div>
               <Formik
@@ -37,7 +37,7 @@ export default function EditItem() {
                   cost: "49.99",
                   barcode: "123456789",
                   sku: "SAMPLE123",
-                  trackStock: true,
+                  trackStock: false,
                   stockLevel: "100",
                   lowStockNumber: "10",
                 }}
@@ -270,7 +270,7 @@ export default function EditItem() {
                     )}
 
                     <Button variant="primary" type="submit" className="button w-100">
-                      Add Item
+                      Update Item
                     </Button>
                   </Form>
                 )}

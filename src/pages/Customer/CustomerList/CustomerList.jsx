@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Container, Table, Button, Form, Card } from "react-bootstrap";
 import { useNavigate } from "react-router";
 import PathConstants from "../../../constants/pathConstants";
-
+import { GET_CUSTOMERS } from "../../../graphql/customers";
 const CustomerList = () => {
+  useEffect(() => {}, []);
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredCustomers, setFilteredCustomers] = useState([]);

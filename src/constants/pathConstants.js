@@ -25,12 +25,24 @@ const PathConstants = {
   ADD_TIMECARD: "employees/add-timecard",
   EDIT_TIMECARD: "employees/edit-timecard",
 
-  CATEGORIES: "items/category-list",
+  CATEGORIES: "items/categories",
   ADD_CATEGORY: "items/add-category",
   EDIT_CATEGORY: "items/edit-category",
 
   ITEM_LIST: "items/item-list",
   ADD_ITEM: "items/add-item",
   EDIT_ITEM: "items/edit-item",
+
+  BRANDS: "items/brands",
+  ADD_BRAND: "items/add-brand",
+  EDIT_BRAND: "items/edit-brand",
+
+  SUPPLIERS: "inventory/suppliers",
+  ADD_SUPPLIER: "inventory/add-supplier",
+  EDIT_SUPPLIER: "inventory/edit-supplier",
+
+  PURCHASE_ORDERS: "inventory/purchase-orders",
+  ADD_PURCHASE_ORDER: "inventory/add-purchase-order",
+  EDIT_PURCHASE_ORDER: "inventory/edit-purchase-order",
 };
 export default PathConstants;
