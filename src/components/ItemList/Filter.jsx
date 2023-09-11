@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import { MultiSelect } from "react-multi-select-component";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
+import { useNavigate } from "react-router";
+import PathConstants from "../../constants/pathConstants";
 
 const Filter = ({ categories, onFilter }) => {
+  const navigate = useNavigate();
   const [selectedCategories, setSelectedCategories] = useState([...categories.map((category) => ({ label: category.name, value: category.name }))]);
   const [selectedStockAlert, setSelectedStockAlert] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -70,7 +73,12 @@ const Filter = ({ categories, onFilter }) => {
             Apply Filters
           </button>
           &nbsp;
-          <button className="btn btn-success" onClick={handleApplyFilters}>
+          <button
+            className="btn btn-success"
+            onClick={() => {
+              navigate("/" + PathConstants.ADD_ITEM);
+            }}
+          >
             Add Item
           </button>
         </div>

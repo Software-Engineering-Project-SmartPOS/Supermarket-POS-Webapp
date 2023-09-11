@@ -24,13 +24,17 @@ import EditLoyaltyProgram from "./pages/Customer/LoyaltyProgram/EditLLoyaltyProg
 import EmployeeList from "./pages/Employee/EmployeeList/EmployeeList";
 import AddEmployee from "./pages/Employee/EmployeeList/AddEmployee";
 import EditEmployee from "./pages/Employee/EmployeeList/EditEmployee";
+
 import Timecards from "./pages/Employee/Timecards/Timecards";
 import AddTimeCard from "./pages/Employee/Timecards/AddTimecard";
 import EditTimeCard from "./pages/Employee/Timecards/EditTimecard";
+
 import Categories from "./pages/Items/Categories/Categories";
 import AddCategory from "./pages/Items/Categories/AddCategory";
 import EditCategory from "./pages/Items/Categories/EditCategory";
+
 import ItemList from "./pages/Items/ItemList/ItemList";
+import AddItem from "./pages/Items/ItemList/AddItem";
 
 function App() {
   // defining routes for the application using react router
@@ -61,15 +65,17 @@ function App() {
           <Route path={PathConstants.EMPLOYEE_LIST} element={<EmployeeList />} />
           <Route path={PathConstants.EDIT_EMPLOYEE} element={<EditEmployee />} />
           <Route path={PathConstants.EDIT_EMPLOYEE} element={<EditEmployee />} />
-
+          {/* Timecards */}
           <Route path={PathConstants.TIMECARDS} element={<Timecards />} />
           <Route path={PathConstants.ADD_TIMECARD} element={<AddTimeCard />} />
           <Route path={PathConstants.EDIT_TIMECARD} element={<EditTimeCard />} />
-
+          {/* Categories */}
           <Route path={PathConstants.CATEGORIES} element={<Categories />} />
           <Route path={PathConstants.ADD_CATEGORY} element={<AddCategory />} />
           <Route path={PathConstants.EDIT_CATEGORY} element={<EditCategory />} />
+          {/* ItemList */}
           <Route path={PathConstants.ITEM_LIST} element={<ItemList />} />
+          <Route path={PathConstants.ADD_ITEM} element={<AddItem />} />
         </Route>
       </Routes>
     </BrowserRouter>
