@@ -1,7 +1,7 @@
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import PathConstants from "./constants/pathConstants";
-import DashboardLayout from "./layouts/DashBoardLayout";
+import DashboardLayout from "./layouts/DashboardLayout";
 
 import SignIn from "./pages/Common/SignIn";
 import SignUp from "./pages/Common/SignUp";
