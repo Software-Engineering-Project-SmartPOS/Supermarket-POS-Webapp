@@ -59,7 +59,7 @@ const EmployeeList = () => {
   };
 
   // Determine the employee data to render based on search
-  const displayEmployees = searchTerm.length === 0 ? employees : filteredEmployees;
+  // const displayEmployees = searchTerm.length === 0 ? employees : filteredEmployees;
 
   // Function to handle edit employee
   const handleEditEmployee = () => {
