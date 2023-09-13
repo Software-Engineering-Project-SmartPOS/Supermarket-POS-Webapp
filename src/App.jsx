@@ -36,14 +36,18 @@ import EditCategory from "./pages/Items/Categories/EditCategory";
 import ItemList from "./pages/Items/ItemList/ItemList";
 import AddItem from "./pages/Items/ItemList/AddItem";
 import EditItem from "./pages/Items/ItemList/EditItem";
+
 import Brands from "./pages/Items/Brands/Brands";
 import AddBrand from "./pages/Items/Brands/AddBrand";
 import EditBrand from "./pages/Items/Brands/EditBrand";
+
 import Suppliers from "./pages/Inventory/Suppliers/Suppliers";
 import AddSupplier from "./pages/Inventory/Suppliers/AddSupplier";
 import EditSupplier from "./pages/Inventory/Suppliers/EditSupplier";
+
 import PurchaseOrders from "./pages/Inventory/PurchaseOrder/PurchaseOrders";
 import AddPurchaseOrder from "./pages/Inventory/PurchaseOrder/AddPurchaseOrder";
+import EditPurchaseOrder from "./pages/Inventory/PurchaseOrder/EditPurchaseOrder";
 
 function App() {
   // defining routes for the application using react router
@@ -93,9 +97,10 @@ function App() {
           <Route path={PathConstants.SUPPLIERS} element={<Suppliers />} />
           <Route path={PathConstants.ADD_SUPPLIER} element={<AddSupplier />} />
           <Route path={PathConstants.EDIT_SUPPLIER} element={<EditSupplier />} />
-
+          {/* Purchase Orders */}
           <Route path={PathConstants.PURCHASE_ORDERS} element={<PurchaseOrders />} />
           <Route path={PathConstants.ADD_PURCHASE_ORDER} element={<AddPurchaseOrder />} />
+          <Route path={PathConstants.EDIT_PURCHASE_ORDER} element={<EditPurchaseOrder />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faCalendarAlt, faStickyNote, faPlus, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faCalendarAlt, faStickyNote, faPlus, faChevronLeft, faList } from "@fortawesome/free-solid-svg-icons";
 import { Col, Row, Form, Button, Container, InputGroup } from "react-bootstrap";
 import { useNavigate, useParams } from "react-router-dom";
 import { Formik, FieldArray } from "formik";
@@ -155,6 +155,103 @@ export default function EditPurchaseOrder() {
                       </Col>
                     </Row>
 
+                    {values.orderItems.map((item, index) => (
+                      <Row key={index}>
+                        <Col xs={12} lg={4}>
+                          <Form.Group controlId={`orderItems[${index}].itemId`} className="mb-4">
+                            <Form.Label>Select Item</Form.Label>
+                            <InputGroup>
+                              <InputGroup.Text>
+                                <FontAwesomeIcon icon={faList} />
+                              </InputGroup.Text>
+                              <Form.Control as="select" name={`orderItems[${index}].itemId`} onChange={handleChange} value={item.itemId}>
+                                <option value="">Select item</option>
+                                {items.map((item, index) => (
+                                  <option key={index} value={item.id}>
+                                    {item.name}
+                                  </option>
+                                ))}
+                              </Form.Control>
+                            </InputGroup>
+                            {touched.orderItems &&
+                              touched.orderItems[index] &&
+                              touched.orderItems[index].itemId &&
+                              errors.orderItems &&
+                              errors.orderItems[index] &&
+                              errors.orderItems[index].itemId && <div className="text-danger">{errors.orderItems[index].itemId}</div>}
+                          </Form.Group>
+                        </Col>
+
+                        <Col xs={12} lg={2}>
+                          <Form.Group className="mb-4">
+                            <Form.Label>Incoming</Form.Label>
+                            <InputGroup>
+                              <InputGroup.Text>{item.quantity}</InputGroup.Text>
+                            </InputGroup>
+                          </Form.Group>
+                        </Col>
+
+                        <Col xs={12} lg={2}>
+                          <Form.Group controlId={`orderItems[${index}].quantity`} className="mb-4">
+                            <Form.Label>Quantity</Form.Label>
+                            <InputGroup>
+                              <Form.Control
+                                type="number"
+                                placeholder="Enter quantity"
+                                name={`orderItems[${index}].quantity`}
+                                onChange={handleChange}
+                                value={item.quantity}
+                              />
+                            </InputGroup>
+                            {touched.orderItems &&
+                              touched.orderItems[index] &&
+                              touched.orderItems[index].quantity &&
+                              errors.orderItems &&
+                              errors.orderItems[index] &&
+                              errors.orderItems[index].quantity && <div className="text-danger">{errors.orderItems[index].quantity}</div>}
+                          </Form.Group>
+                        </Col>
+
+                        <Col xs={12} lg={2}>
+                          <Form.Group controlId={`orderItems[${index}].purchaseCost`} className="mb-4">
+                            <Form.Label>Purchase Cost</Form.Label>
+                            <InputGroup>
+                              <Form.Control
+                                type="number"
+                                placeholder="Enter cost"
+                                name={`orderItems[${index}].purchaseCost`}
+                                onChange={handleChange}
+                                value={item.purchaseCost}
+                              />
+                            </InputGroup>
+                            {touched.orderItems &&
+                              touched.orderItems[index] &&
+                              touched.orderItems[index].purchaseCost &&
+                              errors.orderItems &&
+                              errors.orderItems[index] &&
+                              errors.orderItems[index].purchaseCost && <div className="text-danger">{errors.orderItems[index].purchaseCost}</div>}
+                          </Form.Group>
+                        </Col>
+
+                        <Col xs={12} lg={2}>
+                          <Form.Group className="mb-4">
+                            <Form.Label>Amount</Form.Label>
+                            <InputGroup>
+                              <InputGroup.Text>${calculateAmount(item.quantity, item.purchaseCost)}</InputGroup.Text>
+                            </InputGroup>
+                          </Form.Group>
+                        </Col>
+
+                        <Col xs={12} lg={2}>
+                          <div className="mt-4">
+                            <Button type="button" variant="danger" onClick={() => remove(index)}>
+                              Remove
+                            </Button>
+                          </div>
+                        </Col>
+                      </Row>
+                    ))}
+
                     <FieldArray name="orderItems">
                       {({ push, remove }) => (
                         <div>
@@ -165,7 +262,7 @@ export default function EditPurchaseOrder() {
                                   <Form.Label>Select Item</Form.Label>
                                   <InputGroup>
                                     <InputGroup.Text>
-                                      <FontAwesomeIcon icon={faPlus} />
+                                      <FontAwesomeIcon icon={faList} />
                                     </InputGroup.Text>
                                     <Form.Control as="select" name={`orderItems[${index}].itemId`} onChange={handleChange} value={item.itemId}>
                                       <option value="">Select item</option>
@@ -182,6 +279,15 @@ export default function EditPurchaseOrder() {
                                     errors.orderItems &&
                                     errors.orderItems[index] &&
                                     errors.orderItems[index].itemId && <div className="text-danger">{errors.orderItems[index].itemId}</div>}
+                                </Form.Group>
+                              </Col>
+
+                              <Col xs={12} lg={2}>
+                                <Form.Group className="mb-4">
+                                  <Form.Label>Incoming</Form.Label>
+                                  <InputGroup>
+                                    <InputGroup.Text>{item.quantity}</InputGroup.Text>
+                                  </InputGroup>
                                 </Form.Group>
                               </Col>
 

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Container, Card, Table, Button, Form } from "react-bootstrap";
+import { Container, Card, Table, Button, Form, ProgressBar } from "react-bootstrap";
 import { useNavigate } from "react-router";
 import PathConstants from "../../../constants/pathConstants";
 
@@ -54,6 +54,11 @@ const PurchaseOrders = () => {
 
   // Determine the purchase orders data to render based on search
   const displayPurchaseOrders = searchTerm.length === 0 ? purchaseOrders : filteredPurchaseOrders;
+  const calculateReceivedProgress = (order) => {
+    // Calculate the received progress based on the number of items received and total items
+    const receivedProgress = (order.itemsReceived / order.totalItems) * 100;
+    return receivedProgress.toFixed(2); // You can adjust the number of decimal places as needed
+  };
 
   return (
     <Container>
@@ -95,7 +100,9 @@ const PurchaseOrders = () => {
                   <td>{order.supplier}</td>
                   <td>{order.store}</td>
                   <td>{order.status}</td>
-                  <td>{order.received}</td>
+                  <td>
+                    <ProgressBar now={calculateReceivedProgress(order)} label={`${calculateReceivedProgress(order)}%`} />
+                  </td>
                   <td>{order.expectedDate}</td>
                   <td>${order.total.toFixed(2)}</td>
                   <td className="text-center">
@@ -104,13 +111,10 @@ const PurchaseOrders = () => {
                       size="sm"
                       className="mx-1"
                       onClick={() => {
-                        `/${PathConstants.EDIT_PURCHASE_ORDER}`;
+                        navigate(`/${PathConstants.EDIT_PURCHASE_ORDER}`);
                       }}
                     >
                       Edit
-                    </Button>
-                    <Button variant="danger" size="sm" className="mx-1">
-                      Delete
                     </Button>
                   </td>
                 </tr>
