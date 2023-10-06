@@ -34,6 +34,13 @@ export default function AddPurchaseOrder() {
     purchaseDate: Yup.date().required("Required"),
     expectedDate: Yup.date().required("Required"),
     note: Yup.string(),
+    orderItems: Yup.array().of(
+      Yup.object().shape({
+        itemId: Yup.string().required("Required"),
+        quantity: Yup.number().required("Required"),
+        purchaseCost: Yup.number().required("Required"),
+      })
+    ),
   });
 
   // Calculate amount for each order item
@@ -67,7 +74,7 @@ export default function AddPurchaseOrder() {
               </div>
               <Formik
                 initialValues={initialValues}
-                // validationSchema={validationSchema}
+                validationSchema={validationSchema}
                 onSubmit={(values) => {
                   console.log(values);
                 }}
@@ -140,7 +147,7 @@ export default function AddPurchaseOrder() {
                       </Col>
                     </Row>
 
-                    <Table responsive bordered hover>
+                    <Table responsive hover>
                       <thead>
                         <tr>
                           <th>Item</th>
@@ -156,9 +163,9 @@ export default function AddPurchaseOrder() {
                             <>
                               {values.orderItems.map((item, index) => (
                                 <tr key={index}>
-                                  <td>
-                                    <Form.Group controlId={`orderItems[${index}].itemId`} className="mb-0">
-                                      {!(item.itemId && items.find((i) => i.name === item.itemId)) ? (
+                                  {!(item.itemId && items.find((i) => i.name === item.itemId)) ? (
+                                    <td colSpan={4}>
+                                      <Form.Group controlId={`orderItems[${index}].itemId`} className="mb-0">
                                         <ReactSearchBox
                                           placeholder="Search Products"
                                           data={items.map((item) => ({
@@ -177,41 +184,58 @@ export default function AddPurchaseOrder() {
                                           }}
                                           autoFocus
                                           leftIcon={<FaShoppingBasket />}
-                                          inputBorderColor="#002a54"
+                                          // inputBorderColor="#002a54"
                                           iconBoxSize="48px"
                                           inputFontSize="16px"
-                                          inputHeight="48px"
+                                          // inputHeight="48px"
                                           dropdownBorderColor="#002a54"
                                           dropdownHoverColor="#c4dcf4"
                                         />
-                                      ) : (
-                                        <>{item.itemId}</>
+                                      </Form.Group>
+                                      {touched.orderItems && errors.orderItems && errors.orderItems[index] && errors.orderItems[index].itemId && (
+                                        <div className="text-danger">{errors.orderItems[index].itemId}</div>
                                       )}
-                                    </Form.Group>
-                                  </td>
-                                  <td>
-                                    <Form.Group controlId={`orderItems[${index}].quantity`} className="mb-0">
-                                      <Form.Control
-                                        type="number"
-                                        placeholder="Enter quantity"
-                                        name={`orderItems[${index}].quantity`}
-                                        onChange={handleChange}
-                                        value={item.quantity}
-                                      />
-                                    </Form.Group>
-                                  </td>
-                                  <td>
-                                    <Form.Group controlId={`orderItems[${index}].purchaseCost`} className="mb-0">
-                                      <Form.Control
-                                        type="number"
-                                        placeholder="Enter cost"
-                                        name={`orderItems[${index}].purchaseCost`}
-                                        onChange={handleChange}
-                                        value={item.purchaseCost}
-                                      />
-                                    </Form.Group>
-                                  </td>
-                                  <td>${calculateAmount(item.quantity, item.purchaseCost)}</td>
+                                    </td>
+                                  ) : (
+                                    <td>{item.itemId}</td>
+                                  )}
+
+                                  {item.itemId && items.find((i) => i.name === item.itemId) && (
+                                    <>
+                                      <td>
+                                        <Form.Group controlId={`orderItems[${index}].quantity`} className="mb-0">
+                                          <Form.Control
+                                            type="number"
+                                            placeholder="Enter quantity"
+                                            name={`orderItems[${index}].quantity`}
+                                            onChange={handleChange}
+                                            value={item.quantity}
+                                          />
+                                        </Form.Group>
+                                        {touched.orderItems && errors.orderItems && errors.orderItems[index] && errors.orderItems[index].quantity && (
+                                          <div className="text-danger">{errors.orderItems[index].quantity}</div>
+                                        )}
+                                      </td>
+                                      <td>
+                                        <Form.Group controlId={`orderItems[${index}].purchaseCost`} className="mb-0">
+                                          <Form.Control
+                                            type="number"
+                                            placeholder="Enter cost"
+                                            name={`orderItems[${index}].purchaseCost`}
+                                            onChange={handleChange}
+                                            value={item.purchaseCost}
+                                          />
+                                        </Form.Group>
+                                        {touched.orderItems &&
+                                          errors.orderItems &&
+                                          errors.orderItems[index] &&
+                                          errors.orderItems[index].purchaseCost && (
+                                            <div className="text-danger">{errors.orderItems[index].purchaseCost}</div>
+                                          )}
+                                      </td>
+                                      <td>Rs. {calculateAmount(item.quantity, item.purchaseCost)}</td>
+                                    </>
+                                  )}
                                   <td>
                                     <Button type="button" variant="danger" onClick={() => remove(index)}>
                                       Remove
@@ -220,7 +244,7 @@ export default function AddPurchaseOrder() {
                                 </tr>
                               ))}
                               <tr>
-                                <td>
+                                <td colSpan={5}>
                                   <Button type="button" variant="primary" onClick={() => push({ itemId: "", quantity: "", purchaseCost: "" })}>
                                     Add Item
                                   </Button>

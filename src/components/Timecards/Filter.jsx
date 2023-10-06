@@ -59,7 +59,7 @@ const Filters = ({ onFilter }) => {
   ];
 
   return (
-    <div className="container my-3">
+    <div className="my-3">
       <div className="row">
         <div style={{ width: "fit-content" }}>
           <div className="form-control border border-black  " onClick={toggleCalendar}>

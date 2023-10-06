@@ -97,7 +97,7 @@ function Timecards() {
       <div className="title">
         <h3>Timecards</h3>
       </div>
-      <Filters onFilter={handleFilter} />
+      {/* <Filters onFilter={handleFilter} /> */}
       <TimecardsTable timecards={filteredTimecards} />
     </div>
   );

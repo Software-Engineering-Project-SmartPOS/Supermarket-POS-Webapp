@@ -1,12 +1,14 @@
 import { Card, Container, Table, Button } from "react-bootstrap";
 import { useNavigate } from "react-router";
 import PathConstants from "../../constants/pathConstants";
+import Filters from "./Filter";
 const TimecardsTable = ({ timecards }) => {
   const navigate = useNavigate();
   return (
     <Container>
       <Card border="light" className="table-responsive shadow">
         <Card.Body className="pt-0">
+          <Filters />
           <Table hover responsive>
             <thead>
               <tr>

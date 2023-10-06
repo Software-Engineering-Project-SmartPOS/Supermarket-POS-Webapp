@@ -2,10 +2,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faUnlockAlt } from "@fortawesome/free-solid-svg-icons";
 import { Col, Row, Form, Card, Button, FormCheck, Container, InputGroup } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-
 import "../../styles/SignIn.css";
 import { Formik } from "formik";
 import PathConstants from "../../constants/pathConstants";
+import axios from "../../utils/axios";
+import * as Yup from "yup";
 
 export default function SignIn() {
   const navigate = useNavigate();
@@ -21,11 +22,29 @@ export default function SignIn() {
                 </div>
                 <Formik
                   initialValues={{ email: "", password: "" }}
+                  validationSchema={Yup.object({
+                    email: Yup.string().email("Invalid email address").required("Email Required"),
+                    password: Yup.string().required("Password Required"),
+                  })}
                   onSubmit={(values) => {
-                    navigate(PathConstants.HOME);
+                    axios
+                      .post("/authenticate", { username: values.email, password: values.password })
+                      .then((response) => {
+                        if (response.status === 200) {
+                          localStorage.setItem("token", response.data.token);
+                          localStorage.setItem("user", JSON.stringify(response.data.user));
+                          navigate(PathConstants.HOME);
+                        } else {
+                          alert("Invalid signin");
+                        }
+                      })
+                      .catch((error) => {
+                        console.log(error);
+                        alert("Invalid signin");
+                      });
                   }}
                 >
-                  {({ handleSubmit, handleChange }) => (
+                  {({ handleSubmit, handleChange, touched, errors }) => (
                     <Form onSubmit={handleSubmit} className="mt-4">
                       <Form.Group id="email" className="mb-4">
                         <Form.Label>Your Email</Form.Label>
@@ -35,6 +54,7 @@ export default function SignIn() {
                           </InputGroup.Text>
                           <Form.Control autoFocus required type="email" id="email" placeholder="example@company.com" onChange={handleChange} />
                         </InputGroup>
+                        {touched.email && errors.email && <div className="text-danger">{errors.email}</div>}
                       </Form.Group>
                       <Form.Group>
                         <Form.Group id="password" className="mb-4">
@@ -45,6 +65,7 @@ export default function SignIn() {
                             </InputGroup.Text>
                             <Form.Control required type="password" id="password" placeholder="Password" onChange={handleChange} />
                           </InputGroup>
+                          {touched.password && errors.password && <div className="text-danger">{errors.password}</div>}
                         </Form.Group>
                         <div className="d-flex justify-content-between align-items-center mb-4">
                           <Form.Check type="checkbox">
