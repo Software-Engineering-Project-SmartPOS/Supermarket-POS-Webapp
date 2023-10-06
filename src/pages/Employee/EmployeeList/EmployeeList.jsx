@@ -1,15 +1,18 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Container, Card, Table, Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router";
 import PathConstants from "../../../constants/pathConstants";
-import { GET_EMPLOYEES } from "../../../graphql/employees";
-import { useQuery } from "@apollo/client";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchEmployees } from "../../../state/reducers/employee";
 const EmployeeList = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredEmployees, setFilteredEmployees] = useState([]);
-  // Use the useQuery hook to fetch employees
-  const { data, loading, error } = useQuery(GET_EMPLOYEES);
+  const { loading, error, employees } = useSelector((state) => state.employee);
+  useEffect(() => {
+    dispatch(fetchEmployees());
+  }, []);
 
   if (loading) {
     return <p>Loading...</p>;
@@ -18,28 +21,6 @@ const EmployeeList = () => {
   if (error) {
     return <p>Error: {error.message}</p>;
   }
-
-  const employees = data.allEmployees;
-  console.log(data);
-
-  // Sample employee data
-  // const employees = [
-  //   {
-  //     id: 1,
-  //     name: "John Doe",
-  //     email: "johndoe@example.com",
-  //     phone: "123-456-7890",
-  //     role: "Manager",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Jane Smith",
-  //     email: "janesmith@example.com",
-  //     phone: "987-654-3210",
-  //     role: "Developer",
-  //   },
-  //   // Add more employee data as needed
-  // ];
 
   // Function to handle search
   const handleSearch = (e) => {
@@ -57,9 +38,6 @@ const EmployeeList = () => {
 
     setFilteredEmployees(filtered);
   };
-
-  // Determine the employee data to render based on search
-  // const displayEmployees = searchTerm.length === 0 ? employees : filteredEmployees;
 
   // Function to handle edit employee
   const handleEditEmployee = () => {

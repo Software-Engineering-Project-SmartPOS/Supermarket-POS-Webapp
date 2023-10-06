@@ -1,15 +1,18 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope, faUnlockAlt } from "@fortawesome/free-solid-svg-icons";
-import { Col, Row, Form, Card, Button, FormCheck, Container, InputGroup } from "react-bootstrap";
+import { Col, Row, Form, Card, Button, FormCheck, Container, InputGroup, Spinner } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import "../../styles/SignIn.css";
 import { Formik } from "formik";
 import PathConstants from "../../constants/pathConstants";
 import axios from "../../utils/axios";
 import * as Yup from "yup";
+import { useState } from "react";
 
 export default function SignIn() {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false); // Add isLoading state variable
+
   return (
     <main className="main">
       <section className="d-flex align-items-center my-5 mt-lg-6 mb-lg-5">
@@ -27,6 +30,7 @@ export default function SignIn() {
                     password: Yup.string().required("Password Required"),
                   })}
                   onSubmit={(values) => {
+                    setIsLoading(true); // Set isLoading to true when form is submitted
                     axios
                       .post("/authenticate", { username: values.email, password: values.password })
                       .then((response) => {
@@ -41,6 +45,9 @@ export default function SignIn() {
                       .catch((error) => {
                         console.log(error);
                         alert("Invalid signin");
+                      })
+                      .finally(() => {
+                        setIsLoading(false); // Set isLoading to false when request is complete
                       });
                   }}
                 >
@@ -77,9 +84,15 @@ export default function SignIn() {
                           <Card.Link className="small text-end">Lost password?</Card.Link>
                         </div>
                       </Form.Group>
-                      <Button variant="primary" type="submit" className="button w-100">
-                        Sign in
-                      </Button>
+                      {isLoading ? ( // Conditionally render loading icon or submit button
+                        <Button variant="primary" type="submit" className="button w-100" disabled>
+                          <Spinner animation="border" size="sm" /> Loading...
+                        </Button>
+                      ) : (
+                        <Button variant="primary" type="submit" className="button w-100">
+                          Sign in
+                        </Button>
+                      )}
                     </Form>
                   )}
                 </Formik>

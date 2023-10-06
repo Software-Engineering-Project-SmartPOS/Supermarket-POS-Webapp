@@ -1,11 +1,24 @@
 //queries and mutation related with customers
 import gql from "graphql-tag";
 
-export const GET_CUSTOMERS = gql`
+export const GET_ALL_CUSTOMERS = gql`
   query {
-    countries {
+    allCustomer {
+      id
       name
-      code
+      telephone
+      email
+      addressId
+      houseNumber
+      street
+      city
+      district
+      postalCode
+      customerType
+      loyaltyId
+      createdDate
+      firstVisited
+      lastVisited
     }
   }
 `;

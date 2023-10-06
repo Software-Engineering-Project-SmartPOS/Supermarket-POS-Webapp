@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { GET_CUSTOMERS } from "../../graphql/customers";
+import { GET_ALL_CUSTOMERS } from "../../graphql/customers";
 import client from "../../ApolloClient";
 // Define an async thunk to fetch customers
 export const fetchCustomers = createAsyncThunk("customer/fetchCustomers", async () => {
   const { data } = await client.query({
-    query: GET_CUSTOMERS,
+    query: GET_ALL_CUSTOMERS,
   });
-  return data.countries;
+  return data;
 });
 
 // Define the initial state using that type
@@ -46,5 +46,4 @@ const customerSlice = createSlice({
 });
 
 export const { addCustomer } = customerSlice.actions;
-
 export default customerSlice.reducer;

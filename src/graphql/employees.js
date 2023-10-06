@@ -1,8 +1,8 @@
 //queries and mutation related with customers
 import gql from "graphql-tag";
 
-export const GET_EMPLOYEES = gql`
-  query AllEmployees {
+export const GET_ALL_EMPLOYEES = gql`
+  query {
     allEmployees {
       id
       title
