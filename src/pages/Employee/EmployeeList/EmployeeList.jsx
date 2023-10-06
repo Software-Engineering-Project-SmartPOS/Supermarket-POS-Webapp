@@ -4,36 +4,29 @@ import { useNavigate } from "react-router";
 import PathConstants from "../../../constants/pathConstants";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchEmployees } from "../../../state/reducers/employee";
+
 const EmployeeList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
+  const { employees } = useSelector((state) => state.employee);
   const [filteredEmployees, setFilteredEmployees] = useState([]);
-  const { loading, error, employees } = useSelector((state) => state.employee);
+
   useEffect(() => {
     dispatch(fetchEmployees());
-  }, []);
-
-  if (loading) {
-    return <p>Loading...</p>;
-  }
-
-  if (error) {
-    return <p>Error: {error.message}</p>;
-  }
+  }, [dispatch]);
 
   // Function to handle search
   const handleSearch = (e) => {
     const searchTerm = e.target.value.toLowerCase();
     setSearchTerm(searchTerm);
-
     // Filter employees based on name, email, or role
     const filtered = employees.filter(
       (employee) =>
-        employee.name.toLowerCase().includes(searchTerm) ||
+        employee.firstName.toLowerCase().includes(searchTerm) ||
         employee.email.toLowerCase().includes(searchTerm) ||
-        employee.phone.includes(searchTerm) ||
-        employee.role.toLowerCase().includes(searchTerm)
+        employee.number.includes(searchTerm) ||
+        employee.jobRole.toLowerCase().includes(searchTerm)
     );
 
     setFilteredEmployees(filtered);
@@ -54,7 +47,7 @@ const EmployeeList = () => {
       </div>
       <div className="search-box">
         <Form.Group>
-          <Form.Control type="text" placeholder="Search by name, email, phone, or role" value={searchTerm} onChange={handleSearch} />
+          <Form.Control type="text" placeholder="Search by firstname, email, phone, or role" value={searchTerm} onChange={handleSearch} />
         </Form.Group>
       </div>
 
@@ -64,7 +57,7 @@ const EmployeeList = () => {
             <thead>
               <tr>
                 <th>#</th>
-                <th>Name</th>
+                <th>FirstName</th>
                 <th>Email</th>
                 <th>Phone</th>
                 <th>Role</th>
@@ -72,7 +65,7 @@ const EmployeeList = () => {
               </tr>
             </thead>
             <tbody>
-              {employees.map((employee, index) => (
+              {(searchTerm === "" ? employees : filteredEmployees).map((employee, index) => (
                 <tr key={employee.id}>
                   <td>{index + 1}</td>
                   <td>{employee.firstName}</td>
