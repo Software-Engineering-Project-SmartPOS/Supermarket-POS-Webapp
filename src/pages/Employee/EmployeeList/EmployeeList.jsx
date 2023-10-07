@@ -58,9 +58,11 @@ const EmployeeList = () => {
               <tr>
                 <th>#</th>
                 <th>FirstName</th>
+                <th>LastName</th>
                 <th>Email</th>
                 <th>Phone</th>
                 <th>Role</th>
+                <th>Active</th>
                 <th className="text-center">Actions</th>
               </tr>
             </thead>
@@ -69,9 +71,11 @@ const EmployeeList = () => {
                 <tr key={employee.id}>
                   <td>{index + 1}</td>
                   <td>{employee.firstName}</td>
+                  <td>{employee.lastName}</td>
                   <td>{employee.email}</td>
                   <td>{employee.number}</td>
                   <td>{employee.jobRole}</td>
+                  <td>{employee.active ? "Yes" : "No"}</td>
                   <td className="text-center">
                     <Button variant="info" size="sm" className="mx-1" onClick={handleEditEmployee}>
                       Edit

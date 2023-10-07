@@ -2,7 +2,7 @@
 import gql from "graphql-tag";
 
 export const GET_ALL_EMPLOYEES = gql`
-  query {
+  query GetAllEmployees {
     allEmployees {
       id
       title
@@ -51,6 +51,18 @@ export const ADD_EMPLOYEE = gql`
       active
       createdAt
       updatedAt
+    }
+  }
+`;
+
+export const GET_ALL_SALARY_TYPES = gql`
+  query GetAllSalaryTypes {
+    allSalaryTypes {
+      id
+      basicSalary
+      halfDaySalary
+      overTimeSalary
+      bonus
     }
   }
 `;

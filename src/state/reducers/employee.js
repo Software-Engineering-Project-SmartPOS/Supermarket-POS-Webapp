@@ -6,9 +6,9 @@ export const fetchEmployees = createAsyncThunk("employee/fetchEmployees", async 
   const { data } = await client.query({
     query: GET_ALL_EMPLOYEES,
   });
-  console.log(data);
   return data.allEmployees;
 });
+
 const initialState = {
   employees: [],
   selectedEmployee: null,

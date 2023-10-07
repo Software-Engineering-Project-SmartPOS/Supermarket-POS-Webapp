@@ -1,13 +1,31 @@
 import { Container, Row, Col, Form, InputGroup, Button } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEnvelope, faUser, faPhone, faBuilding, faCity, faMapMarker, faLocationArrow, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEnvelope,
+  faUser,
+  faPhone,
+  faBuilding,
+  faCity,
+  faMapMarker,
+  faLocationArrow,
+  faChevronLeft,
+  faHome,
+} from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import PathConstants from "../../../constants/pathConstants";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { fetchSalaryTypes } from "../../../state/reducers/salaryTypes";
 
 export default function AddEmployee() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { salaryTypes } = useSelector((state) => state.salaryType);
+  useEffect(() => {
+    dispatch(fetchSalaryTypes());
+  }, [dispatch]);
 
   const initialValues = {
     title: "",
@@ -50,7 +68,7 @@ export default function AddEmployee() {
     <section className="d-flex align-items-center my-5 mt-lg-6 mb-lg-5">
       <Container>
         <Row className="justify-content-center form-bg-image">
-          <Col xs={12} lg={6} className="d-flex align-items-center justify-content-center">
+          <Col xs={12} lg={7} className="d-flex align-items-center justify-content-center">
             <div className="bg-white shadow-lg border rounded border-light px-5 py-2 w-100">
               <div className="d-flex">
                 <div className="text-start" onClick={() => navigate("/" + PathConstants.EMPLOYEE_LIST)}>
@@ -75,10 +93,9 @@ export default function AddEmployee() {
                             </InputGroup.Text>
                             <Form.Control as="select" name="title" onChange={handleChange} value={values.title} placeholder="Select Title">
                               <option value="">Select title</option>
-                              <option value="Mr.">Mr.</option>
-                              <option value="Mrs.">Mrs.</option>
-                              <option value="Miss">Miss</option>
-                              <option value="Dr.">Dr.</option>
+                              <option value="MR">Mr.</option>
+                              <option value="MRS">Mrs.</option>
+                              <option value="MISS">Miss</option>
                             </Form.Control>
                           </InputGroup>
                           {touched.title && errors.title && <div className="text-danger">{errors.title}</div>}
@@ -154,9 +171,12 @@ export default function AddEmployee() {
                             </InputGroup.Text>
                             <Form.Control as="select" name="job_role" onChange={handleChange} value={values.job_role} placeholder="Select Job Role">
                               <option value="">Select job role</option>
-                              <option value="Role 1">Role 1</option>
-                              <option value="Role 2">Role 2</option>
-                              <option value="Role 3">Role 3</option>
+                              <option value="CASHIER">CASHIER</option>
+                              <option value="OWNER">OWNER</option>
+                              <option value="MANAGER">MANAGER</option>
+                              <option value="STORE_MANAGER">STORE_MANAGER</option>
+                              <option value="SALES_ASSISTANT">SALES_ASSISTANT</option>
+                              <option value="ADMIN">ADMIN</option>
                             </Form.Control>
                           </InputGroup>
                           {touched.job_role && errors.job_role && <div className="text-danger">{errors.job_role}</div>}
@@ -178,9 +198,11 @@ export default function AddEmployee() {
                               placeholder="Select Salary Type"
                             >
                               <option value="">Select salary type</option>
-                              <option value="Type 1">Type 1</option>
-                              <option value="Type 2">Type 2</option>
-                              <option value="Type 3">Type 3</option>
+                              {salaryTypes?.map((type) => (
+                                <option key={type.id} value={type.id}>
+                                  Rs. {type.basicSalary}
+                                </option>
+                              ))}
                             </Form.Control>
                           </InputGroup>
                           {touched.salary_type && errors.salary_type && <div className="text-danger">{errors.salary_type}</div>}
@@ -223,7 +245,25 @@ export default function AddEmployee() {
                     </Row>
 
                     <Row>
-                      <Col xs={12} lg={6}>
+                      <Col xs={12} lg={4}>
+                        <Form.Group controlId="house_number" className="mb-4">
+                          <Form.Label>House Number</Form.Label>
+                          <InputGroup>
+                            <InputGroup.Text>
+                              <FontAwesomeIcon icon={faHome} />
+                            </InputGroup.Text>
+                            <Form.Control
+                              type="text"
+                              name="house_number"
+                              onChange={handleChange}
+                              value={values.house_number}
+                              placeholder="Enter House Number"
+                            />
+                          </InputGroup>
+                          {touched.house_number && errors.house_number && <div className="text-danger">{errors.house_number}</div>}
+                        </Form.Group>
+                      </Col>
+                      <Col xs={12} lg={8}>
                         <Form.Group controlId="address" className="mb-4">
                           <Form.Label>Address</Form.Label>
                           <InputGroup>
@@ -235,8 +275,10 @@ export default function AddEmployee() {
                           {touched.address && errors.address && <div className="text-danger">{errors.address}</div>}
                         </Form.Group>
                       </Col>
+                    </Row>
 
-                      <Col xs={12} lg={6}>
+                    <Row>
+                      <Col xs={12} lg={4}>
                         <Form.Group controlId="city" className="mb-4">
                           <Form.Label>City</Form.Label>
                           <InputGroup>
@@ -248,10 +290,8 @@ export default function AddEmployee() {
                           {touched.city && errors.city && <div className="text-danger">{errors.city}</div>}
                         </Form.Group>
                       </Col>
-                    </Row>
 
-                    <Row>
-                      <Col xs={12} lg={6}>
+                      <Col xs={12} lg={4}>
                         <Form.Group controlId="district" className="mb-4">
                           <Form.Label>District</Form.Label>
                           <InputGroup>
@@ -264,7 +304,7 @@ export default function AddEmployee() {
                         </Form.Group>
                       </Col>
 
-                      <Col xs={12} lg={6}>
+                      <Col xs={12} lg={4}>
                         <Form.Group controlId="postal_code" className="mb-4">
                           <Form.Label>Postal Code</Form.Label>
                           <InputGroup>
