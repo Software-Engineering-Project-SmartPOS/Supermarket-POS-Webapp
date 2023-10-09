@@ -10,10 +10,10 @@ import {
   FaLock,
   FaShoppingBasket,
   FaSignOutAlt,
+  FaStore,
   FaUsers,
   FaWarehouse,
 } from "react-icons/fa";
-import { AiFillSetting } from "react-icons/ai";
 import "../styles/SideBar.css";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleSideBar, setSelectedTab, setActiveTab } from "../state/reducers/sideBar";
@@ -131,10 +131,9 @@ export default function SideBar() {
           <SideBarTab mainTab="Employees" reactIcon={<FaAddressCard />} nestedTabs={["Employee List", "Timecards"]} />
           <SideBarTab mainTab="Items" reactIcon={<FaShoppingBasket />} nestedTabs={["Item List", "Categories", "Brands"]} />
           <SideBarTab mainTab="Inventory Management" reactIcon={<FaWarehouse />} nestedTabs={["Suppliers", "Purchase Orders"]} />
-          {/* <SideBarTab mainTab="Account" reactIcon={<FaUser />} nestedTabs={["Sales by item 1", "Sales by item 2", "Sales by item 3"]} /> */}
+          <SideBarTab mainTab="Account" reactIcon={<FaStore />} nestedTabs={["Account", "Stores"]} />
           <SideBarTab mainTab="Reports" reactIcon={<FaChartBar />} nestedTabs={["Sales by item 1", "Sales by item 2", "Sales by item 3"]} />
           <SideBarTab mainTab="Online Orders" reactIcon={<SiShopify />} nestedTabs={["Sales by item 1", "Sales by item 2"]} />
-          {/* <SideBarTab mainTab="Settings" reactIcon={<AiFillSetting />} iconType="react" nestedTabs={["Sales by item 1", "Sales by item 2"]} /> */}
         </div>
       </div>
     </>

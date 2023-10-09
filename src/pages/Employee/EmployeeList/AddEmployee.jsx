@@ -15,17 +15,12 @@ import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import PathConstants from "../../../constants/pathConstants";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { fetchSalaryTypes } from "../../../state/reducers/salaryTypes";
+import { useQuery } from "@apollo/client";
+import { GET_ALL_SALARY_TYPES } from "../../../graphql/employees";
 
 export default function AddEmployee() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { salaryTypes } = useSelector((state) => state.salaryType);
-  useEffect(() => {
-    dispatch(fetchSalaryTypes());
-  }, [dispatch]);
+  const { loading, error, data } = useQuery(GET_ALL_SALARY_TYPES);
 
   const initialValues = {
     title: "",
@@ -172,7 +167,6 @@ export default function AddEmployee() {
                             <Form.Control as="select" name="job_role" onChange={handleChange} value={values.job_role} placeholder="Select Job Role">
                               <option value="">Select job role</option>
                               <option value="CASHIER">CASHIER</option>
-                              <option value="OWNER">OWNER</option>
                               <option value="MANAGER">MANAGER</option>
                               <option value="STORE_MANAGER">STORE_MANAGER</option>
                               <option value="SALES_ASSISTANT">SALES_ASSISTANT</option>
@@ -198,7 +192,7 @@ export default function AddEmployee() {
                               placeholder="Select Salary Type"
                             >
                               <option value="">Select salary type</option>
-                              {salaryTypes?.map((type) => (
+                              {data?.allSalaryTypes?.map((type) => (
                                 <option key={type.id} value={type.id}>
                                   Rs. {type.basicSalary}
                                 </option>

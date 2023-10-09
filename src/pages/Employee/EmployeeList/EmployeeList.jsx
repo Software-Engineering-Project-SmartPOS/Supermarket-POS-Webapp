@@ -28,7 +28,6 @@ const EmployeeList = () => {
         employee.number.includes(searchTerm) ||
         employee.jobRole.toLowerCase().includes(searchTerm)
     );
-
     setFilteredEmployees(filtered);
   };
 
