@@ -48,6 +48,7 @@ import EditSupplier from "./pages/Inventory/Suppliers/EditSupplier";
 import PurchaseOrders from "./pages/Inventory/PurchaseOrder/PurchaseOrders";
 import AddPurchaseOrder from "./pages/Inventory/PurchaseOrder/AddPurchaseOrder";
 import EditPurchaseOrder from "./pages/Inventory/PurchaseOrder/EditPurchaseOrder";
+import ProtectedRoutes from "./utils/protectedRoutes";
 
 function App() {
   // defining routes for the application using react router
@@ -59,48 +60,50 @@ function App() {
         <Route path={PathConstants.SIGN_UP} element={<SignUp />} />
         <Route path={PathConstants.LOCK} element={<Lock />} />
         <Route path="*" element={<PageNotFound />} />
-        <Route path={PathConstants.HOME} element={<DashboardLayout />}>
-          {/* Sales */}
-          <Route path={PathConstants.CHECKOUT} element={<Checkout />} />
-          <Route path={PathConstants.RECEIPTS} element={<Receipts />} />
-          <Route path={PathConstants.REFUND} element={<Refund />} />
-          {/* Customers */}
-          <Route path={PathConstants.ADD_CUSTOMER} element={<AddCustomer />} />
-          <Route path={PathConstants.CUSTOMER_LIST} element={<CustomerList />} />
-          <Route path={PathConstants.EDIT_CUSTOMER} element={<EditCustomer />} />
-          <Route path={PathConstants.PURCHASE_HISTORY} element={<PurchaseHistory />} />
-          <Route path={PathConstants.LOYALTY_PROGRAMS} element={<LoyaltyProgramList />} />
-          <Route path={PathConstants.ADD_LOYALTY_PROGRAM} element={<AddLoyaltyProgram />} />
-          <Route path={PathConstants.EDIT_LOYALTY_PROGRAM} element={<EditLoyaltyProgram />} />
-          {/* Employees */}
-          <Route path={PathConstants.ADD_EMPLOYEE} element={<AddEmployee />} />
-          <Route path={PathConstants.EMPLOYEE_LIST} element={<EmployeeList />} />
-          <Route path={PathConstants.EDIT_EMPLOYEE} element={<EditEmployee />} />
-          <Route path={PathConstants.EDIT_EMPLOYEE} element={<EditEmployee />} />
-          {/* Timecards */}
-          <Route path={PathConstants.TIMECARDS} element={<Timecards />} />
-          <Route path={PathConstants.ADD_TIMECARD} element={<AddTimeCard />} />
-          <Route path={PathConstants.EDIT_TIMECARD} element={<EditTimeCard />} />
-          {/* Categories */}
-          <Route path={PathConstants.CATEGORIES} element={<Categories />} />
-          <Route path={PathConstants.ADD_CATEGORY} element={<AddCategory />} />
-          <Route path={PathConstants.EDIT_CATEGORY} element={<EditCategory />} />
-          {/* ItemList */}
-          <Route path={PathConstants.ITEM_LIST} element={<ItemList />} />
-          <Route path={PathConstants.ADD_ITEM} element={<AddItem />} />
-          <Route path={PathConstants.EDIT_ITEM} element={<EditItem />} />
-          {/* Brands */}
-          <Route path={PathConstants.BRANDS} element={<Brands />} />
-          <Route path={PathConstants.ADD_BRAND} element={<AddBrand />} />
-          <Route path={PathConstants.EDIT_BRAND} element={<EditBrand />} />
-          {/* Suppliers */}
-          <Route path={PathConstants.SUPPLIERS} element={<Suppliers />} />
-          <Route path={PathConstants.ADD_SUPPLIER} element={<AddSupplier />} />
-          <Route path={PathConstants.EDIT_SUPPLIER} element={<EditSupplier />} />
-          {/* Purchase Orders */}
-          <Route path={PathConstants.PURCHASE_ORDERS} element={<PurchaseOrders />} />
-          <Route path={PathConstants.ADD_PURCHASE_ORDER} element={<AddPurchaseOrder />} />
-          <Route path={PathConstants.EDIT_PURCHASE_ORDER} element={<EditPurchaseOrder />} />
+        <Route element={<ProtectedRoutes roles={["OWNER", "ADMIN"]} />}>
+          <Route path={PathConstants.HOME} element={<DashboardLayout />}>
+            {/* Sales */}
+            <Route path={PathConstants.CHECKOUT} element={<Checkout />} />
+            <Route path={PathConstants.RECEIPTS} element={<Receipts />} />
+            <Route path={PathConstants.REFUND} element={<Refund />} />
+            {/* Customers */}
+            <Route path={PathConstants.ADD_CUSTOMER} element={<AddCustomer />} />
+            <Route path={PathConstants.CUSTOMER_LIST} element={<CustomerList />} />
+            <Route path={PathConstants.EDIT_CUSTOMER} element={<EditCustomer />} />
+            <Route path={PathConstants.PURCHASE_HISTORY} element={<PurchaseHistory />} />
+            <Route path={PathConstants.LOYALTY_PROGRAMS} element={<LoyaltyProgramList />} />
+            <Route path={PathConstants.ADD_LOYALTY_PROGRAM} element={<AddLoyaltyProgram />} />
+            <Route path={PathConstants.EDIT_LOYALTY_PROGRAM} element={<EditLoyaltyProgram />} />
+            {/* Employees */}
+            <Route path={PathConstants.ADD_EMPLOYEE} element={<AddEmployee />} />
+            <Route path={PathConstants.EMPLOYEE_LIST} element={<EmployeeList />} />
+            <Route path={PathConstants.EDIT_EMPLOYEE} element={<EditEmployee />} />
+            <Route path={PathConstants.EDIT_EMPLOYEE} element={<EditEmployee />} />
+            {/* Timecards */}
+            <Route path={PathConstants.TIMECARDS} element={<Timecards />} />
+            <Route path={PathConstants.ADD_TIMECARD} element={<AddTimeCard />} />
+            <Route path={PathConstants.EDIT_TIMECARD} element={<EditTimeCard />} />
+            {/* Categories */}
+            <Route path={PathConstants.CATEGORIES} element={<Categories />} />
+            <Route path={PathConstants.ADD_CATEGORY} element={<AddCategory />} />
+            <Route path={PathConstants.EDIT_CATEGORY} element={<EditCategory />} />
+            {/* ItemList */}
+            <Route path={PathConstants.ITEM_LIST} element={<ItemList />} />
+            <Route path={PathConstants.ADD_ITEM} element={<AddItem />} />
+            <Route path={PathConstants.EDIT_ITEM} element={<EditItem />} />
+            {/* Brands */}
+            <Route path={PathConstants.BRANDS} element={<Brands />} />
+            <Route path={PathConstants.ADD_BRAND} element={<AddBrand />} />
+            <Route path={PathConstants.EDIT_BRAND} element={<EditBrand />} />
+            {/* Suppliers */}
+            <Route path={PathConstants.SUPPLIERS} element={<Suppliers />} />
+            <Route path={PathConstants.ADD_SUPPLIER} element={<AddSupplier />} />
+            <Route path={PathConstants.EDIT_SUPPLIER} element={<EditSupplier />} />
+            {/* Purchase Orders */}
+            <Route path={PathConstants.PURCHASE_ORDERS} element={<PurchaseOrders />} />
+            <Route path={PathConstants.ADD_PURCHASE_ORDER} element={<AddPurchaseOrder />} />
+            <Route path={PathConstants.EDIT_PURCHASE_ORDER} element={<EditPurchaseOrder />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>

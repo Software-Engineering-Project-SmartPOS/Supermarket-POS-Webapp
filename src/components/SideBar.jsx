@@ -115,7 +115,13 @@ export default function SideBar() {
             </OverlayTrigger>
 
             <OverlayTrigger placement="bottom" overlay={<Tooltip id="tooltip-id">Logout</Tooltip>}>
-              <span className="my-2" onClick={() => navigate("/signin")}>
+              <span
+                className="my-2"
+                onClick={() => {
+                  localStorage.clear();
+                  navigate("/signin");
+                }}
+              >
                 <FaSignOutAlt />
               </span>
             </OverlayTrigger>

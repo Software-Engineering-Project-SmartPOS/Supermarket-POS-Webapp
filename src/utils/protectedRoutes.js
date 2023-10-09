@@ -1,3 +1,0 @@
-const ProtectedRoute = ({element, allowedRoles}) => {
-    
-}
