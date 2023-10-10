@@ -1,41 +1,14 @@
 import { Container, Card, Table, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import PathConstants from "../../../constants/pathConstants";
+import { useQuery } from "@apollo/client";
+import { GET_ALL_BRANCHES } from "../../../graphql/branch";
 
 const BranchList = () => {
   const navigate = useNavigate();
-  const branches = [
-    {
-      id: 1,
-      name: "Branch 1",
-      telephone: "0771234567",
-      houseNumber: "123",
-      street: "Street 1",
-      city: "City 1",
-      district: "District 1",
-      postalCode: "12345",
-    },
-    {
-      id: 2,
-      name: "Branch 2",
-      telephone: "0771234567",
-      houseNumber: "123",
-      street: "Street 2",
-      city: "City 2",
-      district: "District 2",
-      postalCode: "12345",
-    },
-    {
-      id: 3,
-      name: "Branch 3",
-      telephone: "0771234567",
-      houseNumber: "123",
-      street: "Street 3",
-      city: "City 3",
-      district: "District 3",
-      postalCode: "12345",
-    },
-  ];
+  const { loading, data } = useQuery(GET_ALL_BRANCHES);
+
+  if (loading) return <div>Loading...</div>;
 
   // Function to handle edit branch
   const handleEditBranch = (branchId) => {
@@ -67,17 +40,17 @@ const BranchList = () => {
               </tr>
             </thead>
             <tbody>
-              {branches?.map((branch, index) => (
+              {data.getAllBranches?.map((branch, index) => (
                 <tr key={branch.id}>
                   <td>{index + 1}</td>
                   <td>{branch.name}</td>
                   <td>{branch.telephone}</td>
                   <td>
-                    {branch.houseNumber}, {branch.street}
+                    {branch.address.houseNumber}, {branch.street}
                   </td>
-                  <td>{branch.city}</td>
-                  <td>{branch.district}</td>
-                  <td>{branch.postalCode}</td>
+                  <td>{branch.address.city}</td>
+                  <td>{branch.address.district}</td>
+                  <td>{branch.address.postalCode}</td>
                   <td className="text-center">
                     <Button variant="info" size="sm" className="mx-1" onClick={() => handleEditBranch(branch.id)}>
                       Edit

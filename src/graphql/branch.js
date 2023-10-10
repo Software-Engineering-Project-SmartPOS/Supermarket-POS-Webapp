@@ -9,3 +9,21 @@ export const ADD_BRANCH = gql`
     }
   }
 `;
+
+export const GET_ALL_BRANCHES = gql`
+  query GetAllBranches {
+    getAllBranches {
+      id
+      name
+      telephone
+      address {
+        id
+        houseNumber
+        street
+        city
+        district
+        postalCode
+      }
+    }
+  }
+`;
