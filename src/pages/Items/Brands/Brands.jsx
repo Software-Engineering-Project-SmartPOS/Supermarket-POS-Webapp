@@ -30,7 +30,7 @@ const Brands = () => {
               </tr>
             </thead>
             <tbody>
-              {data.GetAllBrands.map((brand, index) => (
+              {data?.GetAllBrands.map((brand, index) => (
                 <tr key={brand.id}>
                   <td>{index + 1}</td>
                   <td>{brand.name}</td>

@@ -18,6 +18,10 @@ const PathConstants = {
   ADD_EMPLOYEE: "employees/add-employee",
   EDIT_EMPLOYEE: "employees/edit-employee",
 
+  ADD_SALARY_TYPE: "employees/add-salary-type",
+  SALARY_TYPES: "employees/salary-types",
+  EDIT_SALARY_TYPE: "employees/edit-salary-type",
+
   LOYALTY_PROGRAMS: "loyalty/loyalty-programs",
   ADD_LOYALTY_PROGRAM: "loyalty/add-loyalty-program",
   EDIT_LOYALTY_PROGRAM: "loyalty/edit-loyalty-program",

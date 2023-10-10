@@ -55,8 +55,20 @@ export const ADD_EMPLOYEE = gql`
   }
 `;
 
+export const ADD_SALARY_TYPE = gql`
+  mutation AddSalaryType($salaryTypeInput: SalaryTypeInput!) {
+    AddSalaryType(inputSalaryTypeDetails: $salaryTypeInput) {
+      id
+      basicSalary
+      halfDaySalary
+      overTimeSalary
+      bonus
+    }
+  }
+`;
+
 export const GET_ALL_SALARY_TYPES = gql`
-  query GetAllSalaryTypes {
+  query AllSalaryTypes {
     allSalaryTypes {
       id
       basicSalary

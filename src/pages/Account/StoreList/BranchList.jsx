@@ -1,36 +1,41 @@
-import { useEffect, useState } from "react";
-import { Container, Card, Table, Button, Form } from "react-bootstrap";
+import { Container, Card, Table, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import PathConstants from "../../../constants/pathConstants";
-import { useDispatch, useSelector } from "react-redux";
-// import { fetchBranches } from "../../../state/reducers/branch";
 
 const BranchList = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState("");
-  const { branches } = useSelector((state) => state.branch);
-  const [filteredBranches, setFilteredBranches] = useState([]);
-
-  // useEffect(() => {
-  //   dispatch(fetchBranches());
-  // }, [dispatch]);
-
-  // Function to handle search
-  const handleSearch = (e) => {
-    const searchTerm = e.target.value.toLowerCase();
-    setSearchTerm(searchTerm);
-    // Filter branches based on name, telephone, or other criteria
-    const filtered = branches.filter(
-      (branch) =>
-        branch.name.toLowerCase().includes(searchTerm) ||
-        branch.telephone.includes(searchTerm) ||
-        branch.city.toLowerCase().includes(searchTerm) ||
-        branch.district.toLowerCase().includes(searchTerm) ||
-        branch.postalCode.includes(searchTerm)
-    );
-    setFilteredBranches(filtered);
-  };
+  const branches = [
+    {
+      id: 1,
+      name: "Branch 1",
+      telephone: "0771234567",
+      houseNumber: "123",
+      street: "Street 1",
+      city: "City 1",
+      district: "District 1",
+      postalCode: "12345",
+    },
+    {
+      id: 2,
+      name: "Branch 2",
+      telephone: "0771234567",
+      houseNumber: "123",
+      street: "Street 2",
+      city: "City 2",
+      district: "District 2",
+      postalCode: "12345",
+    },
+    {
+      id: 3,
+      name: "Branch 3",
+      telephone: "0771234567",
+      houseNumber: "123",
+      street: "Street 3",
+      city: "City 3",
+      district: "District 3",
+      postalCode: "12345",
+    },
+  ];
 
   // Function to handle edit branch
   const handleEditBranch = (branchId) => {
@@ -44,16 +49,6 @@ const BranchList = () => {
         <Button variant="success" size="sm" onClick={() => navigate(`/${PathConstants.ADD_BRANCH}`)}>
           Add Branch
         </Button>
-      </div>
-      <div className="search-box">
-        <Form.Group>
-          <Form.Control
-            type="text"
-            placeholder="Search by name, telephone, city, district, or postal code"
-            value={searchTerm}
-            onChange={handleSearch}
-          />
-        </Form.Group>
       </div>
 
       <Card border="light" className="table-responsive shadow">
@@ -72,7 +67,7 @@ const BranchList = () => {
               </tr>
             </thead>
             <tbody>
-              {(searchTerm === "" ? branches : filteredBranches).map((branch, index) => (
+              {branches?.map((branch, index) => (
                 <tr key={branch.id}>
                   <td>{index + 1}</td>
                   <td>{branch.name}</td>

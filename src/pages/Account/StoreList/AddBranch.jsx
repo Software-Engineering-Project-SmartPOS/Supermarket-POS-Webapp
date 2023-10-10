@@ -36,7 +36,6 @@ export default function AddBranch() {
   const handleSubmit = (values) => {
     console.log(values);
     addBranch({ variables: { branchInput: values } });
-    // navigate("/" + PathConstants.BRANCH_LIST);
   };
 
   return (
@@ -46,7 +45,7 @@ export default function AddBranch() {
           <Col xs={12} lg={7} className="d-flex align-items-center justify-content-center">
             <div className="bg-white shadow-lg border rounded border-light px-5 py-2 w-100">
               <div className="d-flex">
-                <div className="text-start" onClick={() => navigate("/" + PathConstants.BRANCH_LIST)}>
+                <div className="text-start" onClick={() => navigate("/" + PathConstants.STORES)}>
                   <button type="button" className="btn btn-outline-primary">
                     <FontAwesomeIcon icon={faChevronLeft} /> Back
                   </button>
