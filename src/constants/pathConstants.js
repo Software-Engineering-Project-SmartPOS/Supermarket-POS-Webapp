@@ -3,6 +3,7 @@ const PathConstants = {
   SIGN_IN: "/signin",
   SIGN_UP: "/signup",
   LOCK: "/lock",
+  OWNER_PROFILE: "/owner-profile",
 
   CHECKOUT: "sales/checkout",
   RECEIPTS: "sales/receipts",

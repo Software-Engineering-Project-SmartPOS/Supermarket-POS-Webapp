@@ -11,7 +11,7 @@ export default function SignUp() {
   return (
     <main className="main">
       <section className="d-flex align-items-center my-5 mt-lg-6 mb-lg-5">
-        <Container className="m">
+        <Container>
           <Row className="justify-content-center form-bg-image">
             <Col xs={12} md={6} lg={4} className="d-flex align-items-center justify-content-center">
               <div className="bg-white shadow-lg border rounded border-light p-4 p-lg-5 w-100">
@@ -27,7 +27,7 @@ export default function SignUp() {
                   })}
                   onSubmit={(values) => {
                     console.log(values);
-                    navigate(PathConstants.HOME);
+                    navigate(PathConstants.OWNER_PROFILE, { state: { email: values.email, password: values.password } });
                   }}
                 >
                   {({ handleSubmit, handleChange, errors, touched }) => (

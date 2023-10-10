@@ -49,6 +49,7 @@ import PurchaseOrders from "./pages/Inventory/PurchaseOrder/PurchaseOrders";
 import AddPurchaseOrder from "./pages/Inventory/PurchaseOrder/AddPurchaseOrder";
 import EditPurchaseOrder from "./pages/Inventory/PurchaseOrder/EditPurchaseOrder";
 import ProtectedRoutes from "./utils/protectedRoutes";
+import OwnerProfile from "./pages/Common/OwnerProfile";
 
 function App() {
   // defining routes for the application using react router
@@ -59,6 +60,7 @@ function App() {
         <Route path={PathConstants.SIGN_IN} element={<SignIn />} />
         <Route path={PathConstants.SIGN_UP} element={<SignUp />} />
         <Route path={PathConstants.LOCK} element={<Lock />} />
+        <Route path={PathConstants.OWNER_PROFILE} element={<OwnerProfile />} />
         <Route path="*" element={<PageNotFound />} />
         <Route element={<ProtectedRoutes roles={["OWNER", "ADMIN"]} />}>
           <Route path={PathConstants.HOME} element={<DashboardLayout />}>

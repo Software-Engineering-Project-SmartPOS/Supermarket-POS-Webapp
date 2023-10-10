@@ -66,3 +66,9 @@ export const GET_ALL_SALARY_TYPES = gql`
     }
   }
 `;
+
+export const REGISTER_OWNER = gql`
+  mutation RegisterOWner($employeeInput: EmployeeInput!) {
+    registerOwner(ownerDetail: $employeeInput)
+  }
+`;
