@@ -50,6 +50,8 @@ import AddPurchaseOrder from "./pages/Inventory/PurchaseOrder/AddPurchaseOrder";
 import EditPurchaseOrder from "./pages/Inventory/PurchaseOrder/EditPurchaseOrder";
 import ProtectedRoutes from "./utils/protectedRoutes";
 import OwnerProfile from "./pages/Common/OwnerProfile";
+import AddBranch from "./pages/Account/StoreList/AddBranch";
+import BranchList from "./pages/Account/StoreList/BranchList";
 
 function App() {
   // defining routes for the application using react router
@@ -88,7 +90,7 @@ function App() {
             {/* Categories */}
             <Route path={PathConstants.CATEGORIES} element={<Categories />} />
             <Route path={PathConstants.ADD_CATEGORY} element={<AddCategory />} />
-            <Route path={PathConstants.EDIT_CATEGORY} element={<EditCategory />} />
+            <Route path={PathConstants.EDIT_CATEGORY + "/:id"} element={<EditCategory />} />
             {/* ItemList */}
             <Route path={PathConstants.ITEM_LIST} element={<ItemList />} />
             <Route path={PathConstants.ADD_ITEM} element={<AddItem />} />
@@ -105,6 +107,9 @@ function App() {
             <Route path={PathConstants.PURCHASE_ORDERS} element={<PurchaseOrders />} />
             <Route path={PathConstants.ADD_PURCHASE_ORDER} element={<AddPurchaseOrder />} />
             <Route path={PathConstants.EDIT_PURCHASE_ORDER} element={<EditPurchaseOrder />} />
+            {/* Stores */}
+            <Route path={PathConstants.ADD_BRANCH} element={<AddBranch />} />
+            <Route path={PathConstants.STORES} element={<BranchList />} />
           </Route>
         </Route>
       </Routes>

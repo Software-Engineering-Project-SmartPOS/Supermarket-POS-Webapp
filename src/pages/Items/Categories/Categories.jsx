@@ -1,17 +1,14 @@
 import { useNavigate } from "react-router";
 import { Container, Table, Button, Card } from "react-bootstrap";
 import PathConstants from "../../../constants/pathConstants";
+import { useQuery } from "@apollo/client";
+import { GET_ALL_CATEGORIES } from "../../../graphql/items";
 
 const Categories = () => {
   const navigate = useNavigate();
-  // Sample category data
-  const categories = [
-    { id: 1, description: "Category A", quantity: 10 },
-    { id: 2, description: "Category B", quantity: 20 },
-    { id: 3, description: "Category C", quantity: 30 },
-    // Add more category data as needed
-  ];
-
+  const { loading, error, data } = useQuery(GET_ALL_CATEGORIES);
+  console.log(data);
+  if (loading) return <div>Loading...</div>;
   return (
     <Container>
       <div className="title d-flex justify-content-between pe-2">
@@ -26,19 +23,24 @@ const Categories = () => {
             <thead>
               <tr>
                 <th>#</th>
+                <th>Name</th>
                 <th>Description</th>
-                <th>Quantity</th>
                 <th className="text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {categories.map((category, index) => (
+              {data.GetAllCategories.map((category, index) => (
                 <tr key={category.id}>
                   <td>{index + 1}</td>
+                  <td>{category.name}</td>
                   <td>{category.description}</td>
-                  <td>{category.quantity}</td>
                   <td className="text-center">
-                    <Button variant="info" size="sm" className="mx-1" onClick={() => navigate("/" + PathConstants.EDIT_CATEGORY)}>
+                    <Button
+                      variant="info"
+                      size="sm"
+                      className="mx-1"
+                      onClick={() => navigate(`/${PathConstants.EDIT_CATEGORY}/${category.id}`, { state: { category } })}
+                    >
                       Edit
                     </Button>
                     <Button variant="danger" size="sm" className="mx-1">

@@ -1,13 +1,16 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
-import { Col, Row, Form, Button, Container, InputGroup } from "react-bootstrap";
+import { Col, Row, Form, Button, Container, InputGroup, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import PathConstants from "../../../constants/pathConstants";
+import { useMutation } from "@apollo/client";
+import { CREATE_CATEGORY } from "../../../graphql/items";
 
 export default function AddCategory() {
   const navigate = useNavigate();
+  const [createCategory, { loading, error }] = useMutation(CREATE_CATEGORY);
 
   return (
     <section className="d-flex align-items-center my-5 mt-lg-6 mb-lg-5">
@@ -27,21 +30,51 @@ export default function AddCategory() {
               </div>
               <Formik
                 initialValues={{
+                  name: "",
                   description: "",
                 }}
                 validationSchema={Yup.object({
+                  name: Yup.string().required("Category name is required"),
                   description: Yup.string().required("Category description is required"),
                 })}
                 onSubmit={(values) => {
                   console.log(values);
-                  // Add your logic to submit category data here
-                  // After adding the category, you can navigate to a success page or another route
-                  navigate(PathConstants.CATEGORY_LIST);
+                  createCategory({
+                    variables: {
+                      categoryInput: {
+                        name: values.name,
+                        description: values.description,
+                      },
+                    },
+                  })
+                    .then((response) => {
+                      console.log(response.data.CreateCategory);
+                      navigate(PathConstants.CATEGORY_LIST);
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                    });
                 }}
               >
                 {({ handleSubmit, handleChange, values, errors, touched }) => (
                   <Form className="mt-4" onSubmit={handleSubmit}>
                     <Row>
+                      <Col xs={12}>
+                        <Form.Group controlId="categoryName" className="mb-4">
+                          <Form.Label>Category Name</Form.Label>
+                          <InputGroup>
+                            <Form.Control
+                              type="text"
+                              placeholder="Enter category name"
+                              name="name"
+                              value={values.name}
+                              onChange={handleChange}
+                              isInvalid={touched.name && errors.name}
+                            />
+                            <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
+                          </InputGroup>
+                        </Form.Group>
+                      </Col>
                       <Col xs={12}>
                         <Form.Group controlId="categoryDescription" className="mb-4">
                           <Form.Label>Category Description</Form.Label>
@@ -60,9 +93,16 @@ export default function AddCategory() {
                       </Col>
                     </Row>
 
-                    <Button variant="primary" type="submit" className="button w-100">
-                      Add Category
-                    </Button>
+                    {loading ? (
+                      <Button variant="primary" type="submit" className="button w-100" disabled>
+                        <Spinner animation="border" size="sm" className="me-2" />
+                        Loading...
+                      </Button>
+                    ) : (
+                      <Button variant="primary" type="submit" className="button w-100">
+                        Add Category
+                      </Button>
+                    )}
                   </Form>
                 )}
               </Formik>
