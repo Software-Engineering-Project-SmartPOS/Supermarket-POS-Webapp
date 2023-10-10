@@ -4,13 +4,17 @@ import { Col, Row, Form, Button, Container, InputGroup, Spinner } from "react-bo
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import PathConstants from "../../../constants/pathConstants";
 import { useMutation } from "@apollo/client";
 import { CREATE_CATEGORY } from "../../../graphql/items";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function AddCategory() {
   const navigate = useNavigate();
   const [createCategory, { loading, error }] = useMutation(CREATE_CATEGORY);
+  if (error) {
+    console.log(error);
+    toast.error("Error creating category");
+  }
 
   return (
     <section className="d-flex align-items-center my-5 mt-lg-6 mb-lg-5">
@@ -37,7 +41,7 @@ export default function AddCategory() {
                   name: Yup.string().required("Category name is required"),
                   description: Yup.string().required("Category description is required"),
                 })}
-                onSubmit={(values) => {
+                onSubmit={(values, { resetForm }) => {
                   console.log(values);
                   createCategory({
                     variables: {
@@ -49,7 +53,9 @@ export default function AddCategory() {
                   })
                     .then((response) => {
                       console.log(response.data.CreateCategory);
-                      navigate(PathConstants.CATEGORY_LIST);
+                      toast.success("Category created successfully");
+                      // navigate(PathConstants.CATEGORY_LIST);
+                      resetForm();
                     })
                     .catch((error) => {
                       console.log(error);
@@ -110,6 +116,18 @@ export default function AddCategory() {
           </Col>
         </Row>
       </Container>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </section>
   );
 }

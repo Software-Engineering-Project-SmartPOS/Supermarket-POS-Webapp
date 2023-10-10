@@ -6,7 +6,7 @@ import { GET_ALL_CATEGORIES } from "../../../graphql/items";
 
 const Categories = () => {
   const navigate = useNavigate();
-  const { loading, error, data } = useQuery(GET_ALL_CATEGORIES);
+  const { loading, data } = useQuery(GET_ALL_CATEGORIES);
   console.log(data);
   if (loading) return <div>Loading...</div>;
   return (

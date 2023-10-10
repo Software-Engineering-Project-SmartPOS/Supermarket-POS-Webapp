@@ -9,6 +9,7 @@ import client from "./ApolloClient.js";
 import { ApolloProvider } from "@apollo/client";
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
+import "react-toastify/dist/ReactToastify.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>

@@ -1,14 +1,23 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
-import { Col, Row, Form, Button, Container, InputGroup } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { Col, Row, Form, Button, Container, InputGroup, Spinner } from "react-bootstrap";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import PathConstants from "../../../constants/pathConstants";
+import { useMutation } from "@apollo/client";
+import { UPDATE_BRAND } from "../../../graphql/items";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function EditBrand() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const brand = location.state.brand;
+  const [updateBrand, { loading, error }] = useMutation(UPDATE_BRAND);
 
+  if (error) {
+    console.log(error);
+    toast.error("Error updating brand");
+  }
   return (
     <section className="d-flex align-items-center my-5 mt-lg-6 mb-lg-5">
       <Container className="m">
@@ -26,19 +35,18 @@ export default function EditBrand() {
                 </div>
               </div>
               <Formik
-                initialValues={{
-                  name: "Coca Cola",
-                  description: "Coca-Cola, is one of the world's largest and most well-known beverage companies",
-                }}
+                initialValues={brand}
                 validationSchema={Yup.object({
-                  description: Yup.string().required("Brand description is required"),
                   name: Yup.string().required("Brand name is required"),
+                  description: Yup.string().required("Brand description is required"),
                 })}
                 onSubmit={(values) => {
-                  console.log(values);
-                  // Add your logic to submit brand data here
-                  // After adding the brand, you can navigate to a success page or another route
-                  navigate(`/${PathConstants.BRANDS}`);
+                  updateBrand({ variables: { brandInput: { id: values.id, name: values.name, description: values.description } } }).then(
+                    (response) => {
+                      console.log(response.data.UpdateBrand);
+                      toast.success("Brand updated successfully");
+                    }
+                  );
                 }}
               >
                 {({ handleSubmit, handleChange, values, errors, touched }) => (
@@ -78,9 +86,15 @@ export default function EditBrand() {
                       </Col>
                     </Row>
 
-                    <Button variant="primary" type="submit" className="button w-100">
-                      Edit Brand
-                    </Button>
+                    {loading ? (
+                      <Button variant="primary" type="submit" className="button w-100" disabled>
+                        <Spinner animation="border" size="sm" /> Loading...
+                      </Button>
+                    ) : (
+                      <Button variant="primary" type="submit" className="button w-100">
+                        Update Brand
+                      </Button>
+                    )}
                   </Form>
                 )}
               </Formik>
@@ -88,6 +102,18 @@ export default function EditBrand() {
           </Col>
         </Row>
       </Container>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </section>
   );
 }

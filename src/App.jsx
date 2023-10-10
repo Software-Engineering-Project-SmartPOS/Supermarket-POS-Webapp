@@ -98,7 +98,7 @@ function App() {
             {/* Brands */}
             <Route path={PathConstants.BRANDS} element={<Brands />} />
             <Route path={PathConstants.ADD_BRAND} element={<AddBrand />} />
-            <Route path={PathConstants.EDIT_BRAND} element={<EditBrand />} />
+            <Route path={PathConstants.EDIT_BRAND + "/:id"} element={<EditBrand />} />
             {/* Suppliers */}
             <Route path={PathConstants.SUPPLIERS} element={<Suppliers />} />
             <Route path={PathConstants.ADD_SUPPLIER} element={<AddSupplier />} />

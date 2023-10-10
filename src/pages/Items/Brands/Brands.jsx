@@ -1,16 +1,14 @@
 import { useNavigate } from "react-router";
 import { Container, Table, Button, Card } from "react-bootstrap";
 import PathConstants from "../../../constants/pathConstants";
+import { useQuery } from "@apollo/client";
+import { GET_ALL_BRANDS } from "../../../graphql/items";
 
 const Brands = () => {
   const navigate = useNavigate();
-  // Sample brand data
-  const brands = [
-    { id: 1, name: "Brand A", description: "Brand A description" },
-    { id: 2, name: "Brand B", description: "Brand B description" },
-    { id: 3, name: "Brand C", description: "Brand C description" },
-    // Add more brand data as needed
-  ];
+  const { loading, data } = useQuery(GET_ALL_BRANDS);
+
+  if (loading) return <div>Loading...</div>;
 
   return (
     <Container>
@@ -32,13 +30,22 @@ const Brands = () => {
               </tr>
             </thead>
             <tbody>
-              {brands.map((brand, index) => (
+              {data.GetAllBrands.map((brand, index) => (
                 <tr key={brand.id}>
                   <td>{index + 1}</td>
                   <td>{brand.name}</td>
                   <td>{brand.description}</td>
                   <td className="text-center">
-                    <Button variant="info" size="sm" className="mx-1" onClick={() => navigate("/" + PathConstants.EDIT_BRAND)}>
+                    <Button
+                      variant="info"
+                      size="sm"
+                      className="mx-1"
+                      onClick={() =>
+                        navigate(`/${PathConstants.EDIT_BRAND}/${brand.id}`, {
+                          state: { brand },
+                        })
+                      }
+                    >
                       Edit
                     </Button>
                     <Button variant="danger" size="sm" className="mx-1">

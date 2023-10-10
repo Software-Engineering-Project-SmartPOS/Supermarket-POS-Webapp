@@ -1,13 +1,22 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
-import { Col, Row, Form, Button, Container, InputGroup } from "react-bootstrap";
+import { Col, Row, Form, Button, Container, InputGroup, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { useMutation } from "@apollo/client";
+import { ToastContainer, toast } from "react-toastify";
 import PathConstants from "../../../constants/pathConstants";
+import { CREATE_BRAND } from "../../../graphql/items";
 
 export default function AddBrand() {
   const navigate = useNavigate();
+  const [createBrand, { loading, error }] = useMutation(CREATE_BRAND);
+
+  if (error) {
+    console.log(error);
+    toast.error("Error creating brand");
+  }
 
   return (
     <section className="d-flex align-items-center my-5 mt-lg-6 mb-lg-5">
@@ -31,21 +40,34 @@ export default function AddBrand() {
                   description: "",
                 }}
                 validationSchema={Yup.object({
-                  description: Yup.string().required("Brand description is required"),
                   name: Yup.string().required("Brand name is required"),
+                  description: Yup.string().required("Brand description is required"),
                 })}
-                onSubmit={(values) => {
-                  console.log(values);
-                  // Add your logic to submit brand data here
-                  // After adding the brand, you can navigate to a success page or another route
-                  navigate(`/${PathConstants.BRANDS}`);
+                onSubmit={(values, { resetForm }) => {
+                  createBrand({
+                    variables: {
+                      brandInput: {
+                        name: values.name,
+                        description: values.description,
+                      },
+                    },
+                  })
+                    .then((response) => {
+                      console.log(response.data.CreateBrand);
+                      toast.success("Brand created successfully");
+                      navigate(`/${PathConstants.BRANDS}`);
+                      resetForm();
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                    });
                 }}
               >
                 {({ handleSubmit, handleChange, values, errors, touched }) => (
                   <Form className="mt-4" onSubmit={handleSubmit}>
                     <Row>
                       <Col xs={12}>
-                        <Form.Group controlId="brandDescription" className="mb-4">
+                        <Form.Group controlId="brandName" className="mb-4">
                           <Form.Label>Brand Name</Form.Label>
                           <InputGroup>
                             <Form.Control
@@ -78,9 +100,16 @@ export default function AddBrand() {
                       </Col>
                     </Row>
 
-                    <Button variant="primary" type="submit" className="button w-100">
-                      Add Brand
-                    </Button>
+                    {loading ? (
+                      <Button variant="primary" type="submit" className="button w-100" disabled>
+                        <Spinner animation="border" size="sm" className="me-2" />
+                        Loading...
+                      </Button>
+                    ) : (
+                      <Button variant="primary" type="submit" className="button w-100">
+                        Add Brand
+                      </Button>
+                    )}
                   </Form>
                 )}
               </Formik>
@@ -88,6 +117,18 @@ export default function AddBrand() {
           </Col>
         </Row>
       </Container>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </section>
   );
 }

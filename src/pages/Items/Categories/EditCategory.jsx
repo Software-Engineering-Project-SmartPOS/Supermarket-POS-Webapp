@@ -4,9 +4,9 @@ import { Col, Row, Form, Button, Container, InputGroup, Spinner } from "react-bo
 import { useLocation, useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import PathConstants from "../../../constants/pathConstants";
 import { useMutation } from "@apollo/client";
 import { UPDATE_CATEGORY } from "../../../graphql/items";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function EditCategory() {
   const navigate = useNavigate();
@@ -14,6 +14,11 @@ export default function EditCategory() {
   const category = location.state.category;
 
   const [updateCategory, { loading, error }] = useMutation(UPDATE_CATEGORY);
+
+  if (error) {
+    console.log(error);
+    toast.error("Error updating category");
+  }
 
   return (
     <section className="d-flex align-items-center my-5 mt-lg-6 mb-lg-5">
@@ -48,7 +53,8 @@ export default function EditCategory() {
                     },
                   }).then((response) => {
                     console.log(response.data.UpdateCategory);
-                    navigate(`/${PathConstants.CATEGORIES}`);
+                    toast.success("Category updated successfully");
+                    // navigate(`/${PathConstants.CATEGORIES}`);
                   });
                 }}
               >
@@ -104,6 +110,18 @@ export default function EditCategory() {
           </Col>
         </Row>
       </Container>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </section>
   );
 }

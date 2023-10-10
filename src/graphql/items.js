@@ -32,3 +32,35 @@ export const UPDATE_CATEGORY = gql`
     }
   }
 `;
+
+export const GET_ALL_BRANDS = gql`
+  query GetAllBrands {
+    GetAllBrands {
+      id
+      name
+      description
+      updateAt
+      createAt
+    }
+  }
+`;
+
+export const CREATE_BRAND = gql`
+  mutation CreateBrand($brandInput: BrandInput!) {
+    CreateBrand(brandInput: $brandInput) {
+      id
+      name
+      description
+    }
+  }
+`;
+
+export const UPDATE_BRAND = gql`
+  mutation UpdateBrand($brandInput: BrandInput!) {
+    UpdateBrand(brandInput: $brandInput) {
+      id
+      name
+      description
+    }
+  }
+`;
