@@ -31,11 +31,6 @@ const EmployeeList = () => {
     setFilteredEmployees(filtered);
   };
 
-  // Function to handle edit employee
-  const handleEditEmployee = () => {
-    navigate("/" + PathConstants.EDIT_EMPLOYEE);
-  };
-
   return (
     <Container>
       <div className="title d-flex justify-content-between pe-2">
@@ -76,7 +71,12 @@ const EmployeeList = () => {
                   <td>{employee.jobRole}</td>
                   <td>{employee.active ? "Yes" : "No"}</td>
                   <td className="text-center">
-                    <Button variant="info" size="sm" className="mx-1" onClick={handleEditEmployee}>
+                    <Button
+                      variant="info"
+                      size="sm"
+                      className="mx-1"
+                      onClick={() => navigate(`/${PathConstants.EDIT_EMPLOYEE}/${employee.id}`, { state: { employee } })}
+                    >
                       Edit
                     </Button>
                     <Button variant="danger" size="sm" className="mx-1">

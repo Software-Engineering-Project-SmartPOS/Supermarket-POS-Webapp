@@ -19,38 +19,23 @@ export const GET_ALL_EMPLOYEES = gql`
 
 export const ADD_EMPLOYEE = gql`
   mutation AddEmployee($employeeInput: EmployeeInput!) {
-    addEmployee(employeeInput: $employeeInput) {
-      id
-      title
-      firstName
-      middleName
-      lastName
-      branch {
+    AddEmployee(employeeInput: $employeeInput) {
+      ... on Employee {
         id
-        name
+        title
+        firstName
+        middleName
+        lastName
+        email
+        number
+        jobRole
+        active
+        createdAt
+        updatedAt
       }
-      email
-      address {
-        id
-        houseNumber
-        street
-        city
-        district
-        postalCode
+      ... on FailedPayLoad {
+        errorMessage
       }
-      number
-      jobRole
-      salaryType {
-        id
-        basicSalary
-        halfDaySalary
-        overTimeSalary
-        bonus
-        # Include other salary type fields you need
-      }
-      active
-      createdAt
-      updatedAt
     }
   }
 `;

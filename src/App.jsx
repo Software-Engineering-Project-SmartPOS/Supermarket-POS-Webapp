@@ -52,7 +52,6 @@ import ProtectedRoutes from "./utils/protectedRoutes";
 import OwnerProfile from "./pages/Common/OwnerProfile";
 import AddBranch from "./pages/Account/StoreList/AddBranch";
 import BranchList from "./pages/Account/StoreList/BranchList";
-import { ADD_SALARY_TYPE } from "./graphql/employees";
 import AddSalaryType from "./pages/Employee/Salary/AddSalaryType";
 import SalaryTypes from "./pages/Employee/Salary/SalaryTypes";
 
@@ -84,12 +83,10 @@ function App() {
             {/* Employees */}
             <Route path={PathConstants.ADD_EMPLOYEE} element={<AddEmployee />} />
             <Route path={PathConstants.EMPLOYEE_LIST} element={<EmployeeList />} />
-            <Route path={PathConstants.EDIT_EMPLOYEE} element={<EditEmployee />} />
-            <Route path={PathConstants.EDIT_EMPLOYEE} element={<EditEmployee />} />
+            <Route path={PathConstants.EDIT_EMPLOYEE + "/:id"} element={<EditEmployee />} />
             {/* Salary */}
             <Route path={PathConstants.ADD_SALARY_TYPE} element={<AddSalaryType />} />
             <Route path={PathConstants.SALARY_TYPES} element={<SalaryTypes />} />
-            <Route path={PathConstants.EDIT_SALARY_TYPE} element={<SalaryTypes />} />
 
             {/* Timecards */}
             <Route path={PathConstants.TIMECARDS} element={<Timecards />} />

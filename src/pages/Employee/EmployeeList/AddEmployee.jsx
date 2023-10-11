@@ -1,4 +1,4 @@
-import { Container, Row, Col, Form, InputGroup, Button } from "react-bootstrap";
+import { Container, Row, Col, Form, InputGroup, Button, Spinner } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faEnvelope,
@@ -10,53 +10,89 @@ import {
   faLocationArrow,
   faChevronLeft,
   faHome,
+  faLock,
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import PathConstants from "../../../constants/pathConstants";
-import { useQuery } from "@apollo/client";
-import { GET_ALL_SALARY_TYPES } from "../../../graphql/employees";
+import { useMutation, useQuery } from "@apollo/client";
+import { ADD_EMPLOYEE, GET_ALL_SALARY_TYPES } from "../../../graphql/employees";
+import { GET_ALL_BRANCHES } from "../../../graphql/branch";
+import { ToastContainer, toast } from "react-toastify";
 
 export default function AddEmployee() {
   const navigate = useNavigate();
-  const { loading, error, data } = useQuery(GET_ALL_SALARY_TYPES);
+  const { data } = useQuery(GET_ALL_SALARY_TYPES);
+  const [addEmployee, { loading, error }] = useMutation(ADD_EMPLOYEE);
+  if (error) {
+    console.log(error);
+    toast.error("Error adding employee");
+  }
+  const { data: branchData } = useQuery(GET_ALL_BRANCHES);
 
   const initialValues = {
     title: "",
-    first_name: "",
-    middle_name: "",
-    last_name: "",
-    job_role: "",
-    salary_type: "",
+    firstName: "",
+    middleName: "",
+    lastName: "",
     email: "",
-    phone_number: "",
-    address: "",
+    houseNumber: "",
+    jobRole: "",
+    salaryType: "",
+    phoneNumber: "",
+    street: "",
     city: "",
     district: "",
-    postal_code: "",
+    postalCode: "",
+    branchId: 0,
+    password: "",
   };
 
   const validationSchema = Yup.object({
     title: Yup.string().required("Title is required"),
-    first_name: Yup.string().required("First Name is required"),
-    middle_name: Yup.string(),
-    last_name: Yup.string().required("Last Name is required"),
-    job_role: Yup.string().required("Job Role is required"),
-    salary_type: Yup.string().required("Salary Type is required"),
+    firstName: Yup.string().required("First Name is required"),
+    middleName: Yup.string(),
+    lastName: Yup.string().required("Last Name is required"),
     email: Yup.string().email("Invalid email address"),
-    phone_number: Yup.string().required("Phone Number is required"),
-    address: Yup.string().required("Address is required"),
+    houseNumber: Yup.string().required("House Number is required"),
+    jobRole: Yup.string().required("Job Role is required"),
+    salaryType: Yup.number().required("Salary Type is required"),
+    phoneNumber: Yup.string().required("Phone Number is required"),
+    street: Yup.string().required("Street is required"),
     city: Yup.string().required("City is required"),
     district: Yup.string().required("District is required"),
-    postal_code: Yup.string().required("Postal Code is required"),
+    postalCode: Yup.string().required("Postal Code is required"),
+    branchId: Yup.number().required("Branch is required"),
+    password: Yup.string().required("Password is required"),
   });
 
-  const handleSubmit = (values) => {
+  const handleSubmit = (values, { resetForm }) => {
     console.log(values);
-    // Add your logic to submit employee data here
-    // After adding the employee, you can navigate to a success page or another route
-    navigate("/success");
+    addEmployee({
+      variables: {
+        employeeInput: {
+          title: values.title,
+          firstName: values.firstName,
+          middleName: values.middleName,
+          lastName: values.lastName,
+          email: values.email,
+          jobRole: values.jobRole,
+          salaryTypeId: Number(values.salaryType),
+          phoneNumber: values.phoneNumber,
+          address: values.address,
+          city: values.city,
+          district: values.district,
+          postalCode: values.postalCode,
+          branchId: Number(values.branchId),
+          password: values.password,
+        },
+      },
+    }).then((res) => {
+      console.log(res);
+      toast.success("Employee added successfully");
+      resetForm();
+    });
   };
 
   return (
@@ -98,7 +134,7 @@ export default function AddEmployee() {
                       </Col>
 
                       <Col xs={12} lg={6}>
-                        <Form.Group controlId="first_name" className="mb-4">
+                        <Form.Group controlId="firstName" className="mb-4">
                           <Form.Label>First Name</Form.Label>
                           <InputGroup>
                             <InputGroup.Text>
@@ -106,20 +142,20 @@ export default function AddEmployee() {
                             </InputGroup.Text>
                             <Form.Control
                               type="text"
-                              name="first_name"
+                              name="firstName"
                               onChange={handleChange}
-                              value={values.first_name}
+                              value={values.firstName}
                               placeholder="Enter First Name"
                             />
                           </InputGroup>
-                          {touched.first_name && errors.first_name && <div className="text-danger">{errors.first_name}</div>}
+                          {touched.firstName && errors.firstName && <div className="text-danger">{errors.firstName}</div>}
                         </Form.Group>
                       </Col>
                     </Row>
 
                     <Row>
                       <Col xs={12} lg={6}>
-                        <Form.Group controlId="middle_name" className="mb-4">
+                        <Form.Group controlId="middleName" className="mb-4">
                           <Form.Label>Middle Name</Form.Label>
                           <InputGroup>
                             <InputGroup.Text>
@@ -127,9 +163,9 @@ export default function AddEmployee() {
                             </InputGroup.Text>
                             <Form.Control
                               type="text"
-                              name="middle_name"
+                              name="middleName"
                               onChange={handleChange}
-                              value={values.middle_name}
+                              value={values.middleName}
                               placeholder="Enter Middle Name"
                             />
                           </InputGroup>
@@ -137,34 +173,28 @@ export default function AddEmployee() {
                       </Col>
 
                       <Col xs={12} lg={6}>
-                        <Form.Group controlId="last_name" className="mb-4">
+                        <Form.Group controlId="lastName" className="mb-4">
                           <Form.Label>Last Name</Form.Label>
                           <InputGroup>
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faUser} />
                             </InputGroup.Text>
-                            <Form.Control
-                              type="text"
-                              name="last_name"
-                              onChange={handleChange}
-                              value={values.last_name}
-                              placeholder="Enter Last Name"
-                            />
+                            <Form.Control type="text" name="lastName" onChange={handleChange} value={values.lastName} placeholder="Enter Last Name" />
                           </InputGroup>
-                          {touched.last_name && errors.last_name && <div className="text-danger">{errors.last_name}</div>}
+                          {touched.lastName && errors.lastName && <div className="text-danger">{errors.lastName}</div>}
                         </Form.Group>
                       </Col>
                     </Row>
 
                     <Row>
                       <Col xs={12} lg={6}>
-                        <Form.Group controlId="job_role" className="mb-4">
+                        <Form.Group controlId="jobRole" className="mb-4">
                           <Form.Label>Job Role</Form.Label>
                           <InputGroup>
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faBuilding} />
                             </InputGroup.Text>
-                            <Form.Control as="select" name="job_role" onChange={handleChange} value={values.job_role} placeholder="Select Job Role">
+                            <Form.Control as="select" name="jobRole" onChange={handleChange} value={values.jobRole} placeholder="Select Job Role">
                               <option value="">Select job role</option>
                               <option value="CASHIER">CASHIER</option>
                               <option value="MANAGER">MANAGER</option>
@@ -173,12 +203,12 @@ export default function AddEmployee() {
                               <option value="ADMIN">ADMIN</option>
                             </Form.Control>
                           </InputGroup>
-                          {touched.job_role && errors.job_role && <div className="text-danger">{errors.job_role}</div>}
+                          {touched.jobRole && errors.jobRole && <div className="text-danger">{errors.jobRole}</div>}
                         </Form.Group>
                       </Col>
 
                       <Col xs={12} lg={6}>
-                        <Form.Group controlId="salary_type" className="mb-4">
+                        <Form.Group controlId="salaryType" className="mb-4">
                           <Form.Label>Salary Type</Form.Label>
                           <InputGroup>
                             <InputGroup.Text>
@@ -186,9 +216,9 @@ export default function AddEmployee() {
                             </InputGroup.Text>
                             <Form.Control
                               as="select"
-                              name="salary_type"
+                              name="salaryType"
                               onChange={handleChange}
-                              value={values.salary_type}
+                              value={values.salaryType}
                               placeholder="Select Salary Type"
                             >
                               <option value="">Select salary type</option>
@@ -199,7 +229,7 @@ export default function AddEmployee() {
                               ))}
                             </Form.Control>
                           </InputGroup>
-                          {touched.salary_type && errors.salary_type && <div className="text-danger">{errors.salary_type}</div>}
+                          {touched.salaryType && errors.salaryType && <div className="text-danger">{errors.salaryType}</div>}
                         </Form.Group>
                       </Col>
                     </Row>
@@ -219,7 +249,7 @@ export default function AddEmployee() {
                       </Col>
 
                       <Col xs={12} lg={6}>
-                        <Form.Group controlId="phone_number" className="mb-4">
+                        <Form.Group controlId="phoneNumber" className="mb-4">
                           <Form.Label>Phone Number</Form.Label>
                           <InputGroup>
                             <InputGroup.Text>
@@ -227,20 +257,20 @@ export default function AddEmployee() {
                             </InputGroup.Text>
                             <Form.Control
                               type="text"
-                              name="phone_number"
+                              name="phoneNumber"
                               onChange={handleChange}
-                              value={values.phone_number}
+                              value={values.phoneNumber}
                               placeholder="Enter Phone Number"
                             />
                           </InputGroup>
-                          {touched.phone_number && errors.phone_number && <div className="text-danger">{errors.phone_number}</div>}
+                          {touched.phoneNumber && errors.phoneNumber && <div className="text-danger">{errors.phoneNumber}</div>}
                         </Form.Group>
                       </Col>
                     </Row>
 
                     <Row>
                       <Col xs={12} lg={4}>
-                        <Form.Group controlId="house_number" className="mb-4">
+                        <Form.Group controlId="houseNumber" className="mb-4">
                           <Form.Label>House Number</Form.Label>
                           <InputGroup>
                             <InputGroup.Text>
@@ -248,25 +278,25 @@ export default function AddEmployee() {
                             </InputGroup.Text>
                             <Form.Control
                               type="text"
-                              name="house_number"
+                              name="houseNumber"
                               onChange={handleChange}
-                              value={values.house_number}
+                              value={values.houseNumber}
                               placeholder="Enter House Number"
                             />
                           </InputGroup>
-                          {touched.house_number && errors.house_number && <div className="text-danger">{errors.house_number}</div>}
+                          {touched.houseNumber && errors.houseNumber && <div className="text-danger">{errors.houseNumber}</div>}
                         </Form.Group>
                       </Col>
                       <Col xs={12} lg={8}>
                         <Form.Group controlId="address" className="mb-4">
-                          <Form.Label>Address</Form.Label>
+                          <Form.Label>street</Form.Label>
                           <InputGroup>
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faMapMarker} />
                             </InputGroup.Text>
-                            <Form.Control type="text" name="address" onChange={handleChange} value={values.address} placeholder="Enter Address" />
+                            <Form.Control type="text" name="street" onChange={handleChange} value={values.street} placeholder="Enter street" />
                           </InputGroup>
-                          {touched.address && errors.address && <div className="text-danger">{errors.address}</div>}
+                          {touched.street && errors.street && <div className="text-danger">{errors.street}</div>}
                         </Form.Group>
                       </Col>
                     </Row>
@@ -299,7 +329,7 @@ export default function AddEmployee() {
                       </Col>
 
                       <Col xs={12} lg={4}>
-                        <Form.Group controlId="postal_code" className="mb-4">
+                        <Form.Group controlId="postalCode" className="mb-4">
                           <Form.Label>Postal Code</Form.Label>
                           <InputGroup>
                             <InputGroup.Text>
@@ -307,20 +337,67 @@ export default function AddEmployee() {
                             </InputGroup.Text>
                             <Form.Control
                               type="text"
-                              name="postal_code"
+                              name="postalCode"
                               onChange={handleChange}
-                              value={values.postal_code}
+                              value={values.postalCode}
                               placeholder="Enter Postal Code"
                             />
                           </InputGroup>
-                          {touched.postal_code && errors.postal_code && <div className="text-danger">{errors.postal_code}</div>}
+                          {touched.postalCode && errors.postalCode && <div className="text-danger">{errors.postalCode}</div>}
+                        </Form.Group>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col xs={12} lg={6}>
+                        <Form.Group controlId="branchId" className="mb-4">
+                          <Form.Label>Branch</Form.Label>
+                          <InputGroup>
+                            <InputGroup.Text>
+                              <FontAwesomeIcon icon={faBuilding} />
+                            </InputGroup.Text>
+                            <Form.Control as="select" name="branchId" onChange={handleChange} value={values.branchId} placeholder="Select Branch">
+                              <option value="">Select branch</option>
+                              {branchData?.getAllBranches?.map((branch) => (
+                                <option key={branch.id} value={branch.id}>
+                                  {branch.name}
+                                </option>
+                              ))}
+                            </Form.Control>
+                          </InputGroup>
+                          {touched.branchId && errors.branchId && <div className="text-danger">{errors.branchId}</div>}
+                        </Form.Group>
+                      </Col>
+
+                      <Col xs={12} lg={6}>
+                        <Form.Group controlId="password" className="mb-4">
+                          <Form.Label>Password</Form.Label>
+                          <InputGroup>
+                            <InputGroup.Text>
+                              <FontAwesomeIcon icon={faLock} />
+                            </InputGroup.Text>
+                            <Form.Control
+                              type="password"
+                              name="password"
+                              onChange={handleChange}
+                              value={values.password}
+                              placeholder="Enter Password"
+                            />
+                          </InputGroup>
+                          {touched.password && errors.password && <div className="text-danger">{errors.password}</div>}
                         </Form.Group>
                       </Col>
                     </Row>
 
-                    <Button variant="primary" type="submit" className="button w-100">
-                      Add Employee
-                    </Button>
+                    {loading ? (
+                      <Button variant="primary" type="submit" className="button w-100" disabled>
+                        <Spinner animation="border" size="sm" className="me-2" />
+                        Loading...
+                      </Button>
+                    ) : (
+                      <Button variant="primary" type="submit" className="button w-100">
+                        Add Employee
+                      </Button>
+                    )}
                   </Form>
                 )}
               </Formik>
@@ -328,6 +405,18 @@ export default function AddEmployee() {
           </Col>
         </Row>
       </Container>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </section>
   );
 }
