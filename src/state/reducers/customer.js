@@ -6,7 +6,7 @@ export const fetchCustomers = createAsyncThunk("customer/fetchCustomers", async 
   const { data } = await client.query({
     query: GET_ALL_CUSTOMERS,
   });
-  return data;
+  return data.allCustomer;
 });
 
 // Define the initial state using that type

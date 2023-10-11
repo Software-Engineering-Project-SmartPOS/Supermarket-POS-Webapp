@@ -2,53 +2,25 @@ import { useEffect, useState } from "react";
 import { Container, Table, Button, Form, Card } from "react-bootstrap";
 import { useNavigate } from "react-router";
 import PathConstants from "../../../constants/pathConstants";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCustomers } from "../../../state/reducers/customer";
 
 const CustomerList = () => {
-  useEffect(() => {}, []);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchCustomers());
+  }, [dispatch]);
+
   const navigate = useNavigate();
+  const { customers } = useSelector((state) => state.customer);
+  console.log(customers);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredCustomers, setFilteredCustomers] = useState([]);
-
-  // Sample customer data
-  const customers = [
-    {
-      id: 1,
-      name: "John Doe",
-      email: "johndoe@example.com",
-      firstVisitDate: "2023-01-10",
-      lastVisitDate: "2023-09-05",
-      totalVisits: 10,
-      totalSpent: 500,
-      pointsBalance: 100,
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      email: "janesmith@example.com",
-      firstVisitDate: "2023-02-15",
-      lastVisitDate: "2023-08-28",
-      totalVisits: 8,
-      totalSpent: 400,
-      pointsBalance: 80,
-    },
-    {
-      id: 3,
-      name: "Jane Smith",
-      email: "janesmith@example.com",
-      firstVisitDate: "2023-02-15",
-      lastVisitDate: "2023-08-28",
-      totalVisits: 8,
-      totalSpent: 400,
-      pointsBalance: 80,
-    },
-    // Add more customer data as needed
-  ];
 
   // Function to handle search
   const handleSearch = (e) => {
     const searchTerm = e.target.value.toLowerCase();
     setSearchTerm(searchTerm);
-
     // Filter customers based on name or email
     const filtered = customers.filter(
       (customer) => customer.name.toLowerCase().includes(searchTerm) || customer.email.toLowerCase().includes(searchTerm)

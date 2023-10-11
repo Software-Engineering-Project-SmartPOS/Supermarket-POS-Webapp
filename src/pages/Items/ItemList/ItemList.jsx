@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import ItemListTable from "../../../components/ItemList/ItemListTable";
 import Filter from "../../../components/ItemList/Filter";
 
