@@ -1,41 +1,57 @@
-import { Container, Row, Col, Form, InputGroup, Button } from "react-bootstrap";
+import { Container, Row, Col, Form, InputGroup, Button, Spinner } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft, faUser, faEnvelope, faMapMarker, faCity, faLocationArrow } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
+import { faChevronLeft, faUser, faEnvelope, faPhone, faMapMarker, faCity, faLocationArrow } from "@fortawesome/free-solid-svg-icons";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import PathConstants from "../../../constants/pathConstants";
+import { ToastContainer, toast } from "react-toastify";
+import { useMutation } from "@apollo/client";
+import { UPDATE_SUPPLIER } from "../../../graphql/inventory";
 
 export default function EditSupplier() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const supplier = location.state.supplier;
+
+  const [updateSupplier, { loading, error }] = useMutation(UPDATE_SUPPLIER);
+  if (error) {
+    console.log(error);
+    toast.error("Error in updating supplier");
+  }
 
   const initialValues = {
-    supplierName: "ABC Suppliers",
-    contact: "John Doe",
-    email: "john@example.com",
-    address: "123 Main Street",
-    city: "Sample City",
-    postalCode: "12345",
-    district: "Sample District",
-    note: "This is a sample note.",
+    id: supplier.id,
+    name: supplier.name,
+    email: supplier.email,
+    mobilePhone: supplier.mobilePhone,
+    landPhone: supplier.landPhone,
+    street: supplier.address.street,
+    city: supplier.address.city,
+    postalCode: supplier.address.postalCode,
+    district: supplier.address.district,
+    houseNumber: supplier.address.houseNumber,
   };
+  console.log(initialValues);
 
   const validationSchema = Yup.object({
-    supplierName: Yup.string().required("Supplier name is required"),
-    contact: Yup.string().required("Contact is required"),
+    name: Yup.string().required("Name is required"),
+    mobilePhone: Yup.string().required("Mobile Phone is required"),
+    landPhone: Yup.string(),
     email: Yup.string().email("Invalid email address"),
-    address: Yup.string().required("Address is required"),
+    street: Yup.string().required("Street is required"),
     city: Yup.string().required("City is required"),
     postalCode: Yup.string().required("Postal/zip code is required"),
     district: Yup.string().required("District is required"),
-    note: Yup.string(),
+    houseNumber: Yup.string().required("House Number is required"),
   });
 
   const handleSubmit = (values) => {
     console.log(values);
-    // Add your logic to submit supplier data here
-    // After adding the supplier, you can navigate to a success page or another route
-    navigate("/success");
+    updateSupplier({ variables: { supplierDetail: values } }).then((res) => {
+      console.log(res);
+      toast.success("Supplier updated Successfully!");
+    });
   };
 
   return (
@@ -51,7 +67,7 @@ export default function EditSupplier() {
                   </button>
                 </div>
                 <div className="text-center text-md-center mt-md-0 flex-grow-1">
-                  <h3 className="mb-0">Add Supplier</h3>
+                  <h3 className="mb-0">Edit Supplier</h3>
                 </div>
               </div>
               <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
@@ -59,40 +75,21 @@ export default function EditSupplier() {
                   <Form className="mt-4" onSubmit={handleSubmit}>
                     <Row>
                       <Col xs={12}>
-                        <Form.Group controlId="supplierName" className="mb-4">
-                          <Form.Label>Supplier Name</Form.Label>
+                        <Form.Group controlId="name" className="mb-4">
+                          <Form.Label>Name</Form.Label>
                           <InputGroup>
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faUser} />
                             </InputGroup.Text>
-                            <Form.Control
-                              type="text"
-                              name="supplierName"
-                              onChange={handleChange}
-                              value={values.supplierName}
-                              placeholder="Enter Supplier Name"
-                            />
+                            <Form.Control type="text" name="name" onChange={handleChange} value={values.name} placeholder="Enter Name" />
                           </InputGroup>
-                          {touched.supplierName && errors.supplierName && <div className="text-danger">{errors.supplierName}</div>}
+                          {touched.name && errors.name && <div className="text-danger">{errors.name}</div>}
                         </Form.Group>
                       </Col>
                     </Row>
 
                     <Row>
-                      <Col xs={12} lg={6}>
-                        <Form.Group controlId="contact" className="mb-4">
-                          <Form.Label>Contact</Form.Label>
-                          <InputGroup>
-                            <InputGroup.Text>
-                              <FontAwesomeIcon icon={faUser} />
-                            </InputGroup.Text>
-                            <Form.Control type="text" name="contact" onChange={handleChange} value={values.contact} placeholder="Enter Contact" />
-                          </InputGroup>
-                          {touched.contact && errors.contact && <div className="text-danger">{errors.contact}</div>}
-                        </Form.Group>
-                      </Col>
-
-                      <Col xs={12} lg={6}>
+                      <Col xs={12}>
                         <Form.Group controlId="email" className="mb-4">
                           <Form.Label>Email</Form.Label>
                           <InputGroup>
@@ -107,34 +104,63 @@ export default function EditSupplier() {
                     </Row>
 
                     <Row>
-                      <Col xs={12}>
-                        <Form.Group controlId="address" className="mb-4">
-                          <Form.Label>Address</Form.Label>
+                      <Col xs={12} lg={6}>
+                        <Form.Group controlId="mobilePhone" className="mb-4">
+                          <Form.Label>Mobile Phone</Form.Label>
                           <InputGroup>
                             <InputGroup.Text>
-                              <FontAwesomeIcon icon={faMapMarker} />
+                              <FontAwesomeIcon icon={faPhone} />
                             </InputGroup.Text>
-                            <Form.Control type="text" name="address" onChange={handleChange} value={values.address} placeholder="Enter Address" />
+                            <Form.Control
+                              type="text"
+                              name="mobilePhone"
+                              onChange={handleChange}
+                              value={values.mobilePhone}
+                              placeholder="Enter Mobile Phone"
+                            />
                           </InputGroup>
-                          {touched.address && errors.address && <div className="text-danger">{errors.address}</div>}
+                          {touched.mobilePhone && errors.mobilePhone && <div className="text-danger">{errors.mobilePhone}</div>}
+                        </Form.Group>
+                      </Col>
+
+                      <Col xs={12} lg={6}>
+                        <Form.Group controlId="landPhone" className="mb-4">
+                          <Form.Label>Land Phone</Form.Label>
+                          <InputGroup>
+                            <InputGroup.Text>
+                              <FontAwesomeIcon icon={faPhone} />
+                            </InputGroup.Text>
+                            <Form.Control
+                              type="text"
+                              name="landPhone"
+                              onChange={handleChange}
+                              value={values.landPhone}
+                              placeholder="Enter Land Phone"
+                            />
+                          </InputGroup>
                         </Form.Group>
                       </Col>
                     </Row>
 
                     <Row>
                       <Col xs={12} lg={6}>
-                        <Form.Group controlId="city" className="mb-4">
-                          <Form.Label>City</Form.Label>
+                        <Form.Group controlId="houseNumber" className="mb-4">
+                          <Form.Label>House Number</Form.Label>
                           <InputGroup>
                             <InputGroup.Text>
-                              <FontAwesomeIcon icon={faCity} />
+                              <FontAwesomeIcon icon={faLocationArrow} />
                             </InputGroup.Text>
-                            <Form.Control type="text" name="city" onChange={handleChange} value={values.city} placeholder="Enter City" />
+                            <Form.Control
+                              type="text"
+                              name="houseNumber"
+                              onChange={handleChange}
+                              value={values.houseNumber}
+                              placeholder="Enter House Number"
+                            />
                           </InputGroup>
-                          {touched.city && errors.city && <div className="text-danger">{errors.city}</div>}
+                          {touched.houseNumber && errors.houseNumber && <div className="text-danger">{errors.houseNumber}</div>}
                         </Form.Group>
                       </Col>
-
                       <Col xs={12} lg={6}>
                         <Form.Group controlId="postalCode" className="mb-4">
                           <Form.Label>Postal/Zip Code</Form.Label>
@@ -156,6 +182,32 @@ export default function EditSupplier() {
                     </Row>
 
                     <Row>
+                      <Col xs={12}>
+                        <Form.Group controlId="street" className="mb-4">
+                          <Form.Label>Street</Form.Label>
+                          <InputGroup>
+                            <InputGroup.Text>
+                              <FontAwesomeIcon icon={faMapMarker} />
+                            </InputGroup.Text>
+                            <Form.Control type="text" name="street" onChange={handleChange} value={values.street} placeholder="Enter Street" />
+                          </InputGroup>
+                          {touched.street && errors.street && <div className="text-danger">{errors.street}</div>}
+                        </Form.Group>
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col xs={12} lg={6}>
+                        <Form.Group controlId="city" className="mb-4">
+                          <Form.Label>City</Form.Label>
+                          <InputGroup>
+                            <InputGroup.Text>
+                              <FontAwesomeIcon icon={faCity} />
+                            </InputGroup.Text>
+                            <Form.Control type="text" name="city" onChange={handleChange} value={values.city} placeholder="Enter City" />
+                          </InputGroup>
+                          {touched.city && errors.city && <div className="text-danger">{errors.city}</div>}
+                        </Form.Group>
+                      </Col>
                       <Col xs={12} lg={6}>
                         <Form.Group controlId="district" className="mb-4">
                           <Form.Label>District</Form.Label>
@@ -168,23 +220,18 @@ export default function EditSupplier() {
                           {touched.district && errors.district && <div className="text-danger">{errors.district}</div>}
                         </Form.Group>
                       </Col>
-
-                      <Col xs={12} lg={6}>
-                        <Form.Group controlId="note" className="mb-4">
-                          <Form.Label>Note</Form.Label>
-                          <InputGroup>
-                            <InputGroup.Text>
-                              <FontAwesomeIcon icon={faUser} />
-                            </InputGroup.Text>
-                            <Form.Control as="textarea" rows={3} name="note" onChange={handleChange} value={values.note} placeholder="Enter Note" />
-                          </InputGroup>
-                        </Form.Group>
-                      </Col>
                     </Row>
 
-                    <Button variant="primary" type="submit" className="button w-100">
-                      Add Supplier
-                    </Button>
+                    {loading ? (
+                      <Button variant="primary" type="submit" className="button w-100" disabled>
+                        <Spinner animation="border" size="sm" className="me-2" />
+                        Loading...
+                      </Button>
+                    ) : (
+                      <Button variant="primary" type="submit" className="button w-100">
+                        Update Supplier
+                      </Button>
+                    )}
                   </Form>
                 )}
               </Formik>
@@ -192,6 +239,18 @@ export default function EditSupplier() {
           </Col>
         </Row>
       </Container>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </section>
   );
 }

@@ -32,28 +32,36 @@ const SalaryTypes = () => {
               </tr>
             </thead>
             <tbody>
-              {data?.allSalaryTypes?.map((salaryType, index) => (
-                <tr key={salaryType.id}>
-                  <td>{index + 1}</td>
-                  <td>{salaryType.basicSalary}</td>
-                  <td>{salaryType.halfDaySalary}</td>
-                  <td>{salaryType.overTimeSalary}</td>
-                  <td>{salaryType.bonus}</td>
-                  <td className="text-center">
-                    <Button
-                      variant="info"
-                      size="sm"
-                      className="mx-1"
-                      onClick={() => navigate(`/${PathConstants.EDIT_SALARY_TYPE}/${salaryType.id}`, { state: { salaryType } })}
-                    >
-                      Edit
-                    </Button>
-                    <Button variant="danger" size="sm" className="mx-1">
-                      Delete
-                    </Button>
+              {data?.allSalaryTypes?.length > 0 ? (
+                data.allSalaryTypes.map((salaryType, index) => (
+                  <tr key={salaryType.id}>
+                    <td>{index + 1}</td>
+                    <td>{salaryType.basicSalary}</td>
+                    <td>{salaryType.halfDaySalary}</td>
+                    <td>{salaryType.overTimeSalary}</td>
+                    <td>{salaryType.bonus}</td>
+                    <td className="text-center">
+                      <Button
+                        variant="info"
+                        size="sm"
+                        className="mx-1"
+                        onClick={() => navigate(`/${PathConstants.EDIT_SALARY_TYPE}/${salaryType.id}`, { state: { salaryType } })}
+                      >
+                        Edit
+                      </Button>
+                      <Button variant="danger" size="sm" className="mx-1">
+                        Delete
+                      </Button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="6" className="text-center">
+                    No salary types found.
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </Table>
         </Card.Body>

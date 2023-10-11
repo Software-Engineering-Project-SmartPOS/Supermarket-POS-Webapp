@@ -1,16 +1,13 @@
 import { Container, Table, Button, Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import PathConstants from "../../../constants/pathConstants";
+import { useQuery } from "@apollo/client";
+import { GET_ALL_SUPPLIERS } from "../../../graphql/inventory";
 
 const Suppliers = () => {
   const navigate = useNavigate();
-
-  // Sample supplier data
-  const suppliers = [
-    { id: 1, name: "Supplier A", contact: "John Doe", phoneNumber: "123-456-7890", email: "supplierA@example.com" },
-    { id: 2, name: "Supplier B", contact: "Jane Smith", phoneNumber: "987-654-3210", email: "supplierB@example.com" },
-    // Add more supplier data as needed
-  ];
+  const { data, loading } = useQuery(GET_ALL_SUPPLIERS);
+  if (loading) return <div>Loading...</div>;
 
   return (
     <Container>
@@ -27,30 +24,43 @@ const Suppliers = () => {
               <tr>
                 <th>#</th>
                 <th>Name</th>
-                <th>Contact</th>
-                <th>Phone Number</th>
                 <th>Email</th>
+                <th>Mobile Phone</th>
+                <th>Land Phone</th>
                 <th className="text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {suppliers.map((supplier, index) => (
-                <tr key={supplier.id}>
-                  <td>{index + 1}</td>
-                  <td>{supplier.name}</td>
-                  <td>{supplier.contact}</td>
-                  <td>{supplier.phoneNumber}</td>
-                  <td>{supplier.email}</td>
-                  <td className="text-center">
-                    <Button variant="info" size="sm" className="mx-1" onClick={() => navigate("/" + PathConstants.EDIT_SUPPLIER)}>
-                      Edit
-                    </Button>
-                    <Button variant="danger" size="sm" className="mx-1">
-                      Delete
-                    </Button>
+              {data?.GetAllSuppliers?.length === 0 ? (
+                <tr>
+                  <td colSpan="6" className="text-center">
+                    No suppliers found.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                data?.GetAllSuppliers?.map((supplier, index) => (
+                  <tr key={supplier.id}>
+                    <td>{index + 1}</td>
+                    <td>{supplier.name}</td>
+                    <td>{supplier.email}</td>
+                    <td>{supplier.mobilePhone}</td>
+                    <td>{supplier.landPhone}</td>
+                    <td className="text-center">
+                      <Button
+                        variant="info"
+                        size="sm"
+                        className="mx-1"
+                        onClick={() => navigate(`/${PathConstants.EDIT_SUPPLIER}/${supplier.id}`, { state: { supplier } })}
+                      >
+                        Edit
+                      </Button>
+                      <Button variant="danger" size="sm" className="mx-1">
+                        Delete
+                      </Button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </Table>
         </Card.Body>

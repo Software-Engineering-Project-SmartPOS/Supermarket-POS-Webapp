@@ -40,27 +40,35 @@ const BranchList = () => {
               </tr>
             </thead>
             <tbody>
-              {data.getAllBranches?.map((branch, index) => (
-                <tr key={branch.id}>
-                  <td>{index + 1}</td>
-                  <td>{branch.name}</td>
-                  <td>{branch.telephone}</td>
-                  <td>
-                    {branch.address.houseNumber}, {branch.street}
-                  </td>
-                  <td>{branch.address.city}</td>
-                  <td>{branch.address.district}</td>
-                  <td>{branch.address.postalCode}</td>
-                  <td className="text-center">
-                    <Button variant="info" size="sm" className="mx-1" onClick={() => handleEditBranch(branch.id)}>
-                      Edit
-                    </Button>
-                    <Button variant="danger" size="sm" className="mx-1">
-                      Delete
-                    </Button>
+              {data.getAllBranches?.length > 0 ? (
+                data.getAllBranches.map((branch, index) => (
+                  <tr key={branch.id}>
+                    <td>{index + 1}</td>
+                    <td>{branch.name}</td>
+                    <td>{branch.telephone}</td>
+                    <td>
+                      {branch.address.houseNumber}, {branch.street}
+                    </td>
+                    <td>{branch.address.city}</td>
+                    <td>{branch.address.district}</td>
+                    <td>{branch.address.postalCode}</td>
+                    <td className="text-center">
+                      <Button variant="info" size="sm" className="mx-1" onClick={() => handleEditBranch(branch.id)}>
+                        Edit
+                      </Button>
+                      <Button variant="danger" size="sm" className="mx-1">
+                        Delete
+                      </Button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="8" className="text-center">
+                    No branches found.
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </Table>
         </Card.Body>

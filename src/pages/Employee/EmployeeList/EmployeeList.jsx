@@ -9,7 +9,7 @@ const EmployeeList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
-  const { employees } = useSelector((state) => state.employee);
+  const { employees, loading } = useSelector((state) => state.employee);
   const [filteredEmployees, setFilteredEmployees] = useState([]);
 
   useEffect(() => {
@@ -30,6 +30,7 @@ const EmployeeList = () => {
     );
     setFilteredEmployees(filtered);
   };
+  if (loading) return <div>Loading...</div>;
 
   return (
     <Container>
@@ -61,30 +62,38 @@ const EmployeeList = () => {
               </tr>
             </thead>
             <tbody>
-              {(searchTerm === "" ? employees : filteredEmployees).map((employee, index) => (
-                <tr key={employee.id}>
-                  <td>{index + 1}</td>
-                  <td>{employee.firstName}</td>
-                  <td>{employee.lastName}</td>
-                  <td>{employee.email}</td>
-                  <td>{employee.number}</td>
-                  <td>{employee.jobRole}</td>
-                  <td>{employee.active ? "Yes" : "No"}</td>
-                  <td className="text-center">
-                    <Button
-                      variant="info"
-                      size="sm"
-                      className="mx-1"
-                      onClick={() => navigate(`/${PathConstants.EDIT_EMPLOYEE}/${employee.id}`, { state: { employee } })}
-                    >
-                      Edit
-                    </Button>
-                    <Button variant="danger" size="sm" className="mx-1">
-                      Delete
-                    </Button>
+              {(searchTerm === "" ? employees : filteredEmployees).length > 0 ? (
+                (searchTerm === "" ? employees : filteredEmployees).map((employee, index) => (
+                  <tr key={employee.id}>
+                    <td>{index + 1}</td>
+                    <td>{employee.firstName}</td>
+                    <td>{employee.lastName}</td>
+                    <td>{employee.email}</td>
+                    <td>{employee.number}</td>
+                    <td>{employee.jobRole}</td>
+                    <td>{employee.active ? "Yes" : "No"}</td>
+                    <td className="text-center">
+                      <Button
+                        variant="info"
+                        size="sm"
+                        className="mx-1"
+                        onClick={() => navigate(`/${PathConstants.EDIT_EMPLOYEE}/${employee.id}`, { state: { employee } })}
+                      >
+                        Edit
+                      </Button>
+                      <Button variant="danger" size="sm" className="mx-1">
+                        Delete
+                      </Button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="8" className="text-center">
+                    {searchTerm === "" ? "No employees found" : "No results found"}
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </Table>
         </Card.Body>

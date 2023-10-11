@@ -30,30 +30,38 @@ const Brands = () => {
               </tr>
             </thead>
             <tbody>
-              {data?.GetAllBrands.map((brand, index) => (
-                <tr key={brand.id}>
-                  <td>{index + 1}</td>
-                  <td>{brand.name}</td>
-                  <td>{brand.description}</td>
-                  <td className="text-center">
-                    <Button
-                      variant="info"
-                      size="sm"
-                      className="mx-1"
-                      onClick={() =>
-                        navigate(`/${PathConstants.EDIT_BRAND}/${brand.id}`, {
-                          state: { brand },
-                        })
-                      }
-                    >
-                      Edit
-                    </Button>
-                    <Button variant="danger" size="sm" className="mx-1">
-                      Delete
-                    </Button>
+              {data?.GetAllBrands.length === 0 ? (
+                <tr>
+                  <td colSpan="4" className="text-center">
+                    No brands to display.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                data?.GetAllBrands.map((brand, index) => (
+                  <tr key={brand.id}>
+                    <td>{index + 1}</td>
+                    <td>{brand.name}</td>
+                    <td>{brand.description}</td>
+                    <td className="text-center">
+                      <Button
+                        variant="info"
+                        size="sm"
+                        className="mx-1"
+                        onClick={() =>
+                          navigate(`/${PathConstants.EDIT_BRAND}/${brand.id}`, {
+                            state: { brand },
+                          })
+                        }
+                      >
+                        Edit
+                      </Button>
+                      <Button variant="danger" size="sm" className="mx-1">
+                        Delete
+                      </Button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </Table>
         </Card.Body>

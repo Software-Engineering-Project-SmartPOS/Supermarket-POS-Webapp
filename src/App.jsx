@@ -77,6 +77,7 @@ function App() {
             <Route path={PathConstants.CUSTOMER_LIST} element={<CustomerList />} />
             <Route path={PathConstants.EDIT_CUSTOMER} element={<EditCustomer />} />
             <Route path={PathConstants.PURCHASE_HISTORY} element={<PurchaseHistory />} />
+
             <Route path={PathConstants.LOYALTY_PROGRAMS} element={<LoyaltyProgramList />} />
             <Route path={PathConstants.ADD_LOYALTY_PROGRAM} element={<AddLoyaltyProgram />} />
             <Route path={PathConstants.EDIT_LOYALTY_PROGRAM} element={<EditLoyaltyProgram />} />
@@ -107,7 +108,7 @@ function App() {
             {/* Suppliers */}
             <Route path={PathConstants.SUPPLIERS} element={<Suppliers />} />
             <Route path={PathConstants.ADD_SUPPLIER} element={<AddSupplier />} />
-            <Route path={PathConstants.EDIT_SUPPLIER} element={<EditSupplier />} />
+            <Route path={PathConstants.EDIT_SUPPLIER + "/:id"} element={<EditSupplier />} />
             {/* Purchase Orders */}
             <Route path={PathConstants.PURCHASE_ORDERS} element={<PurchaseOrders />} />
             <Route path={PathConstants.ADD_PURCHASE_ORDER} element={<AddPurchaseOrder />} />

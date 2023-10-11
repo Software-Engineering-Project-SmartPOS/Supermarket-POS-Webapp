@@ -29,26 +29,34 @@ const Categories = () => {
               </tr>
             </thead>
             <tbody>
-              {data?.GetAllCategories.map((category, index) => (
-                <tr key={category.id}>
-                  <td>{index + 1}</td>
-                  <td>{category.name}</td>
-                  <td>{category.description}</td>
-                  <td className="text-center">
-                    <Button
-                      variant="info"
-                      size="sm"
-                      className="mx-1"
-                      onClick={() => navigate(`/${PathConstants.EDIT_CATEGORY}/${category.id}`, { state: { category } })}
-                    >
-                      Edit
-                    </Button>
-                    <Button variant="danger" size="sm" className="mx-1">
-                      Delete
-                    </Button>
+              {data?.GetAllCategories.length === 0 ? (
+                <tr>
+                  <td colSpan="4" className="text-center">
+                    No categories to display
                   </td>
                 </tr>
-              ))}
+              ) : (
+                data?.GetAllCategories.map((category, index) => (
+                  <tr key={category.id}>
+                    <td>{index + 1}</td>
+                    <td>{category.name}</td>
+                    <td>{category.description}</td>
+                    <td className="text-center">
+                      <Button
+                        variant="info"
+                        size="sm"
+                        className="mx-1"
+                        onClick={() => navigate(`/${PathConstants.EDIT_CATEGORY}/${category.id}`, { state: { category } })}
+                      >
+                        Edit
+                      </Button>
+                      <Button variant="danger" size="sm" className="mx-1">
+                        Delete
+                      </Button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </Table>
         </Card.Body>
