@@ -11,8 +11,8 @@ export const ADD_BRANCH = gql`
 `;
 
 export const GET_ALL_BRANCHES = gql`
-  query GetAllBranches {
-    getAllBranches {
+  query GetAllBranch {
+    getAllBranch {
       id
       name
       telephone
@@ -25,5 +25,11 @@ export const GET_ALL_BRANCHES = gql`
         postalCode
       }
     }
+  }
+`;
+
+export const DELETE_BRANCH = gql`
+  mutation DeleteBranch($branchId: ID!) {
+    deleteBranch(id: $branchId)
   }
 `;

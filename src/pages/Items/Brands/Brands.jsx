@@ -3,12 +3,13 @@ import { Container, Table, Button, Card } from "react-bootstrap";
 import PathConstants from "../../../constants/pathConstants";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_BRANDS } from "../../../graphql/items";
+import Skeleton from "react-loading-skeleton";
 
 const Brands = () => {
   const navigate = useNavigate();
   const { loading, data } = useQuery(GET_ALL_BRANDS);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Skeleton count={20} />;
 
   return (
     <Container>

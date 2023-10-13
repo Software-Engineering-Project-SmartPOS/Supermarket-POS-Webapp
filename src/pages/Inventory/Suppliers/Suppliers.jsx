@@ -3,11 +3,12 @@ import { useNavigate } from "react-router-dom";
 import PathConstants from "../../../constants/pathConstants";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_SUPPLIERS } from "../../../graphql/inventory";
+import Skeleton from "react-loading-skeleton";
 
 const Suppliers = () => {
   const navigate = useNavigate();
   const { data, loading } = useQuery(GET_ALL_SUPPLIERS);
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Skeleton count={20} />;
 
   return (
     <Container>

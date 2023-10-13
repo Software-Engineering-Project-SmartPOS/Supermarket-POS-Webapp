@@ -3,12 +3,13 @@ import { Container, Table, Button, Card } from "react-bootstrap";
 import PathConstants from "../../../constants/pathConstants";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_SALARY_TYPES } from "../../../graphql/employees";
+import Skeleton from "react-loading-skeleton";
 
 const SalaryTypes = () => {
   const navigate = useNavigate();
   const { loading, data } = useQuery(GET_ALL_SALARY_TYPES);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Skeleton count={20} />;
 
   return (
     <Container>

@@ -5,7 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import PathConstants from "../../../constants/pathConstants";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { useMutation } from "@apollo/client";
 import { UPDATE_SUPPLIER } from "../../../graphql/inventory";
 
@@ -239,18 +239,6 @@ export default function EditSupplier() {
           </Col>
         </Row>
       </Container>
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
     </section>
   );
 }

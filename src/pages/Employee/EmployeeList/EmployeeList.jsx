@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import PathConstants from "../../../constants/pathConstants";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchEmployees } from "../../../state/reducers/employee";
+import Skeleton from "react-loading-skeleton";
 
 const EmployeeList = () => {
   const dispatch = useDispatch();
@@ -30,7 +31,7 @@ const EmployeeList = () => {
     );
     setFilteredEmployees(filtered);
   };
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Skeleton count={20} />;
 
   return (
     <Container>

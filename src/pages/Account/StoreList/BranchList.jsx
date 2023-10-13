@@ -1,18 +1,38 @@
-import { Container, Card, Table, Button } from "react-bootstrap";
+import { Container, Card, Table, Button, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import PathConstants from "../../../constants/pathConstants";
-import { useQuery } from "@apollo/client";
-import { GET_ALL_BRANCHES } from "../../../graphql/branch";
+import { useMutation, useQuery } from "@apollo/client";
+import { DELETE_BRANCH, GET_ALL_BRANCHES } from "../../../graphql/branch";
+import Skeleton from "react-loading-skeleton";
+import DeleteModal from "../../../components/DeleteModal";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
 const BranchList = () => {
   const navigate = useNavigate();
-  const { loading, data } = useQuery(GET_ALL_BRANCHES);
+  const { loading, data, error } = useQuery(GET_ALL_BRANCHES);
+  const [deleteBranch, { loading: delLoading, error: delError }] = useMutation(DELETE_BRANCH);
+  const [show, setShow] = useState(false);
 
-  if (loading) return <div>Loading...</div>;
+  if (error)
+    return (
+      <Alert className="mt-3" variant="danger">
+        {error.message}
+      </Alert>
+    );
+
+  if (loading) return <Skeleton count={20} />;
 
   // Function to handle edit branch
   const handleEditBranch = (branchId) => {
     navigate(`/edit-branch/${branchId}`);
+  };
+
+  const handleDeleteBranch = (branchId) => {
+    deleteBranch({ variables: { branchId: branchId } }).then(() => {
+      setShow(false);
+      toast.success("Branch deleted successfully");
+    });
   };
 
   return (
@@ -23,7 +43,6 @@ const BranchList = () => {
           Add Branch
         </Button>
       </div>
-
       <Card border="light" className="table-responsive shadow">
         <Card.Body className="pt-0">
           <Table responsive hover>
@@ -40,8 +59,8 @@ const BranchList = () => {
               </tr>
             </thead>
             <tbody>
-              {data.getAllBranches?.length > 0 ? (
-                data.getAllBranches.map((branch, index) => (
+              {data.getAllBranch?.length > 0 ? (
+                data.getAllBranch.map((branch, index) => (
                   <tr key={branch.id}>
                     <td>{index + 1}</td>
                     <td>{branch.name}</td>
@@ -56,9 +75,16 @@ const BranchList = () => {
                       <Button variant="info" size="sm" className="mx-1" onClick={() => handleEditBranch(branch.id)}>
                         Edit
                       </Button>
-                      <Button variant="danger" size="sm" className="mx-1">
+                      <Button variant="danger" size="sm" className="mx-1" onClick={() => setShow(true)}>
                         Delete
                       </Button>
+                      <DeleteModal
+                        show={show}
+                        onClose={() => setShow(false)}
+                        handleYes={() => handleDeleteBranch(branch.id)}
+                        message={"branch"}
+                        loading={delLoading}
+                      />
                     </td>
                   </tr>
                 ))

@@ -3,12 +3,12 @@ import { Container, Table, Button, Card } from "react-bootstrap";
 import PathConstants from "../../../constants/pathConstants";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_CATEGORIES } from "../../../graphql/items";
+import Skeleton from "react-loading-skeleton";
 
 const Categories = () => {
   const navigate = useNavigate();
-  const { loading, data } = useQuery(GET_ALL_CATEGORIES);
-  console.log(data);
-  if (loading) return <div>Loading...</div>;
+  const { loading, data, error } = useQuery(GET_ALL_CATEGORIES);
+  if (loading) return <Skeleton count={20} />;
   return (
     <Container>
       <div className="title d-flex justify-content-between pe-2">

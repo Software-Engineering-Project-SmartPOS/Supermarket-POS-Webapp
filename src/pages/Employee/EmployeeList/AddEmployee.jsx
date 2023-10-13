@@ -19,7 +19,7 @@ import PathConstants from "../../../constants/pathConstants";
 import { useMutation, useQuery } from "@apollo/client";
 import { ADD_EMPLOYEE, GET_ALL_SALARY_TYPES } from "../../../graphql/employees";
 import { GET_ALL_BRANCHES } from "../../../graphql/branch";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 export default function AddEmployee() {
   const navigate = useNavigate();
@@ -405,18 +405,6 @@ export default function AddEmployee() {
           </Col>
         </Row>
       </Container>
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
     </section>
   );
 }

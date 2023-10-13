@@ -109,7 +109,7 @@ export default function SideBar() {
         <div className="lock-btn">
           <div className="d-flex justify-content-around">
             <OverlayTrigger placement="bottom" overlay={<Tooltip id="tooltip-id">Lock</Tooltip>}>
-              <span className="my-2" onClick={() => navigate("/lock")}>
+              <span className="my-2" onClick={() => navigate(PathConstants.LOCK)}>
                 <FaLock />
               </span>
             </OverlayTrigger>
@@ -119,7 +119,7 @@ export default function SideBar() {
                 className="my-2"
                 onClick={() => {
                   localStorage.clear();
-                  navigate("/signin");
+                  navigate(PathConstants.SIGN_IN);
                 }}
               >
                 <FaSignOutAlt />

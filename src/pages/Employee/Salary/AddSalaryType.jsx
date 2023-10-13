@@ -7,7 +7,7 @@ import * as Yup from "yup";
 import PathConstants from "../../../constants/pathConstants";
 import { useMutation } from "@apollo/client";
 import { ADD_SALARY_TYPE } from "../../../graphql/employees";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 export default function AddSalaryType() {
   const navigate = useNavigate();
@@ -165,18 +165,6 @@ export default function AddSalaryType() {
           </Col>
         </Row>
       </Container>
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
     </section>
   );
 }

@@ -1,6 +1,6 @@
 const PathConstants = {
   HOME: "/",
-  SIGN_IN: "/signin",
+  SIGN_IN: "/",
   SIGN_UP: "/signup",
   LOCK: "/lock",
   OWNER_PROFILE: "/owner-profile",
