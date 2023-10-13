@@ -10,8 +10,8 @@ import { toast } from "react-toastify";
 
 const BranchList = () => {
   const navigate = useNavigate();
-  const { loading, data, error } = useQuery(GET_ALL_BRANCHES);
-  const [deleteBranch, { loading: delLoading, error: delError }] = useMutation(DELETE_BRANCH);
+  const { loading, data, error, refetch } = useQuery(GET_ALL_BRANCHES);
+  const [deleteBranch, { loading: delLoading }] = useMutation(DELETE_BRANCH);
   const [show, setShow] = useState(false);
 
   if (error)
@@ -29,9 +29,12 @@ const BranchList = () => {
   };
 
   const handleDeleteBranch = (branchId) => {
-    deleteBranch({ variables: { branchId: branchId } }).then(() => {
+    deleteBranch({ variables: { branchId: branchId } }).then((res) => {
       setShow(false);
-      toast.success("Branch deleted successfully");
+      if (res.data.deleteBranch == "branch deleted") {
+        toast.success("Branch deleted successfully");
+        refetch();
+      } else toast.error("This branch cannot be deleted");
     });
   };
 
