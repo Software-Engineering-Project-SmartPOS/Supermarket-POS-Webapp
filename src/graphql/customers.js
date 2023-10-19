@@ -22,3 +22,39 @@ export const GET_ALL_CUSTOMERS = gql`
     }
   }
 `;
+
+export const GET_ALL_LOYALTY_PROGRAMS = gql`
+  query GetAllLoyaltyPrograms {
+    getAllLoyaltyPrograms {
+      id
+      loyaltyProgramName
+      description
+      pointsThreshold
+      discountPercentage
+    }
+  }
+`;
+
+export const ADD_LOYALTY_PROGRAM = gql`
+  mutation CreateLoyaltyProgram($newProgramInput: LoyaltyProgramInput!) {
+    createLoyaltyProgram(newProgramInput: $newProgramInput) {
+      id
+      loyaltyProgramName
+      description
+      pointsThreshold
+      discountPercentage
+    }
+  }
+`;
+
+export const UPDATE_LOYALTY_PROGRAM = gql`
+  mutation UpdateLoyaltyProgram($updateDetail: LoyaltyProgramInput!) {
+    updateLoyaltyProgram(updateDetail: $updateDetail) {
+      id
+      loyaltyProgramName
+      description
+      pointsThreshold
+      discountPercentage
+    }
+  }
+`;

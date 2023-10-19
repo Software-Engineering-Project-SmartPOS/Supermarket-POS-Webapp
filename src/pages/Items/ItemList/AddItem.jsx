@@ -24,46 +24,29 @@ export default function AddItem() {
                   <h3 className="mb-0">Add Item</h3>
                 </div>
               </div>
+
               <Formik
                 initialValues={{
                   name: "",
                   category: "",
                   brand: "",
                   description: "",
-                  isAvailableForSale: false,
-                  isReturnable: false,
-                  unitType: "each",
+                  unitType: "KILOGRAM", // Default to KILOGRAM
                   price: "",
                   cost: "",
                   barcode: "",
-                  sku: "",
-                  trackStock: false,
-                  stockLevel: "",
-                  lowStockNumber: "",
+                  itemCode: "", // New itemCode field
                 }}
                 validationSchema={Yup.object({
                   name: Yup.string().required("Required"),
                   category: Yup.string().required("Required"),
                   brand: Yup.string().required("Required"),
                   description: Yup.string(),
-                  isAvailableForSale: Yup.boolean(),
-                  isReturnable: Yup.boolean(),
                   unitType: Yup.string().required("Required"),
                   price: Yup.number().required("Required"),
                   cost: Yup.number().required("Required"),
                   barcode: Yup.string().required("Required"),
-                  sku: Yup.string().required("Required"),
-                  trackStock: Yup.boolean(),
-                  stockLevel: Yup.number().when("trackStock", {
-                    is: true,
-                    then: Yup.number().required("Required when tracking stock"),
-                    otherwise: Yup.number(),
-                  }),
-                  lowStockNumber: Yup.number().when("trackStock", {
-                    is: true,
-                    then: Yup.number().required("Required when tracking stock"),
-                    otherwise: Yup.number(),
-                  }),
+                  itemCode: Yup.string().required("Required"), // Validation for itemCode
                 })}
                 onSubmit={(values) => {
                   console.log(values);
@@ -96,11 +79,10 @@ export default function AddItem() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faBox} />
                             </InputGroup.Text>
-
                             <Form.Control as="select" required name="brand" onChange={handleChange}>
                               <option value="">Select brand</option>
-                              {/* Add category options */}
-                              <option value="coca cola">coca cola</option>
+                              {/* Add brand options */}
+                              <option value="coca cola">Coca Cola</option>
                             </Form.Control>
                           </InputGroup>
                           {touched.brand && errors.brand && <div className="text-danger">{errors.brand}</div>}
@@ -123,6 +105,7 @@ export default function AddItem() {
                         </Form.Group>
                       </Col>
                     </Row>
+
                     <Row>
                       <Col xs={12}>
                         <Form.Group id="description" className="mb-4">
@@ -136,45 +119,26 @@ export default function AddItem() {
                         </Form.Group>
                       </Col>
                     </Row>
-                    <Row>
-                      <Col xs={12} lg={6}>
-                        <Form.Group id="isAvailableForSale" className="mb-4">
-                          <Form.Check type="checkbox" label="Item Available for Sale" name="isAvailableForSale" onChange={handleChange} />
-                        </Form.Group>
-                      </Col>
-
-                      <Col xs={12} lg={6}>
-                        <Form.Group id="isReturnable" className="mb-4">
-                          <Form.Check type="checkbox" label="Returnable" name="isReturnable" onChange={handleChange} />
-                        </Form.Group>
-                      </Col>
-                    </Row>
 
                     <Row>
                       <Col xs={12} lg={6}>
                         <Form.Group id="unitType" className="mb-4">
                           <Form.Label>Unit Type</Form.Label>
                           <InputGroup>
-                            <Form.Check
-                              inline
-                              type="radio"
-                              label="Each"
-                              name="unitType"
-                              value="each"
-                              onChange={handleChange}
-                              checked={values.unitType === "each"}
-                            />
-                            <Form.Check
-                              inline
-                              type="radio"
-                              label="Weight/Volume"
-                              name="unitType"
-                              value="weightVolume"
-                              onChange={handleChange}
-                              checked={values.unitType === "weightVolume"}
-                            />
+                            <InputGroup.Text>
+                              <FontAwesomeIcon icon={faCubes} />
+                            </InputGroup.Text>
+                            <Form.Control as="select" name="unitType" onChange={handleChange}>
+                              <option value="KILOGRAM">KILOGRAM</option>
+                              <option value="GRAMS">GRAMS</option>
+                              <option value="LITERS">LITERS</option>
+                              <option value="MILLILITERS">MILLILITERS</option>
+                              <option value="METERS">METERS</option>
+                              <option value="MILLIMETERS">MILLIMETERS</option>
+                              <option value="COUNT">COUNT</option>
+                            </Form.Control>
+                            {touched.unitType && errors.unitType && <div className="text-danger">{errors.unitType}</div>}
                           </InputGroup>
-                          {touched.unitType && errors.unitType && <div className="text-danger">{errors.unitType}</div>}
                         </Form.Group>
                       </Col>
                     </Row>
@@ -218,56 +182,18 @@ export default function AddItem() {
                       </Col>
 
                       <Col xs={12} lg={6}>
-                        <Form.Group id="sku" className="mb-4">
-                          <Form.Label>SKU</Form.Label>
+                        <Form.Group id="itemCode" className="mb-4">
+                          <Form.Label>Item Code</Form.Label>
                           <InputGroup>
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faBarcode} />
                             </InputGroup.Text>
-                            <Form.Control required type="text" placeholder="Enter SKU" name="sku" onChange={handleChange} />
+                            <Form.Control required type="text" placeholder="Enter item code" name="itemCode" onChange={handleChange} />
                           </InputGroup>
-                          {touched.sku && errors.sku && <div className="text-danger">{errors.sku}</div>}
+                          {touched.itemCode && errors.itemCode && <div className="text-danger">{errors.itemCode}</div>}
                         </Form.Group>
                       </Col>
                     </Row>
-
-                    <Row>
-                      <Col xs={12}>
-                        <Form.Group id="trackStock" className="mb-4">
-                          <Form.Check type="switch" label="Track Stock" name="trackStock" onChange={handleChange} />
-                        </Form.Group>
-                      </Col>
-                    </Row>
-
-                    {values.trackStock && (
-                      <Row>
-                        <Col xs={12} lg={6}>
-                          <Form.Group id="stockLevel" className="mb-4">
-                            <Form.Label>Stock Level</Form.Label>
-                            <InputGroup>
-                              <InputGroup.Text>
-                                <FontAwesomeIcon icon={faCubes} />
-                              </InputGroup.Text>
-                              <Form.Control type="number" placeholder="Enter stock level" name="stockLevel" onChange={handleChange} />
-                            </InputGroup>
-                            {touched.stockLevel && errors.stockLevel && <div className="text-danger">{errors.stockLevel}</div>}
-                          </Form.Group>
-                        </Col>
-
-                        <Col xs={12} lg={6}>
-                          <Form.Group id="lowStockNumber" className="mb-4">
-                            <Form.Label>Low Stock Number</Form.Label>
-                            <InputGroup>
-                              <InputGroup.Text>
-                                <FontAwesomeIcon icon={faCubes} />
-                              </InputGroup.Text>
-                              <Form.Control type="number" placeholder="Enter low stock number" name="lowStockNumber" onChange={handleChange} />
-                            </InputGroup>
-                            {touched.lowStockNumber && errors.lowStockNumber && <div className="text-danger">{errors.lowStockNumber}</div>}
-                          </Form.Group>
-                        </Col>
-                      </Row>
-                    )}
 
                     <Button variant="primary" type="submit" className="button w-100">
                       Add Item

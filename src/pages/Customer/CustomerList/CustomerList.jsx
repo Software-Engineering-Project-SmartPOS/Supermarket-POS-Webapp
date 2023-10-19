@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import PathConstants from "../../../constants/pathConstants";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCustomers } from "../../../state/reducers/customer";
+import Skeleton from "react-loading-skeleton";
 
 const CustomerList = () => {
   const dispatch = useDispatch();
@@ -12,11 +13,10 @@ const CustomerList = () => {
   }, [dispatch]);
 
   const navigate = useNavigate();
-  const { customers } = useSelector((state) => state.customer);
-  console.log(customers);
+  const { customers, loading } = useSelector((state) => state.customer);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredCustomers, setFilteredCustomers] = useState([]);
-
+  if (loading) return <Skeleton count={20} />;
   // Function to handle search
   const handleSearch = (e) => {
     const searchTerm = e.target.value.toLowerCase();
@@ -68,7 +68,7 @@ const CustomerList = () => {
               </tr>
             </thead>
             <tbody>
-              {displayCustomers.map((customer, index) => (
+              {displayCustomers?.map((customer, index) => (
                 <tr key={customer.id}>
                   <td>{index + 1}</td>
                   <td onClick={handleCustomerClick} className="text-link">
@@ -77,8 +77,8 @@ const CustomerList = () => {
                     {customer.email}
                   </td>
                   <td>{customer.telephone}</td>
-                  <td>{customer.firstVisitDate}</td>
-                  <td>{customer.lastVisitDate}</td>
+                  <td>{customer.firstVisited}</td>
+                  <td>{customer.lastVisited}</td>
                   <td className="text-right">{customer.totalVisits}</td>
                   <td className="text-right">{customer.totalSpent}</td>
                   <td className="text-right">{customer.pointsBalance}</td>

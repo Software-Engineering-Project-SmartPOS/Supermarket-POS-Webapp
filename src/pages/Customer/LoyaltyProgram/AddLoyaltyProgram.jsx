@@ -1,49 +1,47 @@
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
-import { Container, Form, Button } from "react-bootstrap";
+import { Container, Form, Button, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router";
-import { Formik } from "formik"; // Import Formik
-import * as Yup from "yup"; // Import Yup
+import { Formik } from "formik";
+import * as Yup from "yup";
 import PathConstants from "../../../constants/pathConstants";
+import { useMutation } from "@apollo/client";
+import { ADD_LOYALTY_PROGRAM } from "../../../graphql/customers";
+import { toast } from "react-toastify";
 
 const AddLoyaltyProgram = () => {
   const navigate = useNavigate();
-  const [programDetails, setProgramDetails] = useState({
-    name: "",
+  const [addLoyaltyProgram, { loading, error }] = useMutation(ADD_LOYALTY_PROGRAM);
+  if (error) {
+    console.log(error);
+    toast.error("Error adding loyalty program");
+  }
+  const programDetails = {
+    loyaltyProgramName: "",
     description: "",
-    rewardsStructure: "",
-    eligibilityCriteria: "",
-  });
+    pointsThreshold: 0,
+    discountPercentage: 0,
+  };
 
   // Validation schema using Yup
   const validationSchema = Yup.object({
-    name: Yup.string().required("Name is required"),
+    loyaltyProgramName: Yup.string().required("Name is required"),
     description: Yup.string().required("Description is required"),
-    rewardsStructure: Yup.string().required("Rewards Structure is required"),
-    eligibilityCriteria: Yup.string().required("Eligibility Criteria is required"),
+    pointsThreshold: Yup.number().required("Rewards Structure is required").min(0),
+    discountPercentage: Yup.number().required("Eligibility Criteria is required").min(0),
   });
 
-  const handleAddProgram = async (values) => {
-    // Implement logic to send programDetails to the server to create a new loyalty program
-    try {
-      const response = await fetch("/api/loyalty-programs", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values), // Use Formik's form values
+  const handleAddProgram = (values, { resetForm }) => {
+    addLoyaltyProgram({ variables: { newProgramInput: values } })
+      .then((response) => {
+        console.log(response.data.AddLoyaltyProgram);
+        toast.success("Loyalty Program added successfully");
+        // resetForm();
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error("Error adding loyalty program");
       });
-
-      if (response.ok) {
-        // Redirect to Loyalty Program List Page after successful creation
-        navigate("/loyalty-programs");
-      } else {
-        console.error("Failed to add loyalty program.");
-      }
-    } catch (error) {
-      console.error("Error adding loyalty program:", error);
-    }
   };
 
   return (
@@ -64,11 +62,19 @@ const AddLoyaltyProgram = () => {
           {/* Wrap your form with Formik */}
           <Formik initialValues={programDetails} validationSchema={validationSchema} onSubmit={handleAddProgram}>
             {(formik) => (
-              <Form>
-                <Form.Group controlId="name" className="mb-4">
+              <Form onSubmit={formik.handleSubmit}>
+                <Form.Group controlId="loyaltyProgramName" className="mb-4">
                   <Form.Label>Name</Form.Label>
-                  <Form.Control type="text" name="name" value={formik.values.name} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                  {formik.touched.name && formik.errors.name && <div className="text-danger">{formik.errors.name}</div>}
+                  <Form.Control
+                    type="text"
+                    name="loyaltyProgramName"
+                    value={formik.values.loyaltyProgramName}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                  {formik.touched.loyaltyProgramName && formik.errors.loyaltyProgramName && (
+                    <div className="text-danger">{formik.errors.loyaltyProgramName}</div>
+                  )}
                 </Form.Group>
                 <Form.Group controlId="description" className="mb-4">
                   <Form.Label>Description</Form.Label>
@@ -81,36 +87,43 @@ const AddLoyaltyProgram = () => {
                   />
                   {formik.touched.description && formik.errors.description && <div className="text-danger">{formik.errors.description}</div>}
                 </Form.Group>
-                <Form.Group controlId="rewardsStructure" className="mb-4">
-                  <Form.Label>Rewards Structure</Form.Label>
+                <Form.Group controlId="pointsThreshold" className="mb-4">
+                  <Form.Label>Points Threshold</Form.Label>
                   <Form.Control
-                    type="text"
-                    name="rewardsStructure"
-                    value={formik.values.rewardsStructure}
+                    type="number"
+                    name="pointsThreshold"
+                    value={formik.values.pointsThreshold}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
-                  {formik.touched.rewardsStructure && formik.errors.rewardsStructure && (
-                    <div className="text-danger">{formik.errors.rewardsStructure}</div>
+                  {formik.touched.pointsThreshold && formik.errors.pointsThreshold && (
+                    <div className="text-danger">{formik.errors.pointsThreshold}</div>
                   )}
                 </Form.Group>
-                <Form.Group controlId="eligibilityCriteria" className="mb-4">
-                  <Form.Label>Eligibility Criteria</Form.Label>
+                <Form.Group controlId="discountPercentage" className="mb-4">
+                  <Form.Label>Discount Percentage</Form.Label>
                   <Form.Control
-                    type="text"
-                    name="eligibilityCriteria"
-                    value={formik.values.eligibilityCriteria}
+                    type="number"
+                    name="discountPercentage"
+                    value={formik.values.discountPercentage}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
-                  {formik.touched.eligibilityCriteria && formik.errors.eligibilityCriteria && (
-                    <div className="text-danger">{formik.errors.eligibilityCriteria}</div>
+                  {formik.touched.discountPercentage && formik.errors.discountPercentage && (
+                    <div className="text-danger">{formik.errors.discountPercentage}</div>
                   )}
                 </Form.Group>
                 <div className="d-flex justify-content-end">
-                  <Button variant="primary" type="submit">
-                    Add Program
-                  </Button>
+                  {loading ? (
+                    <Button variant="primary" type="submit" className="button w-100" disabled>
+                      <Spinner animation="border" size="sm" className="me-2" />
+                      Loading...
+                    </Button>
+                  ) : (
+                    <Button variant="primary" type="submit" className="button w-100">
+                      Add Program
+                    </Button>
+                  )}
                 </div>
               </Form>
             )}

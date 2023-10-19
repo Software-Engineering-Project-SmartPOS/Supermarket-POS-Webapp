@@ -8,6 +8,8 @@ import PathConstants from "../../constants/pathConstants";
 import axios from "../../utils/axios";
 import * as Yup from "yup";
 import { useState } from "react";
+import React from "react";
+import { toast } from "react-toastify";
 
 export default function SignIn() {
   const navigate = useNavigate();
@@ -39,12 +41,12 @@ export default function SignIn() {
                           localStorage.setItem("user", JSON.stringify(response.data.user));
                           navigate(PathConstants.CHECKOUT);
                         } else {
-                          alert("Invalid signin");
+                          toast.error("Invalid signin");
                         }
                       })
                       .catch((error) => {
                         console.log(error);
-                        alert("Invalid signin");
+                        toast.error("Invalid signin");
                       })
                       .finally(() => {
                         setIsLoading(false); // Set isLoading to false when request is complete

@@ -8,6 +8,7 @@ import PathConstants from "../../../constants/pathConstants";
 import { useMutation } from "@apollo/client";
 import { ADD_BRANCH } from "../../../graphql/branch";
 import { ToastContainer, toast } from "react-toastify";
+import React from "react";
 
 export default function AddBranch() {
   const navigate = useNavigate();
@@ -37,7 +38,6 @@ export default function AddBranch() {
   });
 
   const handleSubmit = (values, { resetForm }) => {
-    console.log(values);
     addBranch({ variables: { branchInputDetails: values } }).then((response) => {
       console.log(response.data.AddBranch);
       toast.success("Branch added successfully");
@@ -58,7 +58,9 @@ export default function AddBranch() {
                   </button>
                 </div>
                 <div className="text-center text-md-center mt-md-0 flex-grow-1">
-                  <h3 className="mb-0">Add Branch</h3>
+                  <h3 className="mb-0" data-testid="add-branch-title">
+                    Add Branch
+                  </h3>
                 </div>
               </div>
               <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
@@ -171,7 +173,7 @@ export default function AddBranch() {
                       </Button>
                     ) : (
                       <Button variant="primary" type="submit" className="button w-100">
-                        Add Branch
+                        Add
                       </Button>
                     )}
                   </Form>

@@ -4,10 +4,14 @@ import PathConstants from "../../../constants/pathConstants";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_CATEGORIES } from "../../../graphql/items";
 import Skeleton from "react-loading-skeleton";
+import { useEffect } from "react";
 
 const Categories = () => {
   const navigate = useNavigate();
-  const { loading, data, error } = useQuery(GET_ALL_CATEGORIES);
+  const { loading, data, error, refetch } = useQuery(GET_ALL_CATEGORIES);
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
   if (loading) return <Skeleton count={20} />;
   return (
     <Container>

@@ -5,12 +5,15 @@ import { useMutation, useQuery } from "@apollo/client";
 import { DELETE_BRANCH, GET_ALL_BRANCHES } from "../../../graphql/branch";
 import Skeleton from "react-loading-skeleton";
 import DeleteModal from "../../../components/DeleteModal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 
 const BranchList = () => {
   const navigate = useNavigate();
   const { loading, data, error, refetch } = useQuery(GET_ALL_BRANCHES);
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
   const [deleteBranch, { loading: delLoading }] = useMutation(DELETE_BRANCH);
   const [show, setShow] = useState(false);
 

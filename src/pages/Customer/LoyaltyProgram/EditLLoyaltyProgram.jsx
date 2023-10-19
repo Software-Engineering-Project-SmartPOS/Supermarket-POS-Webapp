@@ -1,69 +1,35 @@
 import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState, useEffect } from "react";
-import { Container, Form, Button } from "react-bootstrap";
-import { useNavigate } from "react-router";
-import { Formik } from "formik"; // Import Formik
-import * as Yup from "yup"; // Import Yup for validation
+import { Container, Form, Button, Spinner } from "react-bootstrap";
+import { useLocation, useNavigate, useParams } from "react-router";
+import { Formik } from "formik";
+import * as Yup from "yup";
 import PathConstants from "../../../constants/pathConstants";
+import { useMutation } from "@apollo/client";
+import { toast } from "react-toastify";
+import { UPDATE_LOYALTY_PROGRAM } from "../../../graphql/customers";
 
-const EditLoyaltyProgram = ({ loyaltyProgramId }) => {
+const EditLoyaltyProgram = () => {
   const navigate = useNavigate();
-  const [programDetails, setProgramDetails] = useState({
-    id: 1,
-    name: "Gold Membership",
-    description: "Exclusive rewards for loyal customers",
-    rewardsStructure: "5% cashback on every purchase",
-    eligibilityCriteria: "Minimum purchase amount of $1000",
-  });
+  const location = useLocation();
+  const [updateLoyaltyProgram, { loading, error }] = useMutation(UPDATE_LOYALTY_PROGRAM);
 
-  // Fetch loyalty program details based on the loyaltyProgramId
-  useEffect(() => {
-    // Replace with actual API call to fetch loyalty program details by ID
-    const fetchLoyaltyProgramDetails = async () => {
-      try {
-        const response = await fetch(`/api/loyalty-programs/${loyaltyProgramId}`);
-        if (response.ok) {
-          const data = await response.json();
-          setProgramDetails(data);
-        } else {
-          console.error("Failed to fetch loyalty program details.");
-        }
-      } catch (error) {
-        console.error("Error fetching loyalty program details:", error);
-      }
-    };
+  const initialValues = location.state?.program;
 
-    fetchLoyaltyProgramDetails();
-  }, [loyaltyProgramId]);
-
+  // Validation schema using Yup
   const validationSchema = Yup.object({
-    name: Yup.string().required("Name is required"),
+    loyaltyProgramName: Yup.string().required("Name is required"),
     description: Yup.string().required("Description is required"),
-    rewardsStructure: Yup.string().required("Rewards Structure is required"),
-    eligibilityCriteria: Yup.string().required("Eligibility Criteria is required"),
+    pointsThreshold: Yup.number().required("Rewards Structure is required").min(0),
+    discountPercentage: Yup.number().required("Eligibility Criteria is required").min(0),
   });
 
-  const handleEditProgram = async (values) => {
-    // Implement logic to send updated programDetails to the server to edit the loyalty program
-    try {
-      const response = await fetch(`/api/loyalty-programs/${loyaltyProgramId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      });
-
-      if (response.ok) {
-        // Redirect to Loyalty Program List Page after successful update
-        navigate("/loyalty-programs");
-      } else {
-        console.error("Failed to edit loyalty program.");
-      }
-    } catch (error) {
-      console.error("Error editing loyalty program:", error);
-    }
+  const handleEditProgram = (values) => {
+    delete values.__typename;
+    updateLoyaltyProgram({ variables: { updateDetail: values } }).then((response) => {
+      console.log(response.data.UpdateLoyaltyProgram);
+      toast.success("Loyalty Program updated successfully");
+    });
   };
 
   return (
@@ -82,13 +48,21 @@ const EditLoyaltyProgram = ({ loyaltyProgramId }) => {
           </div>
 
           {/* Wrap your form with Formik */}
-          <Formik initialValues={programDetails} validationSchema={validationSchema} onSubmit={handleEditProgram}>
+          <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleEditProgram}>
             {(formik) => (
-              <Form>
-                <Form.Group controlId="name" className="mb-4">
+              <Form onSubmit={formik.handleSubmit}>
+                <Form.Group controlId="loyaltyProgramName" className="mb-4">
                   <Form.Label>Name</Form.Label>
-                  <Form.Control type="text" name="name" value={formik.values.name} onChange={formik.handleChange} onBlur={formik.handleBlur} />
-                  {formik.touched.name && formik.errors.name && <div className="text-danger">{formik.errors.name}</div>}
+                  <Form.Control
+                    type="text"
+                    name="loyaltyProgramName"
+                    value={formik.values.loyaltyProgramName}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                  {formik.touched.loyaltyProgramName && formik.errors.loyaltyProgramName && (
+                    <div className="text-danger">{formik.errors.loyaltyProgramName}</div>
+                  )}
                 </Form.Group>
                 <Form.Group controlId="description" className="mb-4">
                   <Form.Label>Description</Form.Label>
@@ -101,36 +75,43 @@ const EditLoyaltyProgram = ({ loyaltyProgramId }) => {
                   />
                   {formik.touched.description && formik.errors.description && <div className="text-danger">{formik.errors.description}</div>}
                 </Form.Group>
-                <Form.Group controlId="rewardsStructure" className="mb-4">
-                  <Form.Label>Rewards Structure</Form.Label>
+                <Form.Group controlId="pointsThreshold" className="mb-4">
+                  <Form.Label>Points Threshold</Form.Label>
                   <Form.Control
-                    type="text"
-                    name="rewardsStructure"
-                    value={formik.values.rewardsStructure}
+                    type="number"
+                    name="pointsThreshold"
+                    value={formik.values.pointsThreshold}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
-                  {formik.touched.rewardsStructure && formik.errors.rewardsStructure && (
-                    <div className="text-danger">{formik.errors.rewardsStructure}</div>
+                  {formik.touched.pointsThreshold && formik.errors.pointsThreshold && (
+                    <div className="text-danger">{formik.errors.pointsThreshold}</div>
                   )}
                 </Form.Group>
-                <Form.Group controlId="eligibilityCriteria" className="mb-4">
-                  <Form.Label>Eligibility Criteria</Form.Label>
+                <Form.Group controlId="discountPercentage" className="mb-4">
+                  <Form.Label>Discount Percentage</Form.Label>
                   <Form.Control
-                    type="text"
-                    name="eligibilityCriteria"
-                    value={formik.values.eligibilityCriteria}
+                    type="number"
+                    name="discountPercentage"
+                    value={formik.values.discountPercentage}
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                   />
-                  {formik.touched.eligibilityCriteria && formik.errors.eligibilityCriteria && (
-                    <div className="text-danger">{formik.errors.eligibilityCriteria}</div>
+                  {formik.touched.discountPercentage && formik.errors.discountPercentage && (
+                    <div className="text-danger">{formik.errors.discountPercentage}</div>
                   )}
                 </Form.Group>
                 <div className="d-flex justify-content-end">
-                  <Button variant="primary" type="submit">
-                    Save Changes
-                  </Button>
+                  {loading ? (
+                    <Button variant="primary" type="submit" className="button w-100" disabled>
+                      <Spinner animation="border" size="sm" className="me-2" />
+                      Loading...
+                    </Button>
+                  ) : (
+                    <Button variant="primary" type="submit" className="button w-100">
+                      Update Program
+                    </Button>
+                  )}
                 </div>
               </Form>
             )}

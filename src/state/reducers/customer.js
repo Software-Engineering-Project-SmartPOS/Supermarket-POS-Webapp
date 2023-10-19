@@ -10,7 +10,7 @@ export const fetchCustomers = createAsyncThunk("customer/fetchCustomers", async 
 });
 
 // Define the initial state using that type
-const initialState = {
+export const initialState = {
   customers: [],
   selectedCustomer: null,
   loading: false,

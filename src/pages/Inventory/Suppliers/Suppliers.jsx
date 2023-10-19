@@ -4,10 +4,14 @@ import PathConstants from "../../../constants/pathConstants";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_SUPPLIERS } from "../../../graphql/inventory";
 import Skeleton from "react-loading-skeleton";
+import { useEffect } from "react";
 
 const Suppliers = () => {
   const navigate = useNavigate();
-  const { data, loading } = useQuery(GET_ALL_SUPPLIERS);
+  const { data, loading, refetch } = useQuery(GET_ALL_SUPPLIERS);
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
   if (loading) return <Skeleton count={20} />;
 
   return (

@@ -9,7 +9,7 @@ export const fetchSalaryTypes = createAsyncThunk("salaryTypes/fetchSalaryTypes",
   return data.allSalaryTypes;
 });
 
-const initialState = {
+export const initialState = {
   salaryTypes: [],
   loading: false,
   error: null,

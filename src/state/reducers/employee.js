@@ -9,7 +9,7 @@ export const fetchEmployees = createAsyncThunk("employee/fetchEmployees", async 
   return data.allEmployees;
 });
 
-const initialState = {
+export const initialState = {
   employees: [],
   selectedEmployee: null,
   loading: false,

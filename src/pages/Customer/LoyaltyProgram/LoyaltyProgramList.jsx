@@ -1,57 +1,17 @@
-import { useState, useEffect } from "react";
-import { Container, Table, Button, Card } from "react-bootstrap";
+import { Container, Table, Button, Card, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router";
 import PathConstants from "../../../constants/pathConstants";
+import { useQuery } from "@apollo/client";
+import { GET_ALL_LOYALTY_PROGRAMS } from "../../../graphql/customers";
+import Skeleton from "react-loading-skeleton";
 
 const LoyaltyProgramList = () => {
   const navigate = useNavigate();
-
-  const [loyaltyPrograms, setLoyaltyPrograms] = useState([
-    {
-      id: 1,
-      name: "Gold Membership",
-      description: "Exclusive rewards for loyal customers",
-      rewardsStructure: "5% cashback on every purchase",
-      eligibilityCriteria: "Minimum purchase amount of $1000",
-    },
-    {
-      id: 2,
-      name: "Platinum Membership",
-      description: "Premium rewards and benefits",
-      rewardsStructure: "10% cashback on every purchase",
-      eligibilityCriteria: "Minimum purchase amount of $2000",
-    },
-    {
-      id: 3,
-      name: "Silver Membership",
-      description: "Basic loyalty program",
-      rewardsStructure: "2% cashback on every purchase",
-      eligibilityCriteria: "Minimum purchase amount of $500",
-    },
-  ]);
-
-  // Fetch loyalty programs from your backend API or database
-  useEffect(() => {
-    // Replace with actual API call to fetch loyalty programs
-    const fetchLoyaltyPrograms = async () => {
-      try {
-        const response = await fetch("/api/loyalty-programs");
-        if (response.ok) {
-          const data = await response.json();
-          setLoyaltyPrograms(data);
-        } else {
-          console.error("Failed to fetch loyalty programs.");
-        }
-      } catch (error) {
-        console.error("Error fetching loyalty programs:", error);
-      }
-    };
-
-    fetchLoyaltyPrograms();
-  }, []);
-
-  const handlEditLoyaltyProgram = () => {
-    navigate("/" + PathConstants.EDIT_LOYALTY_PROGRAM);
+  const { loading, data, error } = useQuery(GET_ALL_LOYALTY_PROGRAMS);
+  if (error) return <Alert variant="danger">{error.message}</Alert>;
+  if (loading) return <Skeleton count={20} />;
+  const handlEditLoyaltyProgram = (program) => {
+    navigate("/" + PathConstants.EDIT_LOYALTY_PROGRAM, { state: { program } });
   };
   const handlAddLoyaltyProgram = () => {
     navigate("/" + PathConstants.ADD_LOYALTY_PROGRAM);
@@ -72,21 +32,28 @@ const LoyaltyProgramList = () => {
                 <th>#</th>
                 <th>Name</th>
                 <th>Description</th>
-                <th>Rewards Structure</th>
-                <th>Eligibility Criteria</th>
+                <th>Points Threshold</th>
+                <th>Discount Percentage</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {loyaltyPrograms.map((program, index) => (
+              {data?.getAllLoyaltyPrograms.map((program, index) => (
                 <tr key={program.id}>
                   <td>{index + 1}</td>
-                  <td>{program.name}</td>
+                  <td>{program.loyaltyProgramName}</td>
                   <td>{program.description}</td>
-                  <td>{program.rewardsStructure}</td>
-                  <td>{program.eligibilityCriteria}</td>
+                  <td>{program.pointsThreshold}</td>
+                  <td>{program.discountPercentage}%</td>
                   <td>
-                    <Button variant="info" size="sm" className="mx-1" onClick={handlEditLoyaltyProgram}>
+                    <Button
+                      variant="info"
+                      size="sm"
+                      className="mx-1"
+                      onClick={() => {
+                        handlEditLoyaltyProgram(program);
+                      }}
+                    >
                       Edit
                     </Button>
                     <Button variant="danger" size="sm" className="mx-1">

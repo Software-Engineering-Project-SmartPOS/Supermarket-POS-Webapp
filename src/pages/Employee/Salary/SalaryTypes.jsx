@@ -4,10 +4,14 @@ import PathConstants from "../../../constants/pathConstants";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_SALARY_TYPES } from "../../../graphql/employees";
 import Skeleton from "react-loading-skeleton";
+import { useEffect } from "react";
 
 const SalaryTypes = () => {
   const navigate = useNavigate();
-  const { loading, data } = useQuery(GET_ALL_SALARY_TYPES);
+  const { loading, data, refetch } = useQuery(GET_ALL_SALARY_TYPES);
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   if (loading) return <Skeleton count={20} />;
 
