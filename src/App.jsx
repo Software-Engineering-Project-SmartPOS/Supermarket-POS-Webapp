@@ -54,6 +54,7 @@ import AddBranch from "./pages/Account/StoreList/AddBranch";
 import BranchList from "./pages/Account/StoreList/BranchList";
 import AddSalaryType from "./pages/Employee/Salary/AddSalaryType";
 import SalaryTypes from "./pages/Employee/Salary/SalaryTypes";
+import EditBranch from "./pages/Account/StoreList/EditBranch";
 
 function App() {
   // defining routes for the application using react router
@@ -116,6 +117,7 @@ function App() {
             {/* Stores */}
             <Route path={PathConstants.ADD_BRANCH} element={<AddBranch />} />
             <Route path={PathConstants.STORES} element={<BranchList />} />
+            <Route path={PathConstants.EDIT_BRANCH + "/:id"} element={<EditBranch />} />
           </Route>
         </Route>
       </Routes>

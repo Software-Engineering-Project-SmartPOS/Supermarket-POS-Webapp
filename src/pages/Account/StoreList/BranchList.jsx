@@ -26,11 +26,6 @@ const BranchList = () => {
 
   if (loading) return <Skeleton count={20} />;
 
-  // Function to handle edit branch
-  const handleEditBranch = (branchId) => {
-    navigate(`/edit-branch/${branchId}`);
-  };
-
   const handleDeleteBranch = (branchId) => {
     deleteBranch({ variables: { branchId: branchId } }).then((res) => {
       setShow(false);
@@ -78,7 +73,12 @@ const BranchList = () => {
                     <td>{branch.address.district}</td>
                     <td>{branch.address.postalCode}</td>
                     <td className="text-center">
-                      <Button variant="info" size="sm" className="mx-1" onClick={() => handleEditBranch(branch.id)}>
+                      <Button
+                        variant="info"
+                        size="sm"
+                        className="mx-1"
+                        onClick={() => navigate(`/${PathConstants.EDIT_BRANCH}/${branch.id}`, { state: { branch: branch } })}
+                      >
                         Edit
                       </Button>
                       <Button variant="danger" size="sm" className="mx-1" onClick={() => setShow(true)}>

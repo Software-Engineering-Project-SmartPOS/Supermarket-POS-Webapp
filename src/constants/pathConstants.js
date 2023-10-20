@@ -51,6 +51,7 @@ const PathConstants = {
   EDIT_PURCHASE_ORDER: "inventory/edit-purchase-order",
 
   ADD_BRANCH: "account/add-branch",
+  EDIT_BRANCH: "account/edit-branch",
   STORES: "account/stores",
 };
 export default PathConstants;

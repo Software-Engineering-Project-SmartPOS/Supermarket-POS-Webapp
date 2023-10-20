@@ -33,3 +33,13 @@ export const DELETE_BRANCH = gql`
     deleteBranch(id: $branchId)
   }
 `;
+
+export const UPDATE_BRANCH = gql`
+  mutation UpdateBranch($branchDetails: BranchInput!) {
+    updateBranch(branchDetails: branchDetails) {
+      id
+      name
+      telephone
+    }
+  }
+`;

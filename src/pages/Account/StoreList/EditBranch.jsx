@@ -1,24 +1,18 @@
+import React from "react";
 import { Container, Row, Col, Form, InputGroup, Button, Spinner } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBuilding, faCity, faHome, faLocationArrow, faPhone, faMapMarker, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import PathConstants from "../../../constants/pathConstants";
-import React from "react";
 
 export default function EditBranch() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const branch = location.state.branch;
 
-  const initialValues = {
-    name: "",
-    telephone: "",
-    houseNumber: "",
-    street: "",
-    city: "",
-    district: "",
-    postalCode: "",
-  };
+  const initialValues = branch;
 
   const validationSchema = Yup.object({
     name: Yup.string().required("Name is required"),

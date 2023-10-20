@@ -64,3 +64,14 @@ export const UPDATE_BRAND = gql`
     }
   }
 `;
+
+export const CREATE_ITEM = gql`
+  mutation CreateItem($itemInput: ItemInput!) {
+    CreateItem(itemInput: $itemInput) {
+      id
+      itemCode
+      name
+      barcodeNo
+    }
+  }
+`;
