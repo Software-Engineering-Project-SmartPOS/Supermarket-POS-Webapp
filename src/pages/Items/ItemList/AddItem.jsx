@@ -15,8 +15,8 @@ import { toast } from "react-toastify";
 
 export default function AddItem() {
   const navigate = useNavigate();
-  const { data: brandData, loading: brandLoading, error: brandError } = useQuery(GET_ALL_BRANDS);
-  const { data: categoryData, loading: categoryLoading, error: categoryError } = useQuery(GET_ALL_CATEGORIES);
+  const { data: brandData } = useQuery(GET_ALL_BRANDS);
+  const { data: categoryData } = useQuery(GET_ALL_CATEGORIES);
 
   const [searchBrand, setSearchBrand] = useState("");
   const [searchCategory, setSearchCategory] = useState("");

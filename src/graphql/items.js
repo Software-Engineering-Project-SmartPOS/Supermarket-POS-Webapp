@@ -75,3 +75,33 @@ export const CREATE_ITEM = gql`
     }
   }
 `;
+
+export const GET_ALL_ITEMS = gql`
+  query GetAllItems {
+    GetAllItems {
+      id
+      itemCode
+      name
+      barcodeNo
+      description
+      unitOfMeasure
+      createdAt
+      updatedAt
+      active
+      reorderLevel
+      returnable
+    }
+  }
+`;
+
+export const CREATE_ITEM_SUPPLY = gql`
+  mutation CreateItemSupply($itemSupplyInput: ItemSupplyInput!) {
+    CreateItemSupply(itemSupplyInput: $itemSupplyInput) {
+      id
+      createdDate
+      modifiedDate
+      unitCost
+      active
+    }
+  }
+`;
