@@ -1,4 +1,5 @@
 import "./App.css";
+import ProtectedRoutes from "./utils/protectedRoutes";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import PathConstants from "./constants/pathConstants";
 import DashboardLayout from "./layouts/DashboardLayout";
@@ -48,16 +49,18 @@ import EditSupplier from "./pages/Inventory/Suppliers/EditSupplier";
 import PurchaseOrders from "./pages/Inventory/PurchaseOrder/PurchaseOrders";
 import AddPurchaseOrder from "./pages/Inventory/PurchaseOrder/AddPurchaseOrder";
 import EditPurchaseOrder from "./pages/Inventory/PurchaseOrder/EditPurchaseOrder";
-import ProtectedRoutes from "./utils/protectedRoutes";
+
 import OwnerProfile from "./pages/Common/OwnerProfile";
 import AddBranch from "./pages/Account/StoreList/AddBranch";
 import BranchList from "./pages/Account/StoreList/BranchList";
+import EditBranch from "./pages/Account/StoreList/EditBranch";
+
 import AddSalaryType from "./pages/Employee/Salary/AddSalaryType";
 import SalaryTypes from "./pages/Employee/Salary/SalaryTypes";
-import EditBranch from "./pages/Account/StoreList/EditBranch";
-import AddItemSupply from "./pages/Items/ItemSupply/AddItemSupply";
-import ItemSupply from "./pages/Items/ItemSupply/ItemSupply";
-import EditItemSupply from "./pages/Items/ItemSupply/EditItemSupply";
+
+import AddItemSupply from "./pages/Inventory/ItemSupply/AddItemSupply";
+import ItemSupply from "./pages/Inventory/ItemSupply/ItemSupply";
+import EditItemSupply from "./pages/Inventory/ItemSupply/EditItemSupply";
 
 function App() {
   // defining routes for the application using react router

@@ -116,3 +116,16 @@ export const GET_ACTIVE_ITEM_SUPPLIES_BY_ITEM_ID = gql`
     }
   }
 `;
+
+export const CREATE_PURCHASE_ORDER = gql`
+  mutation CreatePurchaseOrder($purchaseOrderInput: PurchaseOrderInput!) {
+    CreatePurchaseOrder(purchaseOrderInput: $purchaseOrderInput) {
+      id
+      orderedDate
+      expectedDate
+      description
+      purchaseCost
+      orderStatus
+    }
+  }
+`;

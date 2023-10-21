@@ -1,23 +1,38 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser, faCalendarAlt, faStickyNote, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { faCalendarAlt, faStickyNote, faChevronLeft, faBox } from "@fortawesome/free-solid-svg-icons";
 import { Col, Row, Form, Button, Container, InputGroup, Table } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import { Formik, FieldArray, useFormik } from "formik";
+import { Formik, FieldArray } from "formik";
 import * as Yup from "yup";
 import PathConstants from "../../../constants/pathConstants";
 import ReactSearchBox from "react-search-box";
 import { FaShoppingBasket } from "react-icons/fa";
+import { CREATE_PURCHASE_ORDER, GET_ACTIVE_ITEM_SUPPLIES_BY_SUPPLIER_ID, GET_ALL_SUPPLIERS } from "../../../graphql/inventory";
+import { useState } from "react";
+import { useMutation, useQuery } from "@apollo/client";
+import Skeleton from "react-loading-skeleton";
 
 export default function AddPurchaseOrder() {
   const navigate = useNavigate();
+  const { data: suppliersData, loading: suppliersLoading } = useQuery(GET_ALL_SUPPLIERS);
+  const [selectedSupplier, setSelectedSupplier] = useState("");
+  const [searchSupplier, setSearchSupplier] = useState("");
 
-  // Define a list of suppliers and items (sample data)
-  const suppliers = ["Supplier A", "Supplier B", "Supplier C"];
-  const items = [
-    { id: 1, name: "Item 1", inStock: 100, incoming: 50, purchaseCost: 10 },
-    { id: 2, name: "Item 2", inStock: 75, incoming: 25, purchaseCost: 15 },
-    { id: 3, name: "Item 3", inStock: 120, incoming: 30, purchaseCost: 8 },
-  ];
+  const { data: itemSupplies, loading: itemsLoading } = useQuery(GET_ACTIVE_ITEM_SUPPLIES_BY_SUPPLIER_ID, {
+    variables: {
+      supplierId: Number(selectedSupplier.split("-")[0]),
+    },
+    skip: !selectedSupplier,
+  });
+
+  const items = itemSupplies?.GetActiveItemSuppliesBySupplierId.map((item) => ({
+    key: item.id.toString(),
+    itemSupplyId: Number(item.id),
+    itemId: item.item.id,
+    unitCost: item.unitCost,
+    name: item.item.name,
+    value: item.item.name,
+  }));
 
   // Initial values for the form
   const initialValues = {
@@ -37,8 +52,8 @@ export default function AddPurchaseOrder() {
     orderItems: Yup.array().of(
       Yup.object().shape({
         itemId: Yup.string().required("Required"),
-        quantity: Yup.number().required("Required"),
-        purchaseCost: Yup.number().required("Required"),
+        quantity: Yup.number().min(1, "minimum number is 1").required("Required"),
+        purchaseCost: Yup.number().min(0).required("Required"),
       })
     ),
   });
@@ -48,13 +63,9 @@ export default function AddPurchaseOrder() {
     return quantity * purchaseCost;
   };
 
-  const formik = useFormik({
-    initialValues: initialValues,
-    validationSchema: validationSchema,
-    onSubmit: (values) => {
-      console.log(values);
-    },
-  });
+  const [createPurchaseOrder, { loading: createPurchaseOrderLoading }] = useMutation(CREATE_PURCHASE_ORDER);
+
+  if (suppliersLoading) return <Skeleton count={6} />;
 
   return (
     <section className="d-flex align-items-center my-5 mt-lg-6 mb-lg-5">
@@ -79,24 +90,38 @@ export default function AddPurchaseOrder() {
                   console.log(values);
                 }}
               >
-                {({ handleSubmit, handleChange, values, errors, touched }) => (
+                {({ handleSubmit, handleChange, setFieldValue, values, errors, touched }) => (
                   <Form className="mt-4" onSubmit={handleSubmit}>
                     <Row>
                       <Col xs={12} lg={6}>
-                        <Form.Group controlId="supplier" className="mb-4">
-                          <Form.Label>Select Supplier</Form.Label>
+                        <Form.Group id="supplier" className="mb-4">
+                          <Form.Label>Supplier</Form.Label>
                           <InputGroup>
                             <InputGroup.Text>
-                              <FontAwesomeIcon icon={faUser} />
+                              <FontAwesomeIcon icon={faBox} />
                             </InputGroup.Text>
-                            <Form.Control as="select" name="supplier" onChange={handleChange} value={values.supplier}>
-                              <option value="">Select supplier</option>
-                              {suppliers.map((supplier, index) => (
-                                <option key={index} value={supplier}>
-                                  {supplier}
+                            <Form.Control
+                              list="suppliers"
+                              as="input"
+                              name="supplier"
+                              value={searchSupplier}
+                              placeholder="Search by ID, name"
+                              onChange={(e) => {
+                                setSearchSupplier(e.target.value);
+                                setFieldValue("orderItems", []);
+                              }}
+                              onSelect={(e) => {
+                                setSelectedSupplier(e.target.value);
+                                setFieldValue("supplier", e.target.value.split("-")[0]);
+                              }}
+                            ></Form.Control>
+                            <datalist id="suppliers">
+                              {suppliersData?.GetAllSuppliers.map((supplier) => (
+                                <option key={supplier.id} value={supplier.id + "-" + supplier.name}>
+                                  {supplier.name}
                                 </option>
                               ))}
-                            </Form.Control>
+                            </datalist>
                           </InputGroup>
                           {touched.supplier && errors.supplier && <div className="text-danger">{errors.supplier}</div>}
                         </Form.Group>
@@ -152,6 +177,7 @@ export default function AddPurchaseOrder() {
                         <tr>
                           <th>Item</th>
                           <th>Quantity</th>
+                          <th>Unit Cost</th>
                           <th>Purchase Cost</th>
                           <th>Amount</th>
                           <th>Action</th>
@@ -161,33 +187,27 @@ export default function AddPurchaseOrder() {
                         <FieldArray name="orderItems">
                           {({ push, remove }) => (
                             <>
-                              {values.orderItems.map((item, index) => (
+                              {values?.orderItems.map((item, index) => (
                                 <tr key={index}>
-                                  {!(item.itemId && items.find((i) => i.name === item.itemId)) ? (
+                                  {!(item.itemId && items.find((i) => i.itemId === item.itemId)) ? (
                                     <td colSpan={4}>
                                       <Form.Group controlId={`orderItems[${index}].itemId`} className="mb-0">
                                         <ReactSearchBox
                                           placeholder="Search Products"
-                                          data={items.map((item) => ({
-                                            key: item.id.toString(),
-                                            value: item.name,
-                                          }))}
+                                          data={items}
                                           onSelect={(selectedItem) => {
+                                            console.log(selectedItem);
                                             const updatedValues = [...values.orderItems];
-                                            updatedValues[index].itemId = selectedItem.value;
-                                            formik.setFieldValue(`orderItems`, updatedValues);
-                                          }}
-                                          onChange={(value) => {
-                                            const updatedValues = [...values.orderItems];
-                                            updatedValues[index].itemId = value;
-                                            formik.setFieldValue(`orderItems`, updatedValues);
+                                            updatedValues[index].itemId = selectedItem.item.itemId;
+                                            updatedValues[index].name = selectedItem.item.value;
+                                            updatedValues[index].unitCost = selectedItem.item.unitCost;
+                                            updatedValues[index].itemSupplyId = selectedItem.item.itemSupplyId;
+                                            setFieldValue(`orderItems`, updatedValues);
                                           }}
                                           autoFocus
                                           leftIcon={<FaShoppingBasket />}
-                                          // inputBorderColor="#002a54"
                                           iconBoxSize="48px"
                                           inputFontSize="16px"
-                                          // inputHeight="48px"
                                           dropdownBorderColor="#002a54"
                                           dropdownHoverColor="#c4dcf4"
                                         />
@@ -197,10 +217,10 @@ export default function AddPurchaseOrder() {
                                       )}
                                     </td>
                                   ) : (
-                                    <td>{item.itemId}</td>
+                                    <td>{item.name}</td>
                                   )}
 
-                                  {item.itemId && items.find((i) => i.name === item.itemId) && (
+                                  {item.itemId && items.find((i) => i.itemId === item.itemId) && (
                                     <>
                                       <td>
                                         <Form.Group controlId={`orderItems[${index}].quantity`} className="mb-0">
@@ -216,6 +236,7 @@ export default function AddPurchaseOrder() {
                                           <div className="text-danger">{errors.orderItems[index].quantity}</div>
                                         )}
                                       </td>
+                                      <td>{item.unitCost}</td>
                                       <td>
                                         <Form.Group controlId={`orderItems[${index}].purchaseCost`} className="mb-0">
                                           <Form.Control
@@ -245,8 +266,13 @@ export default function AddPurchaseOrder() {
                               ))}
                               <tr>
                                 <td colSpan={5}>
-                                  <Button type="button" variant="primary" onClick={() => push({ itemId: "", quantity: "", purchaseCost: "" })}>
-                                    Add Item
+                                  <Button
+                                    disabled={!itemSupplies}
+                                    type="button"
+                                    variant="primary"
+                                    onClick={() => push({ itemId: "", quantity: "", purchaseCost: "" })}
+                                  >
+                                    {itemsLoading ? "Loading..." : "Add Item"}
                                   </Button>
                                 </td>
                               </tr>
