@@ -98,7 +98,7 @@ const Filters = ({ onFilter }) => {
             id="employeeSelect" // Add an id for the MultiSelect
             overrideStrings={{ selectAll: "All Employees" }}
             hasSelectAll={true}
-            disableSearch={true}
+            disableSearch={false}
             className="border rounded border-black"
           />
         </div>

@@ -22,8 +22,6 @@ export default function EditItem() {
   const { data: brandData } = useQuery(GET_ALL_BRANDS);
   const { data: categoryData } = useQuery(GET_ALL_CATEGORIES);
 
-  const [searchBrand, setSearchBrand] = useState("");
-  const [searchCategory, setSearchCategory] = useState("");
   const [selectedBrand, setSelectedBrand] = useState(item.brand.name);
   const [selectedCategory, setSelectedCategory] = useState(item.category.name);
 
@@ -149,7 +147,6 @@ export default function EditItem() {
                                   }))}
                                   placeholder="Search brand"
                                   value={values.brand}
-                                  onChange={(newValue) => setSearchBrand(newValue)}
                                   onSelect={(item) => {
                                     setSelectedBrand(item.item.value);
                                     setFieldValue("brand", item.item.key);
@@ -187,7 +184,6 @@ export default function EditItem() {
                                 }))}
                                 placeholder="Search category"
                                 value={values.category}
-                                onChange={(newValue) => setSearchCategory(newValue)}
                                 onSelect={(category) => {
                                   setSelectedCategory(category.item.value);
                                   setFieldValue("category", category.item.key);

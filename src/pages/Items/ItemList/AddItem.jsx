@@ -18,12 +18,10 @@ export default function AddItem() {
   const { data: brandData } = useQuery(GET_ALL_BRANDS);
   const { data: categoryData } = useQuery(GET_ALL_CATEGORIES);
 
-  const [searchBrand, setSearchBrand] = useState("");
-  const [searchCategory, setSearchCategory] = useState("");
   const [selectedBrand, setSelectedBrand] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
 
-  const [createItem, { data, loading, error }] = useMutation(CREATE_ITEM);
+  const [createItem, { loading }] = useMutation(CREATE_ITEM);
   return (
     <section className="d-flex align-items-center my-5 mt-lg-6 mb-lg-5">
       <Container>
@@ -83,10 +81,15 @@ export default function AddItem() {
                         reorderLevel: values.reorderLevel,
                       },
                     },
-                  }).then((res) => {
-                    console.log(res);
-                    toast.success("Item added successfully");
-                  });
+                  })
+                    .then((res) => {
+                      console.log(res);
+                      toast.success("Item added successfully");
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                      toast.error("Error adding item");
+                    });
                 }}
               >
                 {({ handleSubmit, handleChange, setFieldValue, values, errors, touched }) => (
@@ -140,7 +143,6 @@ export default function AddItem() {
                                   }))}
                                   placeholder="Search brand"
                                   value={values.brand}
-                                  onChange={(newValue) => setSearchBrand(newValue)}
                                   onSelect={(item) => {
                                     setSelectedBrand(item.item.value);
                                     setFieldValue("brand", item.item.key);
@@ -178,7 +180,6 @@ export default function AddItem() {
                                 }))}
                                 placeholder="Search category"
                                 value={values.category}
-                                onChange={(newValue) => setSearchCategory(newValue)}
                                 onSelect={(category) => {
                                   setSelectedCategory(category.item.value);
                                   setFieldValue("category", category.item.key);
