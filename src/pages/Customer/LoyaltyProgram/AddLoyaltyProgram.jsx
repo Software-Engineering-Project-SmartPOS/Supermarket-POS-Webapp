@@ -36,7 +36,7 @@ const AddLoyaltyProgram = () => {
       .then((response) => {
         console.log(response.data.AddLoyaltyProgram);
         toast.success("Loyalty Program added successfully");
-        // resetForm();
+        resetForm();
       })
       .catch((error) => {
         console.log(error);

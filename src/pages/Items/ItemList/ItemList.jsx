@@ -1,90 +1,104 @@
 import { useState } from "react";
-import ItemListTable from "../../../components/ItemList/ItemListTable";
-import Filter from "../../../components/ItemList/Filter";
+import { Container, Card, Table, Button, Form, Alert } from "react-bootstrap";
+import { useNavigate } from "react-router";
+import { useQuery } from "@apollo/client";
+import PathConstants from "../../../constants/pathConstants";
+import { GET_ALL_ITEMS } from "../../../graphql/items";
+import Skeleton from "react-loading-skeleton";
 
-function ItemList() {
-  const [items, setItems] = useState([
-    {
-      id: 1,
-      name: "Item 1",
-      category: "Category A",
-      price: 20.0,
-      cost: 10.0,
-      inStock: 50,
-    },
-    {
-      id: 2,
-      name: "Item 2",
-      category: "Category B",
-      price: 30.0,
-      cost: 15.0,
-      inStock: 30,
-    },
-    {
-      id: 3,
-      name: "Item 3",
-      category: "Category A",
-      price: 25.0,
-      cost: 12.0,
-      inStock: 20,
-    },
-    {
-      id: 4,
-      name: "Item 4",
-      category: "Category C",
-      price: 40.0,
-      cost: 20.0,
-      inStock: 15,
-    },
-  ]);
+const ItemList = () => {
+  const navigate = useNavigate();
+  const [searchTerm, setSearchTerm] = useState("");
+  const { data: itemData, loading, error } = useQuery(GET_ALL_ITEMS);
+  const [filteredItems, setFilteredItems] = useState([]);
 
-  // Define categories (you can fetch these from your API)
-  const categories = [
-    { id: 1, name: "Category A" },
-    { id: 2, name: "Category B" },
-    { id: 3, name: "Category C" },
-  ];
-
-  // Handle item updates, e.g., category, price, cost
-  const handleUpdateItem = (itemId, updatedData) => {
-    // Find the item by itemId
-    const updatedItems = items.map((item) => {
-      if (item.id === itemId) {
-        return { ...item, ...updatedData };
-      }
-      return item;
-    });
-
-    setItems(updatedItems);
+  // Function to handle search
+  const handleSearch = (e) => {
+    const searchTerm = e.target.value.toLowerCase();
+    setSearchTerm(searchTerm);
+    // Filter items based on name, itemCode, or other criteria
+    const filtered = itemData?.GetAllItems.filter(
+      (item) =>
+        item.name.toLowerCase().includes(searchTerm) ||
+        item.itemCode.includes(searchTerm) ||
+        item.barcodeNo.includes(searchTerm) ||
+        item.category.name.toLowerCase().includes(searchTerm) ||
+        item.brand.name.toLowerCase().includes(searchTerm)
+    );
+    setFilteredItems(filtered);
   };
 
-  // Implement filtering logic based on categories and stock alert
-  const applyFilters = (filters) => {
-    // Your filtering logic here
-    // For example, you can filter items based on selected categories and stock alert
+  if (loading) return <Skeleton count={20} />;
+  if (error) return <Alert variant="danger">Error fetching the data</Alert>;
 
-    // Example logic:
-    const filteredItems = items.filter((item) => {
-      const matchesCategory = !filters.selectedCategory || item.category === filters.selectedCategory;
-      const isLowStock = filters.lowStock && item.inStock < 10; // Adjust the threshold as needed
-
-      return matchesCategory && (!filters.lowStock || isLowStock);
-    });
-
-    setItems(filteredItems);
-  };
-
-  // Render the ItemListTable with items and categories
   return (
-    <div className="App">
-      <div className="title">
+    <Container>
+      <div className="title d-flex justify-content-between pe-2">
         <h3>Item List</h3>
+        <Button variant="success" size="sm" onClick={() => navigate("/" + PathConstants.ADD_ITEM)}>
+          Add Item
+        </Button>
       </div>
-      {/* Add the Filter component with the applyFilters callback */}
-      <Filter applyFilters={applyFilters} categories={categories} />
-      <ItemListTable items={items} categories={categories} onUpdateItem={handleUpdateItem} />
-    </div>
+      <div className="search-box">
+        <Form.Group>
+          <Form.Control type="text" placeholder="Search by name, item code, barcode, category, or brand" value={searchTerm} onChange={handleSearch} />
+        </Form.Group>
+      </div>
+
+      <Card border="light" className="table-responsive shadow">
+        <Card.Body className="pt-0">
+          <Table responsive hover>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Item Code</th>
+                <th>Barcode</th>
+                <th>Category</th>
+                <th>Brand</th>
+                <th>Active</th>
+                <th className="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {(searchTerm === "" ? itemData?.GetAllItems : filteredItems).length > 0 ? (
+                (searchTerm === "" ? itemData?.GetAllItems : filteredItems).map((item, index) => (
+                  <tr key={item.id}>
+                    <td>{index + 1}</td>
+                    <td>{item.name}</td>
+                    <td>{item.itemCode}</td>
+                    <td>{item.barcodeNo}</td>
+                    <td>{item.category.name}</td>
+                    <td>{item.brand.name}</td>
+                    <td>{item.active ? "Yes" : "No"}</td>
+                    <td className="text-center">
+                      <Button
+                        variant="info"
+                        size="sm"
+                        className="mx-1"
+                        onClick={() => navigate(`/${PathConstants.EDIT_ITEM}/${item.id}`, { state: { item } })}
+                      >
+                        Edit
+                      </Button>
+                      <Button variant="danger" size="sm" className="mx-1">
+                        Delete
+                      </Button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="8" className="text-center">
+                    {searchTerm === "" ? "No items found" : "No results found"}
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </Table>
+        </Card.Body>
+      </Card>
+    </Container>
   );
-}
+};
 
 export default ItemList;

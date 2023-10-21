@@ -1,13 +1,25 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft, faBarcode, faCubes, faPen, faBox, faFileAlt } from "@fortawesome/free-solid-svg-icons";
-import { Col, Row, Form, Button, Container, InputGroup } from "react-bootstrap";
+import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { Col, Row, Form, Button, Container, InputGroup, Spinner } from "react-bootstrap";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { useNavigate } from "react-router";
-import PathConstants from "../../../constants/pathConstants";
+import { useMutation } from "@apollo/client";
+import { UPDATE_ITEM } from "../../../graphql/items"; // Replace with your actual GraphQL mutation
+import { toast } from "react-toastify";
 
 export default function EditItem() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const item = location.state.item; // Pass the item data from your ItemList page
+
+  const [updateItem, { loading, error }] = useMutation(UPDATE_ITEM);
+
+  if (error) {
+    console.log(error);
+    toast.error("Error updating item");
+  }
+
   return (
     <section className="d-flex align-items-center my-5 mt-lg-6 mb-lg-5">
       <Container>
@@ -21,57 +33,48 @@ export default function EditItem() {
                   </button>
                 </div>
                 <div className="text-center text-md-center mt-md-0 flex-grow-1">
-                  <h3 className="mb-0">Edit Item</h3>
+                  <h3 className="mb-0">Add Item</h3>
                 </div>
               </div>
+
               <Formik
-                initialValues={{
-                  name: "Sample Item",
-                  category: "Electronics",
-                  brand: "Sample Brand",
-                  description: "This is a sample item description.",
-                  isAvailableForSale: true,
-                  isReturnable: false,
-                  unitType: "each",
-                  price: "99.99",
-                  cost: "49.99",
-                  barcode: "123456789",
-                  sku: "SAMPLE123",
-                  trackStock: false,
-                  stockLevel: "100",
-                  lowStockNumber: "10",
-                }}
+                initialValues={item}
                 validationSchema={Yup.object({
                   name: Yup.string().required("Required"),
                   category: Yup.string().required("Required"),
                   brand: Yup.string().required("Required"),
                   description: Yup.string(),
-                  isAvailableForSale: Yup.boolean(),
-                  isReturnable: Yup.boolean(),
                   unitType: Yup.string().required("Required"),
-                  price: Yup.number().required("Required"),
-                  cost: Yup.number().required("Required"),
                   barcode: Yup.string().required("Required"),
-                  sku: Yup.string().required("Required"),
-                  trackStock: Yup.boolean(),
-                  stockLevel: Yup.number().when("trackStock", {
-                    is: true,
-                    then: Yup.number().required("Required when tracking stock"),
-                    otherwise: Yup.number(),
-                  }),
-                  lowStockNumber: Yup.number().when("trackStock", {
-                    is: true,
-                    then: Yup.number().required("Required when tracking stock"),
-                    otherwise: Yup.number(),
-                  }),
+                  itemCode: Yup.string().required("Required"),
+                  returnable: Yup.boolean().required("Required"),
+                  active: Yup.boolean().required("Required"),
+                  reorderLevel: Yup.number().required("Required"),
                 })}
                 onSubmit={(values) => {
                   console.log(values);
-                  // Add your logic to submit the item data here
-                  // After adding the item, you can navigate to a success page or another route
+                  createItem({
+                    variables: {
+                      itemInput: {
+                        name: values.name,
+                        itemCode: values.itemCode,
+                        barcodeNo: values.barcode,
+                        description: values.description,
+                        categoryId: Number(values.category),
+                        brandId: Number(values.brand),
+                        unitOfMeasure: values.unitType,
+                        returnable: values.returnable,
+                        active: values.active,
+                        reorderLevel: values.reorderLevel,
+                      },
+                    },
+                  }).then((res) => {
+                    console.log(res);
+                    toast.success("Item added successfully");
+                  });
                 }}
               >
-                {({ handleSubmit, handleChange, values, errors, touched }) => (
+                {({ handleSubmit, handleChange, setFieldValue, values, errors, touched }) => (
                   <Form className="mt-4" onSubmit={handleSubmit}>
                     <Row>
                       <Col xs={12}>
@@ -96,12 +99,33 @@ export default function EditItem() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faBox} />
                             </InputGroup.Text>
-
-                            <Form.Control as="select" required name="brand" onChange={handleChange}>
-                              <option value="">Select brand</option>
-                              {/* Add category options */}
-                              <option value="coca cola">coca cola</option>
-                            </Form.Control>
+                            {selectedBrand ? (
+                              <>
+                                <span className="row border border-dark">
+                                  <span className="col-8 text-start">{selectedBrand}</span>
+                                  <span className="col-2" onClick={() => setSelectedBrand("")}>
+                                    <GrClose />
+                                  </span>
+                                </span>
+                              </>
+                            ) : (
+                              <>
+                                <SearchBox
+                                  data={brandData?.GetAllBrands.map((brand) => ({
+                                    key: brand.id,
+                                    value: brand.name,
+                                  }))}
+                                  placeholder="Search brand"
+                                  value={searchBrand}
+                                  onChange={(newValue) => setSearchBrand(newValue)}
+                                  onSelect={(item) => {
+                                    setSelectedBrand(item.item.value);
+                                    setFieldValue("brand", item.item.key);
+                                  }}
+                                  inputBoxBorderColor="gray"
+                                />
+                              </>
+                            )}
                           </InputGroup>
                           {touched.brand && errors.brand && <div className="text-danger">{errors.brand}</div>}
                         </Form.Group>
@@ -114,15 +138,37 @@ export default function EditItem() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faBox} />
                             </InputGroup.Text>
-                            <Form.Control as="select" required name="category" onChange={handleChange}>
-                              <option value="">Select category</option>
-                              {/* Add category options */}
-                            </Form.Control>
+                            {selectedCategory ? (
+                              <>
+                                <div className="row border border-dark">
+                                  <span className="col-8 text-start">{selectedCategory}</span>
+                                  <span className="col-2" onClick={() => setSelectedCategory("")}>
+                                    <GrClose />
+                                  </span>
+                                </div>
+                              </>
+                            ) : (
+                              <SearchBox
+                                data={categoryData?.GetAllCategories.map((category) => ({
+                                  key: category.id,
+                                  value: category.name,
+                                }))}
+                                placeholder="Search category"
+                                value={searchCategory}
+                                onChange={(newValue) => setSearchCategory(newValue)}
+                                onSelect={(category) => {
+                                  setSelectedCategory(category.item.value);
+                                  setFieldValue("category", category.item.key);
+                                }}
+                                inputBoxBorderColor="gray"
+                              />
+                            )}
                           </InputGroup>
                           {touched.category && errors.category && <div className="text-danger">{errors.category}</div>}
                         </Form.Group>
                       </Col>
                     </Row>
+
                     <Row>
                       <Col xs={12}>
                         <Form.Group id="description" className="mb-4">
@@ -136,69 +182,37 @@ export default function EditItem() {
                         </Form.Group>
                       </Col>
                     </Row>
-                    <Row>
-                      <Col xs={12} lg={6}>
-                        <Form.Group id="isAvailableForSale" className="mb-4">
-                          <Form.Check type="checkbox" label="Item Available for Sale" name="isAvailableForSale" onChange={handleChange} />
-                        </Form.Group>
-                      </Col>
-
-                      <Col xs={12} lg={6}>
-                        <Form.Group id="isReturnable" className="mb-4">
-                          <Form.Check type="checkbox" label="Returnable" name="isReturnable" onChange={handleChange} />
-                        </Form.Group>
-                      </Col>
-                    </Row>
 
                     <Row>
                       <Col xs={12} lg={6}>
                         <Form.Group id="unitType" className="mb-4">
                           <Form.Label>Unit Type</Form.Label>
                           <InputGroup>
-                            <Form.Check
-                              inline
-                              type="radio"
-                              label="Each"
-                              name="unitType"
-                              value="each"
-                              onChange={handleChange}
-                              checked={values.unitType === "each"}
-                            />
-                            <Form.Check
-                              inline
-                              type="radio"
-                              label="Weight/Volume"
-                              name="unitType"
-                              value="weightVolume"
-                              onChange={handleChange}
-                              checked={values.unitType === "weightVolume"}
-                            />
+                            <InputGroup.Text>
+                              <FontAwesomeIcon icon={faCubes} />
+                            </InputGroup.Text>
+                            <Form.Control as="select" name="unitType" onChange={handleChange}>
+                              <option value="KILOGRAM">KILOGRAM</option>
+                              <option value="GRAMS">GRAMS</option>
+                              <option value="LITERS">LITERS</option>
+                              <option value="MILLILITERS">MILLILITERS</option>
+                              <option value="METERS">METERS</option>
+                              <option value="MILLIMETERS">MILLIMETERS</option>
+                              <option value="COUNT">COUNT</option>
+                            </Form.Control>
+                            {touched.unitType && errors.unitType && <div className="text-danger">{errors.unitType}</div>}
                           </InputGroup>
-                          {touched.unitType && errors.unitType && <div className="text-danger">{errors.unitType}</div>}
-                        </Form.Group>
-                      </Col>
-                    </Row>
-
-                    <Row>
-                      <Col xs={12} lg={6}>
-                        <Form.Group id="price" className="mb-4">
-                          <Form.Label>Price</Form.Label>
-                          <InputGroup>
-                            <InputGroup.Text>Rs.</InputGroup.Text>
-                            <Form.Control type="number" placeholder="Enter price" name="price" onChange={handleChange} />
-                          </InputGroup>
-                          {touched.price && errors.price && <div className="text-danger">{errors.price}</div>}
                         </Form.Group>
                       </Col>
 
                       <Col xs={12} lg={6}>
-                        <Form.Group id="cost" className="mb-4">
-                          <Form.Label>Cost</Form.Label>
+                        <Form.Group id="reorderLevel" className="mb-4">
+                          <Form.Label>Reorder Level</Form.Label>
                           <InputGroup>
-                            <InputGroup.Text>Rs.</InputGroup.Text>
-                            <Form.Control type="number" placeholder="Enter cost" name="cost" onChange={handleChange} />
+                            <InputGroup.Text>Level</InputGroup.Text>
+                            <Form.Control type="number" placeholder="Enter reorder level" name="reorderLevel" onChange={handleChange} />
                           </InputGroup>
-                          {touched.cost && errors.cost && <div className="text-danger">{errors.cost}</div>}
+                          {touched.reorderLevel && errors.reorderLevel && <div className="text-danger">{errors.reorderLevel}</div>}
                         </Form.Group>
                       </Col>
                     </Row>
@@ -218,60 +232,60 @@ export default function EditItem() {
                       </Col>
 
                       <Col xs={12} lg={6}>
-                        <Form.Group id="sku" className="mb-4">
-                          <Form.Label>SKU</Form.Label>
+                        <Form.Group id="itemCode" className="mb-4">
+                          <Form.Label>Item Code</Form.Label>
                           <InputGroup>
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faBarcode} />
                             </InputGroup.Text>
-                            <Form.Control required type="text" placeholder="Enter SKU" name="sku" onChange={handleChange} />
+                            <Form.Control required type="text" placeholder="Enter item code" name="itemCode" onChange={handleChange} />
                           </InputGroup>
-                          {touched.sku && errors.sku && <div className="text-danger">{errors.sku}</div>}
+                          {touched.itemCode && errors.itemCode && <div className="text-danger">{errors.itemCode}</div>}
                         </Form.Group>
                       </Col>
                     </Row>
-
                     <Row>
-                      <Col xs={12}>
-                        <Form.Group id="trackStock" className="mb-4">
-                          <Form.Check type="switch" label="Track Stock" name="trackStock" onChange={handleChange} />
+                      <Col xs={12} lg={6}>
+                        <Form.Group className="mb-4">
+                          <Form.Label>Returnable</Form.Label>
+                          <Form.Check
+                            type="switch"
+                            id="returnable-switch"
+                            label="Is Returnable"
+                            name="returnable"
+                            checked={values.returnable}
+                            onChange={handleChange}
+                          />
+                          {touched.returnable && errors.returnable && <div className="text-danger">{errors.returnable}</div>}
+                        </Form.Group>
+                      </Col>
+
+                      <Col xs={12} lg={6}>
+                        <Form.Group className="mb-4">
+                          <Form.Label>Active</Form.Label>
+                          <Form.Check
+                            type="switch"
+                            id="returnable-switch"
+                            label="Is Active"
+                            name="active"
+                            checked={values.active}
+                            onChange={handleChange}
+                          />
+                          {touched.active && errors.active && <div className="text-danger">{errors.active}</div>}
                         </Form.Group>
                       </Col>
                     </Row>
 
-                    {values.trackStock && (
-                      <Row>
-                        <Col xs={12} lg={6}>
-                          <Form.Group id="stockLevel" className="mb-4">
-                            <Form.Label>Stock Level</Form.Label>
-                            <InputGroup>
-                              <InputGroup.Text>
-                                <FontAwesomeIcon icon={faCubes} />
-                              </InputGroup.Text>
-                              <Form.Control type="number" placeholder="Enter stock level" name="stockLevel" onChange={handleChange} />
-                            </InputGroup>
-                            {touched.stockLevel && errors.stockLevel && <div className="text-danger">{errors.stockLevel}</div>}
-                          </Form.Group>
-                        </Col>
-
-                        <Col xs={12} lg={6}>
-                          <Form.Group id="lowStockNumber" className="mb-4">
-                            <Form.Label>Low Stock Number</Form.Label>
-                            <InputGroup>
-                              <InputGroup.Text>
-                                <FontAwesomeIcon icon={faCubes} />
-                              </InputGroup.Text>
-                              <Form.Control type="number" placeholder="Enter low stock number" name="lowStockNumber" onChange={handleChange} />
-                            </InputGroup>
-                            {touched.lowStockNumber && errors.lowStockNumber && <div className="text-danger">{errors.lowStockNumber}</div>}
-                          </Form.Group>
-                        </Col>
-                      </Row>
+                    {loading ? (
+                      <Button variant="primary" type="submit" className="button w-100" disabled>
+                        <Spinner animation="border" size="sm" className="me-2" />
+                        Loading...
+                      </Button>
+                    ) : (
+                      <Button variant="primary" type="submit" className="button w-100">
+                        Add Item
+                      </Button>
                     )}
-
-                    <Button variant="primary" type="submit" className="button w-100">
-                      Update Item
-                    </Button>
                   </Form>
                 )}
               </Formik>

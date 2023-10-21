@@ -23,6 +23,28 @@ export const GET_ALL_CUSTOMERS = gql`
   }
 `;
 
+export const ADD_CUSTOMER = gql`
+  mutation AddCustomer($customerInput: CustomerInput!) {
+    addCustomer(customerInput: $customerInput) {
+      id
+      name
+      telephone
+      email
+      addressId
+      houseNumber
+      street
+      city
+      district
+      postalCode
+      customerType
+      loyaltyId
+      createdDate
+      firstVisited
+      lastVisited
+    }
+  }
+`;
+
 export const GET_ALL_LOYALTY_PROGRAMS = gql`
   query GetAllLoyaltyPrograms {
     getAllLoyaltyPrograms {

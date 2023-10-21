@@ -76,9 +76,9 @@ export const CREATE_ITEM = gql`
   }
 `;
 
-export const GET_ALL_ITEMS = gql`
-  query GetAllItems {
-    GetAllItems {
+export const UPDATE_ITEM = gql`
+  mutation UpdateItem($itemDetail: ItemInput!) {
+    UpdateItem(itemDetail: $itemDetail) {
       id
       itemCode
       name
@@ -90,6 +90,26 @@ export const GET_ALL_ITEMS = gql`
       active
       reorderLevel
       returnable
+    }
+  }
+`;
+
+export const GET_ALL_ITEMS = gql`
+  query GetAllItems {
+    GetAllItems {
+      id
+      itemCode
+      name
+      barcodeNo
+      unitOfMeasure
+      active
+      reorderLevel
+      category {
+        name
+      }
+      brand {
+        name
+      }
     }
   }
 `;

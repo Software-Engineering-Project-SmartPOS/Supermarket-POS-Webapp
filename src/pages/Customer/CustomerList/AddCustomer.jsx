@@ -15,12 +15,12 @@ import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import PathConstants from "../../../constants/pathConstants";
+import { useQuery } from "@apollo/client";
+import { GET_ALL_LOYALTY_PROGRAMS } from "../../../graphql/customers";
 
 export default function AddCustomer() {
   const navigate = useNavigate();
-
-  // Define a list of loyalty programs
-  const loyaltyPrograms = ["Program A", "Program B", "Program C", "Program D"];
+  const { data } = useQuery(GET_ALL_LOYALTY_PROGRAMS);
 
   return (
     <section className="d-flex align-items-center my-5 mt-lg-6 mb-lg-5">
@@ -63,9 +63,6 @@ export default function AddCustomer() {
                 })}
                 onSubmit={(values) => {
                   console.log(values);
-                  // Add your logic to submit customer data here
-                  // After adding the customer, you can navigate to a success page or another route
-                  navigate(PathConstants.HOME);
                 }}
               >
                 {({ handleSubmit, handleChange, errors, touched }) => (
@@ -139,9 +136,9 @@ export default function AddCustomer() {
                             </InputGroup.Text>
                             <Form.Control as="select" required name="loyalty_program" onChange={handleChange}>
                               <option value="">Select loyalty program</option>
-                              {loyaltyPrograms.map((program, index) => (
-                                <option key={index} value={program}>
-                                  {program}
+                              {data?.getAllLoyaltyPrograms.map((program, index) => (
+                                <option key={index} value={program.loyaltyProgramName}>
+                                  {program.loyaltyProgramName}
                                 </option>
                               ))}
                             </Form.Control>
