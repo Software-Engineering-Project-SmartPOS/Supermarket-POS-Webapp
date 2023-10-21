@@ -55,6 +55,30 @@ export const UPDATE_SUPPLIER = gql`
   }
 `;
 
+export const CREATE_ITEM_SUPPLY = gql`
+  mutation CreateItemSupply($itemSupplyInput: ItemSupplyInput!) {
+    CreateItemSupply(itemSupplyInput: $itemSupplyInput) {
+      id
+      createdDate
+      modifiedDate
+      unitCost
+      active
+    }
+  }
+`;
+
+export const UPDATE_ITEM_SUPPLY = gql`
+  mutation UpdateItemSupply($itemSupplyInput: ItemSupplyInput!) {
+    UpdateItemSupply(itemSupplyInput: $itemSupplyInput) {
+      id
+      createdDate
+      modifiedDate
+      unitCost
+      active
+    }
+  }
+`;
+
 export const GET_ACTIVE_ITEM_SUPPLIES_BY_SUPPLIER_ID = gql`
   query GetActiveItemSuppliesBySupplierId($supplierId: ID!) {
     GetActiveItemSuppliesBySupplierId(supplierId: $supplierId) {

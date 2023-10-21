@@ -116,15 +116,3 @@ export const GET_ALL_ITEMS = gql`
     }
   }
 `;
-
-export const CREATE_ITEM_SUPPLY = gql`
-  mutation CreateItemSupply($itemSupplyInput: ItemSupplyInput!) {
-    CreateItemSupply(itemSupplyInput: $itemSupplyInput) {
-      id
-      createdDate
-      modifiedDate
-      unitCost
-      active
-    }
-  }
-`;

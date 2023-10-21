@@ -110,22 +110,24 @@ const ItemSupply = () => {
                   </>
                 ) : (
                   <>
+                    <th>Supplier</th>
+                    <th>Item Code</th>
                     <th>Item Name</th>
-                    <th>Supplier Name</th>
                   </>
                 )}
+                <th className="text-center">Actions</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan="6" className="text-center">
-                    <Skeleton count={5} />
+                  <td colSpan="7" className="text-center">
+                    <Skeleton count={6} />
                   </td>
                 </tr>
               ) : searchResults.length === 0 ? (
                 <tr>
-                  <td colSpan="6" className="text-center">
+                  <td colSpan="7" className="text-center">
                     No results to display
                   </td>
                 </tr>
@@ -143,10 +145,24 @@ const ItemSupply = () => {
                       </>
                     ) : (
                       <>
-                        <td>{result.item.name}</td>
                         <td>{result.supplier.name}</td>
+                        <td>{result.item.name}</td>
+                        <td>{result.item.itemCode}</td>
                       </>
                     )}
+                    <td className="text-center">
+                      <Button
+                        variant="info"
+                        size="sm"
+                        className="mx-1"
+                        onClick={() => navigate(`/${PathConstants.EDIT_ITEM_SUPPLY}/${result.id}`, { state: { itemSupply: result } })}
+                      >
+                        Edit
+                      </Button>
+                      <Button variant="danger" size="sm" className="mx-1">
+                        Delete
+                      </Button>
+                    </td>
                   </tr>
                 ))
               )}

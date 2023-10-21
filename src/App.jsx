@@ -57,6 +57,7 @@ import SalaryTypes from "./pages/Employee/Salary/SalaryTypes";
 import EditBranch from "./pages/Account/StoreList/EditBranch";
 import AddItemSupply from "./pages/Items/ItemSupply/AddItemSupply";
 import ItemSupply from "./pages/Items/ItemSupply/ItemSupply";
+import EditItemSupply from "./pages/Items/ItemSupply/EditItemSupply";
 
 function App() {
   // defining routes for the application using react router
@@ -123,6 +124,7 @@ function App() {
             {/* ItemSupply */}
             <Route path={PathConstants.ADD_ITEM_SUPPLY} element={<AddItemSupply />} />
             <Route path={PathConstants.ITEM_SUPPLY} element={<ItemSupply />} />
+            <Route path={PathConstants.EDIT_ITEM_SUPPLY + "/:id"} element={<EditItemSupply />} />
           </Route>
         </Route>
       </Routes>

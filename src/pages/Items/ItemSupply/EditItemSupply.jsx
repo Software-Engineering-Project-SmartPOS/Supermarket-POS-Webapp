@@ -3,23 +3,31 @@ import { faChevronLeft, faCubes, faBox } from "@fortawesome/free-solid-svg-icons
 import { Col, Row, Form, Button, Container, InputGroup, Spinner } from "react-bootstrap";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import PathConstants from "../../../constants/pathConstants";
 import { useMutation, useQuery } from "@apollo/client";
 import { useState } from "react";
-import { CREATE_ITEM_SUPPLY, GET_ALL_SUPPLIERS } from "../../../graphql/inventory";
+import { GET_ALL_SUPPLIERS, UPDATE_ITEM_SUPPLY } from "../../../graphql/inventory";
 import { GET_ALL_ITEMS } from "../../../graphql/items";
 import { toast } from "react-toastify";
 
-export default function AddItemSupply() {
+export default function EditItemSupply() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const itemSupply = location.state.itemSupply;
+
   const { data: suppliersData } = useQuery(GET_ALL_SUPPLIERS);
   const { data: itemsData } = useQuery(GET_ALL_ITEMS);
 
-  const [selectedSupplier, setSelectedSupplier] = useState("");
-  const [selectedItem, setSelectedItem] = useState("");
+  const [selectedSupplier, setSelectedSupplier] = useState(itemSupply.supplier.id + "-" + itemSupply.supplier.name);
+  const [selectedItem, setSelectedItem] = useState(itemSupply.item.id + "-" + itemSupply.item.name);
 
-  const [createItemSupply, { loading }] = useMutation(CREATE_ITEM_SUPPLY);
+  const [updateItemSupply, { loading, error }] = useMutation(UPDATE_ITEM_SUPPLY);
+
+  if (error) {
+    console.log(error);
+    toast.error("Error updating item supply");
+  }
 
   return (
     <section className="d-flex align-items-center my-5 mt-lg-6 mb-lg-5">
@@ -34,16 +42,16 @@ export default function AddItemSupply() {
                   </button>
                 </div>
                 <div className="text-center text-md-center mt-md-0 flex-grow-1">
-                  <h3 className="mb-0">Add Item Supply</h3>
+                  <h3 className="mb-0">Edit Item Supply</h3>
                 </div>
               </div>
 
               <Formik
                 initialValues={{
-                  supplier: "",
-                  item: "",
-                  unitCost: 0,
-                  active: true,
+                  supplier: itemSupply.supplier.id,
+                  item: itemSupply.item.id,
+                  unitCost: itemSupply.unitCost,
+                  active: itemSupply.active,
                 }}
                 validationSchema={Yup.object({
                   supplier: Yup.string().required("Required"),
@@ -52,9 +60,11 @@ export default function AddItemSupply() {
                   active: Yup.boolean().required("Required"),
                 })}
                 onSubmit={(values) => {
-                  createItemSupply({
+                  console.log(values);
+                  updateItemSupply({
                     variables: {
                       itemSupplyInput: {
+                        id: Number(itemSupply.id),
                         supplierId: Number(values.supplier),
                         itemId: Number(values.item),
                         unitCost: values.unitCost,
@@ -176,7 +186,7 @@ export default function AddItemSupply() {
                       </Button>
                     ) : (
                       <Button variant="primary" type="submit" className="button w-100">
-                        Add Item Supply
+                        Update Item Supply
                       </Button>
                     )}
                   </Form>
