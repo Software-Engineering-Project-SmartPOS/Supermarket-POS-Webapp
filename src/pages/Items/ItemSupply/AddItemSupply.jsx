@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft, faBarcode, faCubes, faPen, faBox, faFileAlt } from "@fortawesome/free-solid-svg-icons";
+import { faChevronLeft, faCubes, faBox } from "@fortawesome/free-solid-svg-icons";
 import { Col, Row, Form, Button, Container, InputGroup, Spinner } from "react-bootstrap";
 import { Formik } from "formik";
 import * as Yup from "yup";
@@ -10,8 +10,6 @@ import { useState } from "react";
 import { GET_ALL_SUPPLIERS } from "../../../graphql/inventory";
 import { CREATE_ITEM_SUPPLY, GET_ALL_ITEMS } from "../../../graphql/items";
 import { toast } from "react-toastify";
-import { GrClose } from "react-icons/gr";
-import SearchBox from "react-search-box";
 
 export default function AddItemSupply() {
   const navigate = useNavigate();
@@ -19,10 +17,9 @@ export default function AddItemSupply() {
   const { data: itemsData } = useQuery(GET_ALL_ITEMS);
 
   const [selectedSupplier, setSelectedSupplier] = useState("");
-  const [searchItem, setSearchItem] = useState("");
   const [selectedItem, setSelectedItem] = useState("");
 
-  const [createItemSupply, { data, loading, error }] = useMutation(CREATE_ITEM_SUPPLY);
+  const [createItemSupply, { loading }] = useMutation(CREATE_ITEM_SUPPLY);
 
   return (
     <section className="d-flex align-items-center my-5 mt-lg-6 mb-lg-5">
@@ -32,7 +29,7 @@ export default function AddItemSupply() {
             <div className="bg-white shadow-lg border rounded border-light p-4 p-lg-5 w-100">
               <div className="d-flex">
                 <div className="text-start">
-                  <button type="button" className="btn btn-outline-primary" onClick={() => navigate("/" + PathConstants.ITEM_SUPPLY_LIST)}>
+                  <button type="button" className="btn btn-outline-primary" onClick={() => navigate("/" + PathConstants.ITEM_SUPPLY)}>
                     <FontAwesomeIcon icon={faChevronLeft} /> Back
                   </button>
                 </div>
@@ -81,23 +78,23 @@ export default function AddItemSupply() {
                               <FontAwesomeIcon icon={faBox} />
                             </InputGroup.Text>
                             <Form.Control
-                              as="select"
+                              list="suppliers"
+                              as="input"
                               name="supplier"
                               value={selectedSupplier}
+                              placeholder="Search by ID, name"
                               onChange={(e) => {
                                 setSelectedSupplier(e.target.value);
-                                setFieldValue("supplier", e.target.value);
+                                setFieldValue("supplier", e.target.value.split("-")[0]);
                               }}
-                            >
-                              <option value="" disabled>
-                                Select a supplier
-                              </option>
+                            ></Form.Control>
+                            <datalist id="suppliers">
                               {suppliersData?.GetAllSuppliers.map((supplier) => (
-                                <option key={supplier.id} value={supplier.id}>
+                                <option key={supplier.id} value={supplier.id + "-" + supplier.name}>
                                   {supplier.name}
                                 </option>
                               ))}
-                            </Form.Control>
+                            </datalist>
                           </InputGroup>
                           {touched.supplier && errors.supplier && <div className="text-danger">{errors.supplier}</div>}
                         </Form.Group>
@@ -110,34 +107,26 @@ export default function AddItemSupply() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faBox} />
                             </InputGroup.Text>
-                            {selectedItem ? (
-                              <>
-                                <span className="row border border-dark">
-                                  <span className="col-8 text-start">{selectedItem}</span>
-                                  <span className="col-2" onClick={() => setSelectedItem("")}>
-                                    <GrClose />
-                                  </span>
-                                </span>
-                              </>
-                            ) : (
-                              <>
-                                <SearchBox
-                                  data={itemsData?.GetAllItems.map((item) => ({
-                                    key: item.id,
-                                    value: item.name,
-                                  }))}
-                                  placeholder="Search item"
-                                  value={searchItem}
-                                  onChange={(newValue) => setSearchItem(newValue)}
-                                  onSelect={(item) => {
-                                    setSelectedItem(item.item.value);
-                                    setFieldValue("item", item.item.key);
-                                  }}
-                                  inputBoxBorderColor="gray"
-                                />
-                              </>
-                            )}
+                            <Form.Control
+                              list="items"
+                              as="input"
+                              name="item"
+                              value={selectedItem}
+                              placeholder="Search by ID, name"
+                              onChange={(e) => {
+                                setSelectedItem(e.target.value);
+                                setFieldValue("item", e.target.value.split("-")[0]);
+                              }}
+                            ></Form.Control>
+                            <datalist id="items">
+                              {itemsData?.GetAllItems.map((item) => (
+                                <option key={item.id} value={item.id + "-" + item.name}>
+                                  {item.name}
+                                </option>
+                              ))}
+                            </datalist>
                           </InputGroup>
+
                           {touched.item && errors.item && <div className="text-danger">{errors.item}</div>}
                         </Form.Group>
                       </Col>

@@ -4,19 +4,28 @@ import Skeleton from "react-loading-skeleton";
 import { useQuery, useLazyQuery } from "@apollo/client";
 import { GET_ACTIVE_ITEM_SUPPLIES_BY_ITEM_ID, GET_ACTIVE_ITEM_SUPPLIES_BY_SUPPLIER_ID, GET_ALL_SUPPLIERS } from "../../../graphql/inventory";
 import { GET_ALL_ITEMS } from "../../../graphql/items";
+import { useNavigate } from "react-router";
+import PathConstants from "../../../constants/pathConstants";
+import { set } from "date-fns";
 
 const ItemSupply = () => {
   const [searchType, setSearchType] = useState("supplier");
+  const [searchName, setSearchName] = useState("");
   const [searchId, setSearchId] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
   const { data: itemData, loading: itemLoading } = useQuery(GET_ALL_ITEMS);
   const { data: supplierData, loading: supplierLoading } = useQuery(GET_ALL_SUPPLIERS);
+  const navigate = useNavigate();
 
   const [loadData, { loading }] = useLazyQuery(
     searchType === "supplier" ? GET_ACTIVE_ITEM_SUPPLIES_BY_SUPPLIER_ID : GET_ACTIVE_ITEM_SUPPLIES_BY_ITEM_ID
   );
 
   const handleSearch = () => {
+    if (!searchId) {
+      setSearchResults([]);
+      return;
+    }
     loadData({
       variables: {
         supplierId: searchId ? searchId : null,
@@ -41,41 +50,48 @@ const ItemSupply = () => {
     <Container>
       <div className="title d-flex justify-content-between pe-2">
         <h3>Item Supply</h3>
-        <Form.Select
-          value={searchType}
-          onChange={(e) => {
-            setSearchType(e.target.value);
-            setSearchId(null);
-            setSearchResults([]);
-          }}
-          style={{ maxWidth: "200px" }}
-        >
-          <option value="supplier">Search by Supplier</option>
-          <option value="item">Search by Item</option>
-        </Form.Select>
-        <input
-          list={searchType === "supplier" ? "suppliers" : "items"}
-          value={searchId ? searchId : ""}
-          placeholder="Search by ID"
-          onChange={(e) => {
-            setSearchId(e.target.value);
-          }}
-        />
-        <datalist id={searchType === "supplier" ? "suppliers" : "items"}>
-          {searchType === "supplier"
-            ? suppliers.map((supplier) => (
-                <option key={supplier.id} value={supplier.id}>
-                  {supplier.name}
-                </option>
-              ))
-            : items.map((item) => (
-                <option key={item.id} value={item.id}>
-                  {item.name}
-                </option>
-              ))}
-        </datalist>
-        <Button variant="primary" onClick={handleSearch}>
-          Search
+        <div className="d-flex ">
+          <Form.Select
+            value={searchType}
+            onChange={(e) => {
+              setSearchType(e.target.value);
+              setSearchId(null);
+              setSearchName("");
+              setSearchResults([]);
+            }}
+            style={{ maxWidth: "200px" }}
+          >
+            <option value="supplier">Search by Supplier</option>
+            <option value="item">Search by Item</option>
+          </Form.Select>
+          <input
+            list={searchType === "supplier" ? "suppliers" : "items"}
+            placeholder="Search by ID, name"
+            value={searchName}
+            onChange={(e) => {
+              setSearchId(e.target.value.split("-", 1)[0]);
+              setSearchName(e.target.value);
+            }}
+          />
+          <datalist id={searchType === "supplier" ? "suppliers" : "items"}>
+            {searchType === "supplier"
+              ? suppliers.map((supplier) => (
+                  <option key={supplier.id} value={supplier.id + "-" + supplier.name}>
+                    {supplier.name}
+                  </option>
+                ))
+              : items.map((item) => (
+                  <option key={item.id} value={item.id + "-" + item.name}>
+                    {item.name}
+                  </option>
+                ))}
+          </datalist>
+          <Button variant="primary" onClick={handleSearch}>
+            Search
+          </Button>
+        </div>
+        <Button variant="success" size="sm" onClick={() => navigate("/" + PathConstants.ADD_ITEM_SUPPLY)}>
+          Add Item
         </Button>
       </div>
       <Card border="light" className="table-responsive shadow">
@@ -128,7 +144,6 @@ const ItemSupply = () => {
                     ) : (
                       <>
                         <td>{result.item.name}</td>
-                        <td>{result.supplier.id}</td>
                         <td>{result.supplier.name}</td>
                       </>
                     )}

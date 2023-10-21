@@ -1,6 +1,7 @@
 import { Navigate, Outlet } from "react-router";
 import jwtDecode from "jwt-decode";
 import PropTypes from "prop-types";
+import PathConstants from "../constants/pathConstants";
 
 const ProtectedRoutes = ({ roles }) => {
   const token = localStorage.getItem("token");
@@ -10,10 +11,10 @@ const ProtectedRoutes = ({ roles }) => {
     if (roles.includes(userRole)) {
       return <Outlet />;
     } else {
-      return <Navigate to="/signin" />;
+      return <Navigate to={`${PathConstants.SIGN_IN}`} />;
     }
   } else {
-    return <Navigate to="/signin" />;
+    return <Navigate to={`${PathConstants.SIGN_IN}`} />;
   }
 };
 
