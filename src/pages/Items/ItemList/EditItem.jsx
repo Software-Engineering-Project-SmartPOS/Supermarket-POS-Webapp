@@ -1,19 +1,31 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { faBarcode, faBox, faChevronLeft, faCubes, faFileAlt, faPen } from "@fortawesome/free-solid-svg-icons";
 import { Col, Row, Form, Button, Container, InputGroup, Spinner } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
-import { useMutation } from "@apollo/client";
-import { UPDATE_ITEM } from "../../../graphql/items"; // Replace with your actual GraphQL mutation
+import { useMutation, useQuery } from "@apollo/client";
+import { GET_ALL_BRANDS, GET_ALL_CATEGORIES, UPDATE_ITEM } from "../../../graphql/items"; // Replace with your actual GraphQL mutation
 import { toast } from "react-toastify";
+import { useState } from "react";
+import { GrClose } from "react-icons/gr";
+import SearchBox from "react-search-box";
+import PathConstants from "../../../constants/pathConstants";
 
 export default function EditItem() {
   const navigate = useNavigate();
   const location = useLocation();
-  const item = location.state.item; // Pass the item data from your ItemList page
+  const item = location.state.item;
+  console.log(item);
 
   const [updateItem, { loading, error }] = useMutation(UPDATE_ITEM);
+  const { data: brandData } = useQuery(GET_ALL_BRANDS);
+  const { data: categoryData } = useQuery(GET_ALL_CATEGORIES);
+
+  const [searchBrand, setSearchBrand] = useState("");
+  const [searchCategory, setSearchCategory] = useState("");
+  const [selectedBrand, setSelectedBrand] = useState(item.brand.name);
+  const [selectedCategory, setSelectedCategory] = useState(item.category.name);
 
   if (error) {
     console.log(error);
@@ -33,12 +45,23 @@ export default function EditItem() {
                   </button>
                 </div>
                 <div className="text-center text-md-center mt-md-0 flex-grow-1">
-                  <h3 className="mb-0">Add Item</h3>
+                  <h3 className="mb-0">Update Item</h3>
                 </div>
               </div>
 
               <Formik
-                initialValues={item}
+                initialValues={{
+                  name: item.name,
+                  category: String(item.category.id),
+                  brand: String(item.brand.id),
+                  description: item.description || "",
+                  unitType: item.unitOfMeasure,
+                  barcode: item.barcodeNo,
+                  itemCode: item.itemCode,
+                  returnable: item.returnable,
+                  active: item.active,
+                  reorderLevel: item.reorderLevel,
+                }}
                 validationSchema={Yup.object({
                   name: Yup.string().required("Required"),
                   category: Yup.string().required("Required"),
@@ -52,10 +75,11 @@ export default function EditItem() {
                   reorderLevel: Yup.number().required("Required"),
                 })}
                 onSubmit={(values) => {
-                  console.log(values);
-                  createItem({
+                  console.log("values");
+                  updateItem({
                     variables: {
                       itemInput: {
+                        id: item.id,
                         name: values.name,
                         itemCode: values.itemCode,
                         barcodeNo: values.barcode,
@@ -70,7 +94,7 @@ export default function EditItem() {
                     },
                   }).then((res) => {
                     console.log(res);
-                    toast.success("Item added successfully");
+                    toast.success("Item updated successfully");
                   });
                 }}
               >
@@ -84,7 +108,15 @@ export default function EditItem() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faPen} />
                             </InputGroup.Text>
-                            <Form.Control autoFocus required type="text" placeholder="Enter item name" name="name" onChange={handleChange} />
+                            <Form.Control
+                              autoFocus
+                              required
+                              type="text"
+                              value={values.name}
+                              placeholder="Enter item name"
+                              name="name"
+                              onChange={handleChange}
+                            />
                           </InputGroup>
                           {touched.name && errors.name && <div className="text-danger">{errors.name}</div>}
                         </Form.Group>
@@ -116,7 +148,7 @@ export default function EditItem() {
                                     value: brand.name,
                                   }))}
                                   placeholder="Search brand"
-                                  value={searchBrand}
+                                  value={values.brand}
                                   onChange={(newValue) => setSearchBrand(newValue)}
                                   onSelect={(item) => {
                                     setSelectedBrand(item.item.value);
@@ -154,7 +186,7 @@ export default function EditItem() {
                                   value: category.name,
                                 }))}
                                 placeholder="Search category"
-                                value={searchCategory}
+                                value={values.category}
                                 onChange={(newValue) => setSearchCategory(newValue)}
                                 onSelect={(category) => {
                                   setSelectedCategory(category.item.value);
@@ -177,7 +209,14 @@ export default function EditItem() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faFileAlt} />
                             </InputGroup.Text>
-                            <Form.Control as="textarea" rows={3} placeholder="Enter description" name="description" onChange={handleChange} />
+                            <Form.Control
+                              as="textarea"
+                              rows={3}
+                              placeholder="Enter description"
+                              name="description"
+                              value={values.description}
+                              onChange={handleChange}
+                            />
                           </InputGroup>
                         </Form.Group>
                       </Col>
@@ -191,7 +230,7 @@ export default function EditItem() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faCubes} />
                             </InputGroup.Text>
-                            <Form.Control as="select" name="unitType" onChange={handleChange}>
+                            <Form.Control as="select" name="unitType" value={values.unitType} onChange={handleChange}>
                               <option value="KILOGRAM">KILOGRAM</option>
                               <option value="GRAMS">GRAMS</option>
                               <option value="LITERS">LITERS</option>
@@ -210,7 +249,13 @@ export default function EditItem() {
                           <Form.Label>Reorder Level</Form.Label>
                           <InputGroup>
                             <InputGroup.Text>Level</InputGroup.Text>
-                            <Form.Control type="number" placeholder="Enter reorder level" name="reorderLevel" onChange={handleChange} />
+                            <Form.Control
+                              type="number"
+                              placeholder="Enter reorder level"
+                              name="reorderLevel"
+                              value={values.reorderLevel}
+                              onChange={handleChange}
+                            />
                           </InputGroup>
                           {touched.reorderLevel && errors.reorderLevel && <div className="text-danger">{errors.reorderLevel}</div>}
                         </Form.Group>
@@ -225,7 +270,14 @@ export default function EditItem() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faBarcode} />
                             </InputGroup.Text>
-                            <Form.Control required type="text" placeholder="Enter barcode" name="barcode" onChange={handleChange} />
+                            <Form.Control
+                              required
+                              type="text"
+                              placeholder="Enter barcode"
+                              name="barcode"
+                              value={values.barcode}
+                              onChange={handleChange}
+                            />
                           </InputGroup>
                           {touched.barcode && errors.barcode && <div className="text-danger">{errors.barcode}</div>}
                         </Form.Group>
@@ -238,7 +290,14 @@ export default function EditItem() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faBarcode} />
                             </InputGroup.Text>
-                            <Form.Control required type="text" placeholder="Enter item code" name="itemCode" onChange={handleChange} />
+                            <Form.Control
+                              required
+                              type="text"
+                              placeholder="Enter item code"
+                              name="itemCode"
+                              value={values.itemCode}
+                              onChange={handleChange}
+                            />
                           </InputGroup>
                           {touched.itemCode && errors.itemCode && <div className="text-danger">{errors.itemCode}</div>}
                         </Form.Group>
@@ -253,6 +312,7 @@ export default function EditItem() {
                             id="returnable-switch"
                             label="Is Returnable"
                             name="returnable"
+                            value={values.returnable}
                             checked={values.returnable}
                             onChange={handleChange}
                           />
@@ -268,6 +328,7 @@ export default function EditItem() {
                             id="returnable-switch"
                             label="Is Active"
                             name="active"
+                            value={values.active}
                             checked={values.active}
                             onChange={handleChange}
                           />
@@ -283,7 +344,7 @@ export default function EditItem() {
                       </Button>
                     ) : (
                       <Button variant="primary" type="submit" className="button w-100">
-                        Add Item
+                        Update Item
                       </Button>
                     )}
                   </Form>

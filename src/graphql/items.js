@@ -77,8 +77,8 @@ export const CREATE_ITEM = gql`
 `;
 
 export const UPDATE_ITEM = gql`
-  mutation UpdateItem($itemDetail: ItemInput!) {
-    UpdateItem(itemDetail: $itemDetail) {
+  mutation UpdateItem($itemInput: ItemInput!) {
+    UpdateItem(itemInput: $itemInput) {
       id
       itemCode
       name
@@ -104,10 +104,13 @@ export const GET_ALL_ITEMS = gql`
       unitOfMeasure
       active
       reorderLevel
+      returnable
       category {
+        id
         name
       }
       brand {
+        id
         name
       }
     }

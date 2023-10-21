@@ -102,7 +102,7 @@ function App() {
             {/* ItemList */}
             <Route path={PathConstants.ITEM_LIST} element={<ItemList />} />
             <Route path={PathConstants.ADD_ITEM} element={<AddItem />} />
-            <Route path={PathConstants.EDIT_ITEM} element={<EditItem />} />
+            <Route path={PathConstants.EDIT_ITEM + "/:id"} element={<EditItem />} />
             {/* Brands */}
             <Route path={PathConstants.BRANDS} element={<Brands />} />
             <Route path={PathConstants.ADD_BRAND} element={<AddBrand />} />

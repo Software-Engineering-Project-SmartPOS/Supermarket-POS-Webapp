@@ -99,7 +99,15 @@ export default function AddItem() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faPen} />
                             </InputGroup.Text>
-                            <Form.Control autoFocus required type="text" placeholder="Enter item name" name="name" onChange={handleChange} />
+                            <Form.Control
+                              autoFocus
+                              required
+                              type="text"
+                              placeholder="Enter item name"
+                              name="name"
+                              value={values.name}
+                              onChange={handleChange}
+                            />
                           </InputGroup>
                           {touched.name && errors.name && <div className="text-danger">{errors.name}</div>}
                         </Form.Group>
@@ -131,7 +139,7 @@ export default function AddItem() {
                                     value: brand.name,
                                   }))}
                                   placeholder="Search brand"
-                                  value={searchBrand}
+                                  value={values.brand}
                                   onChange={(newValue) => setSearchBrand(newValue)}
                                   onSelect={(item) => {
                                     setSelectedBrand(item.item.value);
@@ -169,7 +177,7 @@ export default function AddItem() {
                                   value: category.name,
                                 }))}
                                 placeholder="Search category"
-                                value={searchCategory}
+                                value={values.category}
                                 onChange={(newValue) => setSearchCategory(newValue)}
                                 onSelect={(category) => {
                                   setSelectedCategory(category.item.value);
@@ -192,7 +200,14 @@ export default function AddItem() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faFileAlt} />
                             </InputGroup.Text>
-                            <Form.Control as="textarea" rows={3} placeholder="Enter description" name="description" onChange={handleChange} />
+                            <Form.Control
+                              as="textarea"
+                              rows={3}
+                              placeholder="Enter description"
+                              value={values.description}
+                              name="description"
+                              onChange={handleChange}
+                            />
                           </InputGroup>
                         </Form.Group>
                       </Col>
@@ -206,7 +221,7 @@ export default function AddItem() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faCubes} />
                             </InputGroup.Text>
-                            <Form.Control as="select" name="unitType" onChange={handleChange}>
+                            <Form.Control as="select" name="unitType" value={values.unitType} onChange={handleChange}>
                               <option value="KILOGRAM">KILOGRAM</option>
                               <option value="GRAMS">GRAMS</option>
                               <option value="LITERS">LITERS</option>
@@ -225,7 +240,13 @@ export default function AddItem() {
                           <Form.Label>Reorder Level</Form.Label>
                           <InputGroup>
                             <InputGroup.Text>Level</InputGroup.Text>
-                            <Form.Control type="number" placeholder="Enter reorder level" name="reorderLevel" onChange={handleChange} />
+                            <Form.Control
+                              type="number"
+                              placeholder="Enter reorder level"
+                              value={values.reorderLevel}
+                              name="reorderLevel"
+                              onChange={handleChange}
+                            />
                           </InputGroup>
                           {touched.reorderLevel && errors.reorderLevel && <div className="text-danger">{errors.reorderLevel}</div>}
                         </Form.Group>
@@ -240,7 +261,14 @@ export default function AddItem() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faBarcode} />
                             </InputGroup.Text>
-                            <Form.Control required type="text" placeholder="Enter barcode" name="barcode" onChange={handleChange} />
+                            <Form.Control
+                              required
+                              type="text"
+                              placeholder="Enter barcode"
+                              value={values.barcode}
+                              name="barcode"
+                              onChange={handleChange}
+                            />
                           </InputGroup>
                           {touched.barcode && errors.barcode && <div className="text-danger">{errors.barcode}</div>}
                         </Form.Group>
@@ -253,7 +281,14 @@ export default function AddItem() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faBarcode} />
                             </InputGroup.Text>
-                            <Form.Control required type="text" placeholder="Enter item code" name="itemCode" onChange={handleChange} />
+                            <Form.Control
+                              required
+                              type="text"
+                              placeholder="Enter item code"
+                              value={values.itemCode}
+                              name="itemCode"
+                              onChange={handleChange}
+                            />
                           </InputGroup>
                           {touched.itemCode && errors.itemCode && <div className="text-danger">{errors.itemCode}</div>}
                         </Form.Group>
@@ -268,6 +303,7 @@ export default function AddItem() {
                             id="returnable-switch"
                             label="Is Returnable"
                             name="returnable"
+                            value={values.returnable}
                             checked={values.returnable}
                             onChange={handleChange}
                           />
@@ -283,6 +319,7 @@ export default function AddItem() {
                             id="returnable-switch"
                             label="Is Active"
                             name="active"
+                            value={values.active}
                             checked={values.active}
                             onChange={handleChange}
                           />
