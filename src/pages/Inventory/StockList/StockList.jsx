@@ -22,7 +22,9 @@ const StockList = () => {
     // Filter stocks based on item name, itemCode, or other criteria
     const filtered = stocksData?.AllStockLevels.filter(
       (stock) =>
-        stock.item.name.toLowerCase().includes(searchTerm) || stock.item.itemCode.includes(searchTerm) || stock.item.barcodeNo.includes(searchTerm)
+        stock.item.name.toLowerCase().includes(searchTerm) ||
+        stock.item.itemCode.toLowerCase().includes(searchTerm) ||
+        stock.item.barcodeNo.includes(searchTerm)
     );
     setFilteredStocks(filtered);
   };
@@ -90,9 +92,9 @@ const StockList = () => {
             <thead>
               <tr>
                 <th># </th>
-                <th onClick={() => handleSort("item.name")}>Item {renderSortIcons("item.name")}</th>
-                <th onClick={() => handleSort("item.itemCode")}>Item Code {renderSortIcons("item.itemCode")}</th>
-                <th onClick={() => handleSort("item.barcodeNo")}>Barcode {renderSortIcons("item.barcodeNo")}</th>
+                <th>Item Name</th>
+                <th>Item Code </th>
+                <th>Barcode </th>
                 <th onClick={() => handleSort("expiryDate")}>Expiry Date {renderSortIcons("expiryDate")}</th>
                 <th onClick={() => handleSort("inventoryQuantity")}>Inventory Quantity {renderSortIcons("inventoryQuantity")}</th>
                 <th onClick={() => handleSort("stallQuantity")}>Stall Quantity {renderSortIcons("stallQuantity")}</th>

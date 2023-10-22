@@ -1,25 +1,28 @@
 import { BiUserCircle } from "react-icons/bi";
 import { FaShoppingBasket } from "react-icons/fa";
 import { GrClose } from "react-icons/gr";
-import { useEffect, useState } from "react"; // Import React and useState
+import { useState } from "react"; // Import React and useState
 import ReactSearchBox from "react-search-box";
 import ProfileImg from "../../assets/img/profile.jpg";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchCustomers } from "../../state/reducers/customer";
+import { useQuery } from "@apollo/client";
+import { GET_ALL_CUSTOMERS } from "../../graphql/customers";
+import { useDispatch } from "react-redux";
+import { GET_ALL_STOCK_LEVELS } from "../../graphql/inventory";
+import { addSalesItem } from "../../state/reducers/checkout";
 
 function AddCustomerOrProduct() {
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchCustomers());
-  }, []);
+  const { data: customers, loading: loadingCustomers, error: errorCustomers } = useQuery(GET_ALL_CUSTOMERS);
+  const { data: items, loading: loadingItems, error: errorItems } = useQuery(GET_ALL_STOCK_LEVELS);
 
   const [selectedCustomer, setSelectedCustomer] = useState(null);
-  const { customers, loading, error } = useSelector((state) => state.customer);
+  if (loadingCustomers || loadingItems) return <p>Loading...</p>;
+  if (errorCustomers || errorItems) return <p>Error :</p>;
 
   // Function to handle customer selection
   const handleCustomerSelect = (record) => {
     // Set the selected customer when a customer is selected
-    setSelectedCustomer(record);
+    setSelectedCustomer(record.item.name);
   };
 
   // Function to clear the selected customer
@@ -35,7 +38,7 @@ function AddCustomerOrProduct() {
           <span className="col-3">
             <img src={ProfileImg} className="rounded-circle customer-img" />
           </span>
-          <span className="col-7 text-start">Kobinarth Panchalingam</span>
+          <span className="col-7 text-start">{selectedCustomer}</span>
           <span className="col-2 customer-close" onClick={clearSelectedCustomer}>
             <GrClose />
           </span>
@@ -45,28 +48,13 @@ function AddCustomerOrProduct() {
           <div className="search-box">
             <ReactSearchBox
               placeholder="Search Customers"
-              data={[
-                {
-                  key: "john",
-                  value: "John Doe",
-                },
-                {
-                  key: "jane",
-                  value: "Jane Doe",
-                },
-                {
-                  key: "mary",
-                  value: "Mary Phillips",
-                },
-                {
-                  key: "robert",
-                  value: "Robert",
-                },
-                {
-                  key: "karius",
-                  value: "Karius",
-                },
-              ]}
+              data={customers.allCustomer.map((customer) => {
+                return {
+                  key: customer.id,
+                  value: customer.telephone,
+                  name: customer.name + "-" + customer.email,
+                };
+              })}
               onSelect={handleCustomerSelect}
               onFocus={() => {
                 // console.log("This function is called when is focussed");
@@ -87,33 +75,28 @@ function AddCustomerOrProduct() {
       <div className="search-box mt-1">
         <ReactSearchBox
           placeholder="Search Products"
-          data={[
-            {
-              key: "john",
-              value: "John Doe",
-            },
-            {
-              key: "jane",
-              value: "Jane Doe",
-            },
-            {
-              key: "mary",
-              value: "Mary Phillips",
-            },
-            {
-              key: "robert",
-              value: "Robert",
-            },
-            {
-              key: "karius",
-              value: "Karius",
-            },
-          ]}
-          onSelect={(record) => console.log(record)}
+          data={items.AllStockLevels.map((item) => {
+            return {
+              key: item.id,
+              value: item.item.name + "-" + item.expiryDate,
+              name: item.name + "-" + item.description,
+              item: item,
+            };
+          })}
+          onSelect={(record) => {
+            dispatch(
+              addSalesItem({
+                item: record.item,
+                stockLevelId: record.item.id,
+                quantity: 1,
+              })
+            );
+          }}
           onFocus={() => {
             console.log("This function is called when is focussed");
           }}
           onChange={(value) => console.log(value)}
+          clearOnSelect
           autoFocus
           value="Search Products"
           leftIcon={<FaShoppingBasket />}

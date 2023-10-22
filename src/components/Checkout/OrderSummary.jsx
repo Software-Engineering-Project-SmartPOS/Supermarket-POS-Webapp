@@ -1,6 +1,8 @@
 import { TbDiscount2 } from "react-icons/tb";
 import { BsCashCoin } from "react-icons/bs";
+import { useSelector } from "react-redux";
 const OrderSumary = () => {
+  const { total } = useSelector((state) => state.checkout);
   return (
     <div>
       <div className="title">
@@ -12,7 +14,7 @@ const OrderSumary = () => {
             <h4>Total</h4>
           </div>
           <div className="col-7 text-end">
-            <h4>Rs. 2000</h4>
+            <h4>Rs. {total}</h4>
           </div>
         </div>
         <div className="row">
@@ -23,7 +25,7 @@ const OrderSumary = () => {
             </h4>
           </div>
           <div className="col-7 text-end">
-            <h4>- Rs. 200</h4>
+            <h4>Rs. 0</h4>
           </div>
         </div>
         <hr />
@@ -35,14 +37,10 @@ const OrderSumary = () => {
             </h4>
           </div>
           <div className="col-7 text-end">
-            <h4>Rs. 2000</h4>
+            <h4>Rs. {total}</h4>
           </div>
         </div>
       </div>
-
-      {/* <Button variant="primary">Add Customer</Button>
-      <Button variant="success">Add Product Manually</Button>
-      <Button variant="warning">Checkout</Button> */}
     </div>
   );
 };

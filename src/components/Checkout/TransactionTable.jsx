@@ -2,195 +2,29 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEdit, faEllipsisH, faEye, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { Card, Button, Table, Dropdown, ButtonGroup } from "react-bootstrap";
 import PropTypes from "prop-types";
+import { useSelector } from "react-redux";
 
 export function TransactionsTable() {
-  const transactions = [
-    {
-      productName: "Product A",
-      unitPrice: 10.99,
-      quantity: 3,
-      discount: 2.5,
-      subtotal: 30.97,
-      status: "Paid",
-    },
-    {
-      productName: "Product B",
-      unitPrice: 5.99,
-      quantity: 2,
-      discount: 1.0,
-      subtotal: 9.98,
-      status: "Due",
-    },
-    {
-      productName: "Product C",
-      unitPrice: 7.49,
-      quantity: 4,
-      discount: 1.25,
-      subtotal: 28.96,
-      status: "Canceled",
-    },
-    {
-      productName: "Product C",
-      unitPrice: 7.49,
-      quantity: 4,
-      discount: 1.25,
-      subtotal: 28.96,
-      status: "Canceled",
-    },
-    {
-      productName: "Product C",
-      unitPrice: 7.49,
-      quantity: 4,
-      discount: 1.25,
-      subtotal: 28.96,
-      status: "Canceled",
-    },
-    {
-      productName: "Product C",
-      unitPrice: 7.49,
-      quantity: 4,
-      discount: 1.25,
-      subtotal: 28.96,
-      status: "Canceled",
-    },
-    {
-      productName: "Product C",
-      unitPrice: 7.49,
-      quantity: 4,
-      discount: 1.25,
-      subtotal: 28.96,
-      status: "Canceled",
-    },
-    {
-      productName: "Product C",
-      unitPrice: 7.49,
-      quantity: 4,
-      discount: 1.25,
-      subtotal: 28.96,
-      status: "Canceled",
-    },
-    {
-      productName: "Product C",
-      unitPrice: 7.49,
-      quantity: 4,
-      discount: 1.25,
-      subtotal: 28.96,
-      status: "Canceled",
-    },
-    {
-      productName: "Product C",
-      unitPrice: 7.49,
-      quantity: 4,
-      discount: 1.25,
-      subtotal: 28.96,
-      status: "Canceled",
-    },
-    {
-      productName: "Product C",
-      unitPrice: 7.49,
-      quantity: 4,
-      discount: 1.25,
-      subtotal: 28.96,
-      status: "Canceled",
-    },
-    {
-      productName: "Product C",
-      unitPrice: 7.49,
-      quantity: 4,
-      discount: 1.25,
-      subtotal: 28.96,
-      status: "Canceled",
-    },
-    {
-      productName: "Product C",
-      unitPrice: 7.49,
-      quantity: 4,
-      discount: 1.25,
-      subtotal: 28.96,
-      status: "Canceled",
-    },
-    {
-      productName: "Product C",
-      unitPrice: 7.49,
-      quantity: 4,
-      discount: 1.25,
-      subtotal: 28.96,
-      status: "Canceled",
-    },
-    {
-      productName: "Product C",
-      unitPrice: 7.49,
-      quantity: 4,
-      discount: 1.25,
-      subtotal: 28.96,
-      status: "Canceled",
-    },
-    {
-      productName: "Product C",
-      unitPrice: 7.49,
-      quantity: 4,
-      discount: 1.25,
-      subtotal: 28.96,
-      status: "Canceled",
-    },
-    {
-      productName: "Product C",
-      unitPrice: 7.49,
-      quantity: 4,
-      discount: 1.25,
-      subtotal: 28.96,
-      status: "Canceled",
-    },
-    {
-      productName: "Product C",
-      unitPrice: 7.49,
-      quantity: 4,
-      discount: 1.25,
-      subtotal: 28.96,
-      status: "Canceled",
-    },
-    {
-      productName: "Product C",
-      unitPrice: 7.49,
-      quantity: 4,
-      discount: 1.25,
-      subtotal: 28.96,
-      status: "Canceled",
-    },
-    {
-      productName: "Product C",
-      unitPrice: 7.49,
-      quantity: 4,
-      discount: 1.25,
-      subtotal: 28.96,
-      status: "Canceled",
-    },
-    // Add more transactions as needed
-  ];
+  const transactions = useSelector((state) => state.checkout.salesItemsInput);
 
   const TableRow = (props) => {
-    const { productName, unitPrice, quantity, discount, subtotal, index } = props;
-
     return (
       <tr>
         <td>
-          <Card.Link className="fw-normal">{index}</Card.Link>
+          <Card.Link className="fw-normal">{props.index}</Card.Link>
         </td>
         <td>
-          <span className="fw-normal">{productName}</span>
+          <span className="fw-normal">{props.item.item.item.name}</span>
         </td>
         <td>
-          <span className="fw-normal">{unitPrice}</span>
+          <span className="fw-normal">Rs. {props.item.item.sellingPrice}</span>
         </td>
         <td>
-          <span className="fw-normal">{quantity}</span>
+          <span className="fw-normal">{props.quantity}</span>
         </td>
 
         <td>
-          <span className="fw-normal">{discount}</span>
-        </td>
-        <td>
-          <span className="fw-normal">{subtotal}</span>
+          <span className="fw-normal">Rs. {props.item.item.sellingPrice * props.quantity}</span>
         </td>
         <td>
           <Dropdown as={ButtonGroup}>
@@ -239,7 +73,6 @@ export function TransactionsTable() {
                 <th className="border-bottom">Product Name</th>
                 <th className="border-bottom">Unit Price</th>
                 <th className="border-bottom">Quantity</th>
-                <th className="border-bottom">Discount</th>
                 <th className="border-bottom">Subtotal</th>
                 <th className="border-bottom">Action</th>
               </tr>

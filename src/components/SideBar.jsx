@@ -133,9 +133,9 @@ export default function SideBar() {
       <div className={`sidebar ${isSideBarOpen ? "" : "closed"}`}>
         <div className="row p-0 m-0">
           <SideBarTab mainTab="Account" reactIcon={<FaStore />} nestedTabs={["Stores"]} />
-          <SideBarTab mainTab="Sales" reactIcon={<MdOutlineShoppingCartCheckout />} nestedTabs={["Checkout", "Receipts"]} />
+          <SideBarTab mainTab="Sales" reactIcon={<MdOutlineShoppingCartCheckout />} nestedTabs={["Checkout"]} />
           <SideBarTab mainTab="Customers" reactIcon={<FaUsers />} nestedTabs={["Customer List", "Loyalty Programs"]} />
-          <SideBarTab mainTab="Employees" reactIcon={<FaAddressCard />} nestedTabs={["Employee List", "Timecards", "Salary Types"]} />
+          <SideBarTab mainTab="Employees" reactIcon={<FaAddressCard />} nestedTabs={["Employee List", "Salary Types"]} />
           <SideBarTab mainTab="Items" reactIcon={<FaShoppingBasket />} nestedTabs={["Item List", "Categories", "Brands"]} />
           <SideBarTab
             mainTab="Inventory Management"

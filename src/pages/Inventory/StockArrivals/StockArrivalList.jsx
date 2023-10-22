@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { Container, Table, Button, Card, Alert } from "react-bootstrap";
 import Skeleton from "react-loading-skeleton";
-import { useQuery, useMutation } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { useNavigate } from "react-router";
 import { GET_ALL_STOCK_ARRIVALS } from "../../../graphql/inventory";
 import TransferStockModal from "../../../components/StockArrivals/TransferStockModal";
 
 const StockArrivals = () => {
-  const navigate = useNavigate();
   const { data: stockArrivalsData, loading, error, refetch } = useQuery(GET_ALL_STOCK_ARRIVALS, { variables: { transferred: false } });
   const [showTransferModal, setShowTransferModal] = useState(false);
   const [stockArrival, setStockArrival] = useState(null);
