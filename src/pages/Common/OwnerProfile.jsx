@@ -7,12 +7,13 @@ import * as Yup from "yup";
 import PathConstants from "../../constants/pathConstants";
 import { useMutation } from "@apollo/client";
 import { REGISTER_OWNER } from "../../graphql/employees";
+import { toast } from "react-toastify";
 
 export default function OwnerProfile() {
   const navigate = useNavigate();
   const location = useLocation();
   const { email, password } = location.state;
-  const [registerOwner, { loading, error, data }] = useMutation(REGISTER_OWNER);
+  const [registerOwner, { loading }] = useMutation(REGISTER_OWNER);
 
   const initialValues = {
     title: "",
@@ -47,10 +48,11 @@ export default function OwnerProfile() {
       branchId: 0,
     };
     registerOwner({ variables: { employeeInput } }).then((response) => {
+      console.log(response);
       if (response.data.registerOwner) {
         navigate(PathConstants.SIGN_IN);
       } else {
-        alert("Invalid signup");
+        toast.error("Something went wrong");
       }
     });
   };

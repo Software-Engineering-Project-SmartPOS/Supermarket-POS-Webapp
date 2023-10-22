@@ -357,7 +357,7 @@ export default function AddEmployee() {
                             </InputGroup.Text>
                             <Form.Control as="select" name="branchId" onChange={handleChange} value={values.branchId} placeholder="Select Branch">
                               <option value="">Select branch</option>
-                              {branchData?.getAllBranches?.map((branch) => (
+                              {branchData?.getAllBranch?.map((branch) => (
                                 <option key={branch.id} value={branch.id}>
                                   {branch.name}
                                 </option>
