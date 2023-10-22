@@ -37,7 +37,6 @@ export default function AddPurchaseOrder() {
   // Initial values for the form
   const initialValues = {
     supplier: "",
-    purchaseDate: "",
     expectedDate: "",
     note: "",
     orderItems: [],
@@ -46,14 +45,12 @@ export default function AddPurchaseOrder() {
   // Validation schema
   const validationSchema = Yup.object({
     supplier: Yup.string().required("Required"),
-    purchaseDate: Yup.date().required("Required"),
     expectedDate: Yup.date().required("Required"),
     note: Yup.string(),
     orderItems: Yup.array().of(
       Yup.object().shape({
         itemId: Yup.string().required("Required"),
         quantity: Yup.number().min(1, "minimum number is 1").required("Required"),
-        purchaseCost: Yup.number().min(0).required("Required"),
       })
     ),
   });
@@ -128,19 +125,6 @@ export default function AddPurchaseOrder() {
                       </Col>
 
                       <Col xs={12} lg={6}>
-                        <Form.Group controlId="purchaseDate" className="mb-4">
-                          <Form.Label>Purchase Order Date</Form.Label>
-                          <InputGroup>
-                            <InputGroup.Text>
-                              <FontAwesomeIcon icon={faCalendarAlt} />
-                            </InputGroup.Text>
-                            <Form.Control type="date" name="purchaseDate" onChange={handleChange} value={values.purchaseDate} />
-                          </InputGroup>
-                          {touched.purchaseDate && errors.purchaseDate && <div className="text-danger">{errors.purchaseDate}</div>}
-                        </Form.Group>
-                      </Col>
-
-                      <Col xs={12} lg={6}>
                         <Form.Group controlId="expectedDate" className="mb-4">
                           <Form.Label>Expected Delivery Date</Form.Label>
                           <InputGroup>
@@ -178,7 +162,6 @@ export default function AddPurchaseOrder() {
                           <th>Item</th>
                           <th>Quantity</th>
                           <th>Unit Cost</th>
-                          <th>Purchase Cost</th>
                           <th>Amount</th>
                           <th>Action</th>
                         </tr>
@@ -200,7 +183,7 @@ export default function AddPurchaseOrder() {
                                             const updatedValues = [...values.orderItems];
                                             updatedValues[index].itemId = selectedItem.item.itemId;
                                             updatedValues[index].name = selectedItem.item.value;
-                                            updatedValues[index].unitCost = selectedItem.item.unitCost;
+                                            updatedValues[index].purchaseItemUnitCost = selectedItem.item.unitCost;
                                             updatedValues[index].itemSupplyId = selectedItem.item.itemSupplyId;
                                             setFieldValue(`orderItems`, updatedValues);
                                           }}
@@ -236,25 +219,8 @@ export default function AddPurchaseOrder() {
                                           <div className="text-danger">{errors.orderItems[index].quantity}</div>
                                         )}
                                       </td>
-                                      <td>{item.unitCost}</td>
-                                      <td>
-                                        <Form.Group controlId={`orderItems[${index}].purchaseCost`} className="mb-0">
-                                          <Form.Control
-                                            type="number"
-                                            placeholder="Enter cost"
-                                            name={`orderItems[${index}].purchaseCost`}
-                                            onChange={handleChange}
-                                            value={item.purchaseCost}
-                                          />
-                                        </Form.Group>
-                                        {touched.orderItems &&
-                                          errors.orderItems &&
-                                          errors.orderItems[index] &&
-                                          errors.orderItems[index].purchaseCost && (
-                                            <div className="text-danger">{errors.orderItems[index].purchaseCost}</div>
-                                          )}
-                                      </td>
-                                      <td>Rs. {calculateAmount(item.quantity, item.purchaseCost)}</td>
+                                      <td>{item.purchaseItemUnitCost}</td>
+                                      <td>Rs. {calculateAmount(item.quantity, item.purchaseItemUnitCost)}</td>
                                     </>
                                   )}
                                   <td>

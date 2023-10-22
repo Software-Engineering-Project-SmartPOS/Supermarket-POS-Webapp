@@ -129,3 +129,68 @@ export const CREATE_PURCHASE_ORDER = gql`
     }
   }
 `;
+
+export const GET_ALL_PURCHASE_ORDERS = gql`
+  query AllPurchaseOrders {
+    AllPurchaseOrders {
+      id
+      orderedDate
+      expectedDate
+      description
+      purchaseCost
+      orderStatus
+      purchaseOrderItemList {
+        id
+        quantity
+        totalCost
+        receivedQuantity
+        purchaseOrderItemStatus
+        item {
+          name
+          unitOfMeasure
+        }
+      }
+      supplier {
+        id
+        name
+      }
+      branch {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export const GET_PURCHASE_ORDER_BY_ID = gql`
+  query PurchaseOrderById($id: ID!) {
+    PurchaseOrderById(id: $id) {
+      id
+      purchaseOrderItemList {
+        id
+        quantity
+        purchaseItemUnitCost
+        totalCost
+        receivedQuantity
+        purchaseOrderItemStatus
+        item {
+          id
+          name
+          unitOfMeasure
+        }
+      }
+    }
+  }
+`;
+export const ADD_PURCHASE_ORDER_ITEM_ARRIVAL = gql`
+  mutation PurchaseOrderItemArrival($arrivalDetails: PurchaseOrderItemArrivalInput!) {
+    PurchaseOrderItemArrival(arrivalDetails: $arrivalDetails) {
+      id
+      quantity
+      purchaseItemUnitCost
+      totalCost
+      receivedQuantity
+      purchaseOrderItemStatus
+    }
+  }
+`;

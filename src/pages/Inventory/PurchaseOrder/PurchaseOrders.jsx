@@ -2,62 +2,47 @@ import { useState } from "react";
 import { Container, Card, Table, Button, Form, ProgressBar } from "react-bootstrap";
 import { useNavigate } from "react-router";
 import PathConstants from "../../../constants/pathConstants";
+import { useQuery } from "@apollo/client";
+import { GET_ALL_PURCHASE_ORDERS } from "../../../graphql/inventory";
+import Skeleton from "react-loading-skeleton";
+import ReceiveModal from "../../../components/PurchaseOrder/RecieveModal";
+import { set } from "date-fns";
 
 const PurchaseOrders = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredPurchaseOrders, setFilteredPurchaseOrders] = useState([]);
+  const { data, loading } = useQuery(GET_ALL_PURCHASE_ORDERS);
+  const purchaseOrders = data?.AllPurchaseOrders || [];
+  const [showReceiveModal, setShowReceiveModal] = useState(false);
+  const [orderId, setOrderId] = useState(null);
 
-  // Sample purchase orders data
-  const purchaseOrders = [
-    {
-      id: 1,
-      orderNumber: "PO-001",
-      date: "2023-09-10",
-      supplier: "Supplier A",
-      store: "Store X",
-      status: "Pending",
-      received: "No",
-      expectedDate: "2023-09-15",
-      total: 500.0,
-    },
-    {
-      id: 2,
-      orderNumber: "PO-002",
-      date: "2023-09-12",
-      supplier: "Supplier B",
-      store: "Store Y",
-      status: "Delivered",
-      received: "Yes",
-      expectedDate: "2023-09-20",
-      total: 750.0,
-    },
-    // Add more purchase order data as needed
-  ];
+  if (loading) return <Skeleton count={10} />;
 
   // Function to handle search
   const handleSearch = (e) => {
     const searchTerm = e.target.value.toLowerCase();
     setSearchTerm(searchTerm);
-
-    // Filter purchase orders based on fields
     const filtered = purchaseOrders.filter(
       (order) =>
-        order.orderNumber.toLowerCase().includes(searchTerm) ||
-        order.supplier.toLowerCase().includes(searchTerm) ||
-        order.store.toLowerCase().includes(searchTerm) ||
-        order.status.toLowerCase().includes(searchTerm)
+        order.id.toLowerCase().includes(searchTerm) ||
+        order.supplier.name.toLowerCase().includes(searchTerm) ||
+        order.branch.name.toLowerCase().includes(searchTerm) ||
+        order.orderStatus.toLowerCase().includes(searchTerm)
     );
-
     setFilteredPurchaseOrders(filtered);
   };
 
   // Determine the purchase orders data to render based on search
   const displayPurchaseOrders = searchTerm.length === 0 ? purchaseOrders : filteredPurchaseOrders;
   const calculateReceivedProgress = (order) => {
-    // Calculate the received progress based on the number of items received and total items
-    const receivedProgress = (order.itemsReceived / order.totalItems) * 100;
-    return receivedProgress.toFixed(2); // You can adjust the number of decimal places as needed
+    const receivedQuantity = order.purchaseOrderItemList.reduce((total, item) => total + item.receivedQuantity, 0);
+    const totalQuantity = order.purchaseOrderItemList.reduce((total, item) => total + item.quantity, 0);
+    return `${receivedQuantity}/${totalQuantity}`;
+  };
+
+  const openReceiveModal = () => {
+    setShowReceiveModal(true);
   };
 
   return (
@@ -95,16 +80,14 @@ const PurchaseOrders = () => {
               {displayPurchaseOrders.map((order, index) => (
                 <tr key={order.id}>
                   <td>{index + 1}</td>
-                  <td>{order.orderNumber}</td>
-                  <td>{order.date}</td>
-                  <td>{order.supplier}</td>
-                  <td>{order.store}</td>
-                  <td>{order.status}</td>
-                  <td>
-                    <ProgressBar now={calculateReceivedProgress(order)} label={`${calculateReceivedProgress(order)}%`} />
-                  </td>
+                  <td>{order.id}</td>
+                  <td>{order.orderedDate}</td>
+                  <td>{order.supplier.name}</td>
+                  <td>{order.branch.name}</td>
+                  <td>{order.orderStatus}</td>
+                  <td>{calculateReceivedProgress(order)}</td>
                   <td>{order.expectedDate}</td>
-                  <td>${order.total.toFixed(2)}</td>
+                  <td>Rs. {order.purchaseCost}</td>
                   <td className="text-center">
                     <Button
                       variant="info"
@@ -116,11 +99,31 @@ const PurchaseOrders = () => {
                     >
                       Edit
                     </Button>
+                    <Button
+                      variant="success"
+                      size="sm"
+                      className="mx-1"
+                      onClick={() => {
+                        setOrderId(order.id);
+                        openReceiveModal(); // Open the receive modal for the selected order
+                      }}
+                    >
+                      Receive
+                    </Button>
                   </td>
                 </tr>
               ))}
             </tbody>
           </Table>
+          {orderId && (
+            <ReceiveModal
+              show={showReceiveModal}
+              handleClose={() => {
+                setShowReceiveModal(false);
+              }}
+              orderId={orderId}
+            />
+          )}
         </Card.Body>
       </Card>
     </Container>
