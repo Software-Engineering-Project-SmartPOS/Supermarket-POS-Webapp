@@ -140,7 +140,7 @@ export default function SideBar() {
           <SideBarTab
             mainTab="Inventory Management"
             reactIcon={<FaWarehouse />}
-            nestedTabs={["Suppliers", "Item Supply", "Purchase Orders", "Stock List"]}
+            nestedTabs={["Suppliers", "Item Supply", "Purchase Orders", "Stock List", "Stock Arrivals"]}
           />
           {/* <SideBarTab mainTab="Reports" reactIcon={<FaChartBar />} nestedTabs={["Sales by item 1", "Sales by item 2", "Sales by item 3"]} /> */}
           {/* <SideBarTab mainTab="Online Orders" reactIcon={<SiShopify />} nestedTabs={["Sales by item 1", "Sales by item 2"]} /> */}

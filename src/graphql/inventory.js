@@ -195,6 +195,30 @@ export const ADD_PURCHASE_ORDER_ITEM_ARRIVAL = gql`
   }
 `;
 
+export const GET_ALL_STOCK_ARRIVALS = gql`
+  query GetAllStockArrivals($transferred: Boolean!) {
+    GetAllStockArrivals(transferred: $transferred) {
+      id
+      quantity
+      arrivedAt
+      purchaseOrderItem {
+        id
+        purchaseItemUnitCost
+        item {
+          id
+          name
+        }
+        itemSupply {
+          supplier {
+            name
+            id
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const GET_ALL_STOCK_LEVELS = gql`
   query AllStocks {
     AllStockLevels {
@@ -212,6 +236,18 @@ export const GET_ALL_STOCK_LEVELS = gql`
         name
         id
       }
+    }
+  }
+`;
+
+export const ADD_TO_STOCK_LEVEL = gql`
+  mutation AddToStockLevel($stockLevelInput: StockLevelInput!) {
+    AddToStockLevel(stockLevelInput: $stockLevelInput) {
+      id
+      expiryDate
+      inventoryQuantity
+      stallQuantity
+      sellingPrice
     }
   }
 `;

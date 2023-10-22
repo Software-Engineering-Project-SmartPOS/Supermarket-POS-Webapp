@@ -59,5 +59,7 @@ const PathConstants = {
   EDIT_ITEM_SUPPLY: "inventory/edit-item-supply",
 
   STOCK_LIST: "inventory/stock-list",
+
+  STOCK_ARRIVALS: "inventory/stock-arrivals",
 };
 export default PathConstants;
