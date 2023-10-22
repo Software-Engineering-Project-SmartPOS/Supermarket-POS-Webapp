@@ -8,14 +8,15 @@ import Skeleton from "react-loading-skeleton";
 const LoyaltyProgramList = () => {
   const navigate = useNavigate();
   const { loading, data, error } = useQuery(GET_ALL_LOYALTY_PROGRAMS);
-  if (error) return <Alert variant="danger">{error.message}</Alert>;
-  if (loading) return <Skeleton count={20} />;
   const handlEditLoyaltyProgram = (program) => {
     navigate("/" + PathConstants.EDIT_LOYALTY_PROGRAM, { state: { program } });
   };
   const handlAddLoyaltyProgram = () => {
     navigate("/" + PathConstants.ADD_LOYALTY_PROGRAM);
   };
+  if (loading) return <Skeleton count={20} />;
+  if (error) return <Alert variant="danger">{error.message}</Alert>;
+
   return (
     <Container>
       <div className="title d-flex justify-content-between pe-2">

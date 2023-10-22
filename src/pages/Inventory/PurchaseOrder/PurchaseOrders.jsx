@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Container, Card, Table, Button, Form, ProgressBar } from "react-bootstrap";
+import { Container, Card, Table, Button, Form, ProgressBar, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router";
 import PathConstants from "../../../constants/pathConstants";
 import { useQuery } from "@apollo/client";
@@ -12,12 +12,13 @@ const PurchaseOrders = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredPurchaseOrders, setFilteredPurchaseOrders] = useState([]);
-  const { data, loading } = useQuery(GET_ALL_PURCHASE_ORDERS);
+  const { data, loading, error } = useQuery(GET_ALL_PURCHASE_ORDERS);
   const purchaseOrders = data?.AllPurchaseOrders || [];
   const [showReceiveModal, setShowReceiveModal] = useState(false);
   const [orderId, setOrderId] = useState(null);
 
   if (loading) return <Skeleton count={10} />;
+  if (error) return <Alert variant="danger">Error fetching data</Alert>;
 
   // Function to handle search
   const handleSearch = (e) => {

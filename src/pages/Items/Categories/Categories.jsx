@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import { Container, Table, Button, Card } from "react-bootstrap";
+import { Container, Table, Button, Card, Alert } from "react-bootstrap";
 import PathConstants from "../../../constants/pathConstants";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_CATEGORIES } from "../../../graphql/items";
@@ -13,6 +13,7 @@ const Categories = () => {
     refetch();
   }, [refetch]);
   if (loading) return <Skeleton count={20} />;
+  if (error) return <Alert variant="danger">Error fetching data</Alert>;
   return (
     <Container>
       <div className="title d-flex justify-content-between pe-2">

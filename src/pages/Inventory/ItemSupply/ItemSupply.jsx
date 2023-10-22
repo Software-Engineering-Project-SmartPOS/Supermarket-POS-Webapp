@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Table, Button, Card, Form } from "react-bootstrap";
+import { Container, Table, Button, Card, Form, Alert } from "react-bootstrap";
 import Skeleton from "react-loading-skeleton";
 import { useQuery, useLazyQuery } from "@apollo/client";
 import { GET_ACTIVE_ITEM_SUPPLIES_BY_ITEM_ID, GET_ACTIVE_ITEM_SUPPLIES_BY_SUPPLIER_ID, GET_ALL_SUPPLIERS } from "../../../graphql/inventory";
@@ -13,8 +13,8 @@ const ItemSupply = () => {
   const [searchName, setSearchName] = useState("");
   const [searchId, setSearchId] = useState(null);
   const [searchResults, setSearchResults] = useState([]);
-  const { data: itemData, loading: itemLoading } = useQuery(GET_ALL_ITEMS);
-  const { data: supplierData, loading: supplierLoading } = useQuery(GET_ALL_SUPPLIERS);
+  const { data: itemData, loading: itemLoading, error: itemError } = useQuery(GET_ALL_ITEMS);
+  const { data: supplierData, loading: supplierLoading, error: supplierError } = useQuery(GET_ALL_SUPPLIERS);
   const navigate = useNavigate();
 
   const [loadData, { loading }] = useLazyQuery(
@@ -42,6 +42,8 @@ const ItemSupply = () => {
   };
 
   if (itemLoading || supplierLoading) return <Skeleton count={5} />;
+
+  if (itemError || supplierError) return <Alert variant="danger">Error fetching data</Alert>;
 
   const suppliers = supplierData.GetAllSuppliers.map((supplier) => ({ name: supplier.name, id: supplier.id }));
   const items = itemData.GetAllItems.map((item) => ({ name: item.name, id: item.id }));

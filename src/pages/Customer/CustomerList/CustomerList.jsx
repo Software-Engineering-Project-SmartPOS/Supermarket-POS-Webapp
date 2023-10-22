@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Container, Table, Button, Form, Card } from "react-bootstrap";
+import { Container, Table, Button, Form, Card, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router";
 import PathConstants from "../../../constants/pathConstants";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,7 +13,7 @@ const CustomerList = () => {
   }, [dispatch]);
 
   const navigate = useNavigate();
-  const { customers, loading } = useSelector((state) => state.customer);
+  const { customers, loading, error } = useSelector((state) => state.customer);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredCustomers, setFilteredCustomers] = useState([]);
   if (loading) return <Skeleton count={20} />;
@@ -38,6 +38,8 @@ const CustomerList = () => {
   const handleCustomerClick = () => {
     navigate("/" + PathConstants.PURCHASE_HISTORY);
   };
+
+  if (error) return <Alert variant="danger">Error fetching data</Alert>;
   return (
     <Container>
       <div className="title d-flex justify-content-between pe-2">

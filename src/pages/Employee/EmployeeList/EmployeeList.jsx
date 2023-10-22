@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Container, Card, Table, Button, Form } from "react-bootstrap";
+import { Container, Card, Table, Button, Form, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router";
 import PathConstants from "../../../constants/pathConstants";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,7 +10,7 @@ const EmployeeList = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
-  const { employees, loading } = useSelector((state) => state.employee);
+  const { employees, loading, error } = useSelector((state) => state.employee);
   const [filteredEmployees, setFilteredEmployees] = useState([]);
 
   useEffect(() => {
@@ -32,6 +32,7 @@ const EmployeeList = () => {
     setFilteredEmployees(filtered);
   };
   if (loading) return <Skeleton count={20} />;
+  if (error) return <Alert variant="danger">Error fetching data</Alert>;
 
   return (
     <Container>

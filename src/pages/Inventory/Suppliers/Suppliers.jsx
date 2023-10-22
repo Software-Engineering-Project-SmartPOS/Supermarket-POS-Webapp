@@ -1,4 +1,4 @@
-import { Container, Table, Button, Card } from "react-bootstrap";
+import { Container, Table, Button, Card, Alert } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import PathConstants from "../../../constants/pathConstants";
 import { useQuery } from "@apollo/client";
@@ -8,11 +8,12 @@ import { useEffect } from "react";
 
 const Suppliers = () => {
   const navigate = useNavigate();
-  const { data, loading, refetch } = useQuery(GET_ALL_SUPPLIERS);
+  const { data, loading, error, refetch } = useQuery(GET_ALL_SUPPLIERS);
   useEffect(() => {
     refetch();
   }, [refetch]);
   if (loading) return <Skeleton count={20} />;
+  if (error) return <Alert variant="danger">Error fetching data</Alert>;
 
   return (
     <Container>
