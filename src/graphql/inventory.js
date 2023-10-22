@@ -194,3 +194,24 @@ export const ADD_PURCHASE_ORDER_ITEM_ARRIVAL = gql`
     }
   }
 `;
+
+export const GET_ALL_STOCK_LEVELS = gql`
+  query AllStocks {
+    AllStockLevels {
+      id
+      expiryDate
+      inventoryQuantity
+      stallQuantity
+      sellingPrice
+      item {
+        itemCode
+        name
+        barcodeNo
+      }
+      branch {
+        name
+        id
+      }
+    }
+  }
+`;
