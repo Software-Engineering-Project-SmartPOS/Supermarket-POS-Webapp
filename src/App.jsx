@@ -75,61 +75,86 @@ function App() {
         <Route path={PathConstants.LOCK} element={<Lock />} />
         <Route path={PathConstants.OWNER_PROFILE} element={<OwnerProfile />} />
         <Route path="*" element={<PageNotFound />} />
-        <Route element={<ProtectedRoutes roles={["OWNER", "MANAGER", "ADMIN"]} />}>
-          <Route element={<DashboardLayout />}>
+        <Route element={<DashboardLayout />}>
+          <Route element={<ProtectedRoutes roles={["MANAGER", "ADMIN", "CASHIER"]} />}>
             {/* Sales */}
             <Route path={PathConstants.CHECKOUT} element={<Checkout />} />
             <Route path={PathConstants.RECEIPTS} element={<Receipts />} />
             <Route path={PathConstants.REFUND} element={<Refund />} />
+          </Route>
+          <Route element={<ProtectedRoutes roles={["OWNER", "MANAGER", "ADMIN", "CASHIER"]} />}>
             {/* Customers */}
             <Route path={PathConstants.ADD_CUSTOMER} element={<AddCustomer />} />
             <Route path={PathConstants.CUSTOMER_LIST} element={<CustomerList />} />
             <Route path={PathConstants.EDIT_CUSTOMER} element={<EditCustomer />} />
             <Route path={PathConstants.PURCHASE_HISTORY} element={<PurchaseHistory />} />
-
+          </Route>
+          <Route element={<ProtectedRoutes roles={["OWNER", "MANAGER", "ADMIN"]} />}>
+            {/* Loyalty Programs */}
             <Route path={PathConstants.LOYALTY_PROGRAMS} element={<LoyaltyProgramList />} />
             <Route path={PathConstants.ADD_LOYALTY_PROGRAM} element={<AddLoyaltyProgram />} />
             <Route path={PathConstants.EDIT_LOYALTY_PROGRAM} element={<EditLoyaltyProgram />} />
+          </Route>
+          <Route element={<ProtectedRoutes roles={["OWNER", "MANAGER", "ADMIN"]} />}>
             {/* Employees */}
             <Route path={PathConstants.ADD_EMPLOYEE} element={<AddEmployee />} />
             <Route path={PathConstants.EMPLOYEE_LIST} element={<EmployeeList />} />
             <Route path={PathConstants.EDIT_EMPLOYEE + "/:id"} element={<EditEmployee />} />
+          </Route>
+          <Route element={<ProtectedRoutes roles={["OWNER", "MANAGER", "ADMIN"]} />}>
             {/* Salary */}
             <Route path={PathConstants.ADD_SALARY_TYPE} element={<AddSalaryType />} />
             <Route path={PathConstants.SALARY_TYPES} element={<SalaryTypes />} />
-
+          </Route>
+          <Route element={<ProtectedRoutes roles={["MANAGER", "ADMIN"]} />}>
             {/* Timecards */}
             <Route path={PathConstants.TIMECARDS} element={<Timecards />} />
             <Route path={PathConstants.ADD_TIMECARD} element={<AddTimeCard />} />
             <Route path={PathConstants.EDIT_TIMECARD} element={<EditTimeCard />} />
+          </Route>
+          <Route element={<ProtectedRoutes roles={["OWNER", "MANAGER", "ADMIN", "CASHIER"]} />}>
             {/* Categories */}
             <Route path={PathConstants.CATEGORIES} element={<Categories />} />
             <Route path={PathConstants.ADD_CATEGORY} element={<AddCategory />} />
             <Route path={PathConstants.EDIT_CATEGORY + "/:id"} element={<EditCategory />} />
+          </Route>
+          <Route element={<ProtectedRoutes roles={["OWNER", "MANAGER", "ADMIN", "CASHIER"]} />}>
             {/* ItemList */}
             <Route path={PathConstants.ITEM_LIST} element={<ItemList />} />
             <Route path={PathConstants.ADD_ITEM} element={<AddItem />} />
             <Route path={PathConstants.EDIT_ITEM + "/:id"} element={<EditItem />} />
+          </Route>
+          <Route element={<ProtectedRoutes roles={["OWNER", "MANAGER", "ADMIN", "CASHIER"]} />}>
             {/* Brands */}
             <Route path={PathConstants.BRANDS} element={<Brands />} />
             <Route path={PathConstants.ADD_BRAND} element={<AddBrand />} />
             <Route path={PathConstants.EDIT_BRAND + "/:id"} element={<EditBrand />} />
+          </Route>
+          <Route element={<ProtectedRoutes roles={["OWNER", "MANAGER", "ADMIN"]} />}>
             {/* Suppliers */}
             <Route path={PathConstants.SUPPLIERS} element={<Suppliers />} />
             <Route path={PathConstants.ADD_SUPPLIER} element={<AddSupplier />} />
             <Route path={PathConstants.EDIT_SUPPLIER + "/:id"} element={<EditSupplier />} />
+          </Route>
+          <Route element={<ProtectedRoutes roles={["MANAGER", "ADMIN"]} />}>
             {/* Purchase Orders */}
             <Route path={PathConstants.PURCHASE_ORDERS} element={<PurchaseOrders />} />
             <Route path={PathConstants.ADD_PURCHASE_ORDER} element={<AddPurchaseOrder />} />
             <Route path={PathConstants.EDIT_PURCHASE_ORDER} element={<EditPurchaseOrder />} />
+          </Route>
+          <Route element={<ProtectedRoutes roles={["OWNER", "MANAGER", "ADMIN"]} />}>
             {/* Stores */}
             <Route path={PathConstants.ADD_BRANCH} element={<AddBranch />} />
             <Route path={PathConstants.STORES} element={<BranchList />} />
             <Route path={PathConstants.EDIT_BRANCH + "/:id"} element={<EditBranch />} />
+          </Route>
+          <Route element={<ProtectedRoutes roles={["MANAGER", "ADMIN"]} />}>
             {/* ItemSupply */}
             <Route path={PathConstants.ADD_ITEM_SUPPLY} element={<AddItemSupply />} />
             <Route path={PathConstants.ITEM_SUPPLY} element={<ItemSupply />} />
             <Route path={PathConstants.EDIT_ITEM_SUPPLY + "/:id"} element={<EditItemSupply />} />
+          </Route>
+          <Route element={<ProtectedRoutes roles={["OWNER", "MANAGER", "ADMIN", "CASHIER"]} />}>
             {/* Stocks */}
             <Route path={PathConstants.STOCK_LIST} element={<StockList />} />
             <Route path={PathConstants.STOCK_ARRIVALS} element={<StockArrivalsList />} />

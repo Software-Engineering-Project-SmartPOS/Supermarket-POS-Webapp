@@ -1,4 +1,5 @@
 import { SiShopify } from "react-icons/si";
+import jwtDecode from "jwt-decode";
 import { MdOutlineShoppingCartCheckout } from "react-icons/md";
 import {
   FaAddressCard,
@@ -21,7 +22,17 @@ import PropTypes from "prop-types";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { useNavigate } from "react-router";
 import PathConstants from "../constants/pathConstants";
+import { useState } from "react";
 
+const getUserRole = () => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    const decodedToken = jwtDecode(token);
+    const userRole = decodedToken.role;
+    return userRole;
+  }
+  return null;
+};
 export default function SideBar() {
   const dispatch = useDispatch();
   const isSideBarOpen = useSelector((state) => state.sideBar.isSideBarOpen);
@@ -30,6 +41,7 @@ export default function SideBar() {
   const selectedNestedTab = useSelector((state) => state.sideBar.selectedTab.nestedTab);
   const handleToggleSideBar = () => dispatch(toggleSideBar());
   const navigate = useNavigate();
+  const [userRole, setUserRole] = useState(getUserRole());
 
   const isMainTab = (tabName) => {
     return selectedMainTab === tabName;
@@ -52,12 +64,12 @@ export default function SideBar() {
 
   const handleNestedTabClick = (mainTab, nestedTab) => {
     dispatch(setSelectedTab({ mainTab, nestedTab }));
-    // dispatch(toggleSideBar());
     const url = PathConstants[nestedTab.toUpperCase().replace(" ", "_")];
     navigate(url);
   };
 
-  const SideBarTab = ({ mainTab, reactIcon, nestedTabs }) => {
+  const SideBarTab = ({ mainTab, reactIcon, nestedTabs, allowedRoles }) => {
+    // const isTabVisible = allowedRoles.includes(userRole);
     return (
       <div className={isTabActive(mainTab) ? "view-tab" : "p-0"}>
         <OverlayTrigger
@@ -81,12 +93,14 @@ export default function SideBar() {
           activeTab &&
           isSideBarOpen &&
           nestedTabs.map((nestedTab) => {
-            return (
-              <div key={nestedTab} className="row py-2 mx-0 nested-tab" onClick={() => handleNestedTabClick(mainTab, nestedTab)}>
-                <div className="col-3 "></div>
-                <div className="col-9 ">{nestedTab}</div>
-              </div>
-            );
+            if (allowedRoles[nestedTab].includes(userRole))
+              return (
+                <div key={nestedTab} className="row py-2 mx-0 nested-tab" onClick={() => handleNestedTabClick(mainTab, nestedTab)}>
+                  <div className="col-3 "></div>
+                  <div className="col-9 ">{nestedTab}</div>
+                </div>
+              );
+            else return null;
           })}
       </div>
     );
@@ -132,18 +146,63 @@ export default function SideBar() {
       {/* sidebar tabs */}
       <div className={`sidebar ${isSideBarOpen ? "" : "closed"}`}>
         <div className="row p-0 m-0">
-          <SideBarTab mainTab="Account" reactIcon={<FaStore />} nestedTabs={["Stores"]} />
-          <SideBarTab mainTab="Sales" reactIcon={<MdOutlineShoppingCartCheckout />} nestedTabs={["Checkout"]} />
-          <SideBarTab mainTab="Customers" reactIcon={<FaUsers />} nestedTabs={["Customer List", "Loyalty Programs"]} />
-          <SideBarTab mainTab="Employees" reactIcon={<FaAddressCard />} nestedTabs={["Employee List", "Salary Types", "Timecards"]} />
-          <SideBarTab mainTab="Items" reactIcon={<FaShoppingBasket />} nestedTabs={["Item List", "Categories", "Brands"]} />
-          <SideBarTab
-            mainTab="Inventory Management"
-            reactIcon={<FaWarehouse />}
-            nestedTabs={["Suppliers", "Item Supply", "Purchase Orders", "Stock List", "Stock Arrivals"]}
-          />
-          {/* <SideBarTab mainTab="Reports" reactIcon={<FaChartBar />} nestedTabs={["Sales by item 1", "Sales by item 2", "Sales by item 3"]} /> */}
-          {/* <SideBarTab mainTab="Online Orders" reactIcon={<SiShopify />} nestedTabs={["Sales by item 1", "Sales by item 2"]} /> */}
+          {["OWNER", "MANAGER", "ADMIN"].includes(userRole) && (
+            <SideBarTab mainTab="Account" reactIcon={<FaStore />} nestedTabs={["Stores"]} allowedRoles={{ Stores: ["OWNER", "MANAGER", "ADMIN"] }} />
+          )}
+          {["MANAGER", "ADMIN", "CASHIER"].includes(userRole) && (
+            <SideBarTab
+              mainTab="Sales"
+              reactIcon={<MdOutlineShoppingCartCheckout />}
+              nestedTabs={["Checkout"]}
+              allowedRoles={{ Checkout: ["MANAGER", "ADMIN", "CASHIER"] }}
+            />
+          )}
+          {["OWNER", "MANAGER", "ADMIN", "CASHIER"].includes(userRole) && (
+            <SideBarTab
+              mainTab="Customers"
+              reactIcon={<FaUsers />}
+              nestedTabs={["Customer List", "Loyalty Programs"]}
+              allowedRoles={{ "Customer List": ["OWNER", "MANAGER", "ADMIN", "CASHIER"], "Loyalty Programs": ["OWNER", "MANAGER", "ADMIN"] }}
+            />
+          )}
+          {["OWNER", "MANAGER", "ADMIN"].includes(userRole) && (
+            <SideBarTab
+              mainTab="Employees"
+              reactIcon={<FaAddressCard />}
+              nestedTabs={["Employee List", "Salary Types", "Timecards"]}
+              allowedRoles={{
+                "Employee List": ["OWNER", "MANAGER", "ADMIN"],
+                "Salary Types": ["OWNER", "MANAGER", "ADMIN"],
+                Timecards: ["MANAGER", "ADMIN"],
+              }}
+            />
+          )}
+          {["OWNER", "MANAGER", "ADMIN", "CASHIER"].includes(userRole) && (
+            <SideBarTab
+              mainTab="Items"
+              reactIcon={<FaShoppingBasket />}
+              nestedTabs={["Item List", "Categories", "Brands"]}
+              allowedRoles={{
+                "Item List": ["OWNER", "MANAGER", "ADMIN", "CASHIER"],
+                Categories: ["OWNER", "MANAGER", "ADMIN", "CASHIER"],
+                Brands: ["OWNER", "MANAGER", "ADMIN", "CASHIER"],
+              }}
+            />
+          )}
+          {["OWNER", "MANAGER", "ADMIN", "CASHIER"].includes(userRole) && (
+            <SideBarTab
+              mainTab="Inventory Management"
+              reactIcon={<FaWarehouse />}
+              nestedTabs={["Suppliers", "Item Supply", "Purchase Orders", "Stock List", "Stock Arrivals"]}
+              allowedRoles={{
+                Suppliers: ["OWNER", "MANAGER", "ADMIN"],
+                "Item Supply": ["MANAGER", "ADMIN"],
+                "Purchase Orders": ["MANAGER", "ADMIN"],
+                "Stock List": ["MANAGER", "ADMIN", "CASHIER"],
+                "Stock Arrivals": ["MANAGER", "ADMIN"],
+              }}
+            />
+          )}
         </div>
       </div>
     </>
