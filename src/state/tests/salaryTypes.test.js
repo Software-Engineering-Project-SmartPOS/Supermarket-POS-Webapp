@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { fetchSalaryTypes, initialState } from "../reducers/salaryTypes";
 import salaryTypesReducer from "../reducers/salaryTypes";
-import client from "../../ApolloClient";
+import client from "../../utils/ApolloClient";
 
 describe("salaryTypes slice", () => {
   let store;

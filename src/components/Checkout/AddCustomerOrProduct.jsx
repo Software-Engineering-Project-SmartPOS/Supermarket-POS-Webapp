@@ -3,7 +3,7 @@ import { FaShoppingBasket } from "react-icons/fa";
 import { GrClose } from "react-icons/gr";
 import { useState } from "react"; // Import React and useState
 import ReactSearchBox from "react-search-box";
-import ProfileImg from "../../assets/img/profile.jpg";
+import ProfileImg from "../../assets/img/profile.png";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_CUSTOMERS } from "../../graphql/customers";
 import { useDispatch } from "react-redux";
@@ -47,19 +47,15 @@ function AddCustomerOrProduct() {
         <>
           <div className="search-box">
             <ReactSearchBox
-              placeholder="Search Customers"
+              placeholder="Search Customers using name, email or phone number"
               data={customers.allCustomer.map((customer) => {
                 return {
                   key: customer.id,
-                  value: customer.telephone,
+                  value: [customer.telephone, " | ", customer.email, " | ", customer.name],
                   name: customer.name + "-" + customer.email,
                 };
               })}
               onSelect={handleCustomerSelect}
-              onFocus={() => {
-                // console.log("This function is called when is focussed");
-              }}
-              onChange={(value) => console.log(value)}
               autoFocus
               leftIcon={<BiUserCircle />}
               inputBorderColor="#002a54"
@@ -78,8 +74,7 @@ function AddCustomerOrProduct() {
           data={items.AllStockLevels.map((item) => {
             return {
               key: item.id,
-              value: item.item.name + "-" + item.expiryDate,
-              name: item.name + "-" + item.description,
+              value: [item.item.name, " | ", item.expiryDate, " | Rs.", item.sellingPrice, " | ", item.item.itemCode],
               item: item,
             };
           })}

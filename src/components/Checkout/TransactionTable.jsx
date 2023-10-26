@@ -1,13 +1,30 @@
+import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faEllipsisH, faEye, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import { faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { Card, Button, Table, Dropdown, ButtonGroup } from "react-bootstrap";
 import PropTypes from "prop-types";
-import { useSelector } from "react-redux";
-
+import { useSelector, useDispatch } from "react-redux";
+import { removeSalesItem, updateQuantity } from "../../state/reducers/checkout";
 export function TransactionsTable() {
   const transactions = useSelector((state) => state.checkout.salesItemsInput);
+  const dispatch = useDispatch();
 
   const TableRow = (props) => {
+    const [quantity, setQuantity] = useState(props.quantity);
+
+    const handleQuantityChange = (e) => {
+      const newQuantity = parseInt(e.target.value, 10);
+
+      // Dispatch the updateQuantity action to update the quantity in the Redux store
+      dispatch(updateQuantity({ stockLevelId: props.stockLevelId, quantity: newQuantity }));
+      setQuantity(newQuantity);
+    };
+
+    const handleDeleteClick = () => {
+      // Remove the item from the Redux store
+      dispatch(removeSalesItem({ stockLevelId: props.stockLevelId }));
+    };
+
     return (
       <tr>
         <td>
@@ -20,31 +37,15 @@ export function TransactionsTable() {
           <span className="fw-normal">Rs. {props.item.item.sellingPrice}</span>
         </td>
         <td>
-          <span className="fw-normal">{props.quantity}</span>
-        </td>
-
-        <td>
-          <span className="fw-normal">Rs. {props.item.item.sellingPrice * props.quantity}</span>
+          <input type="number" value={quantity} onChange={handleQuantityChange} className="fw-normal" />
         </td>
         <td>
-          <Dropdown as={ButtonGroup}>
-            <Dropdown.Toggle as={Button} split variant="link" className="text-dark m-0 p-0">
-              <span>
-                <FontAwesomeIcon icon={faEllipsisH} className="icon-dark" />
-              </span>
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Dropdown.Item>
-                <FontAwesomeIcon icon={faEye} className="me-2" /> View Details
-              </Dropdown.Item>
-              <Dropdown.Item>
-                <FontAwesomeIcon icon={faEdit} className="me-2" /> Edit
-              </Dropdown.Item>
-              <Dropdown.Item className="text-danger">
-                <FontAwesomeIcon icon={faTrashAlt} className="me-2" /> Remove
-              </Dropdown.Item>
-            </Dropdown.Menu>
-          </Dropdown>
+          <span className="fw-normal">Rs. {props.item.item.sellingPrice * quantity}</span>
+        </td>
+        <td>
+          <Button variant="danger" size="sm" className="mx-1" onClick={handleDeleteClick}>
+            Delete
+          </Button>
         </td>
       </tr>
     );

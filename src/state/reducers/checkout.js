@@ -26,6 +26,17 @@ const checkoutSlice = createSlice({
         state.salesItemsInput.splice(itemIndex, 1);
       }
     },
+    updateQuantity: (state, action) => {
+      const { stockLevelId, quantity } = action.payload;
+      const item = state.salesItemsInput.find((item) => item.stockLevelId === stockLevelId);
+      if (item) {
+        // Update the quantity of the item
+        item.quantity = quantity;
+
+        // Recalculate the total based on the updated quantities
+        state.total = state.salesItemsInput.reduce((acc, curr) => acc + curr.item.item.sellingPrice * curr.quantity, 0);
+      }
+    },
     setTotal: (state, action) => {
       state.total = action.payload;
     },
@@ -42,6 +53,6 @@ const checkoutSlice = createSlice({
   },
 });
 
-export const { setCustomerId, addSalesItem, removeSalesItem, setTotal, setPaymentType, resetCheckout } = checkoutSlice.actions;
+export const { setCustomerId, addSalesItem, removeSalesItem, setTotal, setPaymentType, resetCheckout, updateQuantity } = checkoutSlice.actions;
 
 export default checkoutSlice.reducer;

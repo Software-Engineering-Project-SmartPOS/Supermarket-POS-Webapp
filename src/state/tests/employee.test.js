@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { fetchEmployees, addEmployee, initialState } from "../reducers/employee";
 import employeeReducer from "../reducers/employee";
-import client from "../../ApolloClient";
+import client from "../../utils/ApolloClient";
 
 describe("employee slice", () => {
   let store;

@@ -77,13 +77,7 @@ export default function SignIn() {
                           {touched.password && errors.password && <div className="text-danger">{errors.password}</div>}
                         </Form.Group>
                         <div className="d-flex justify-content-between align-items-center mb-4">
-                          <Form.Check type="checkbox">
-                            <FormCheck.Input id="defaultCheck5" className="me-2" />
-                            <FormCheck.Label htmlFor="defaultCheck5" className="mb-0">
-                              Remember me
-                            </FormCheck.Label>
-                          </Form.Check>
-                          <Card.Link className="small text-end">Lost password?</Card.Link>
+                          {/* <Card.Link className="small text-end">Lost password?</Card.Link> */}
                         </div>
                       </Form.Group>
                       {isLoading ? ( // Conditionally render loading icon or submit button
