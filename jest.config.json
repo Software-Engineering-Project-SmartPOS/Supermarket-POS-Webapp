@@ -1,5 +1,7 @@
 {
   "collectCoverage": true,
+  "collectCoverageFrom": ["src/**/*.{js,jsx,mjs}"],
+  "coverageDirectory": "coverage",
   "moduleFileExtensions": ["js", "mjs", "jsx"],
   "transform": {
     "^.+\\.js$": "babel-jest",
