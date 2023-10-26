@@ -4,7 +4,7 @@ export const initialState = {
   isSideBarOpen: false,
   selectedTab: {
     mainTab: "Sales",
-    nestedTab: "Receipts",
+    nestedTab: "Checkout",
   },
   activeTab: null,
 };

@@ -76,9 +76,6 @@ const StockList = () => {
     <Container>
       <div className="title d-flex justify-content-between pe-2">
         <h3>Stocks List</h3>
-        <Button variant="success" size="sm" onClick={() => navigate("/add-stock")}>
-          Add Stock
-        </Button>
       </div>
       <div className="search-box">
         <Form.Group>
@@ -100,7 +97,7 @@ const StockList = () => {
                 <th onClick={() => handleSort("stallQuantity")}>Stall Quantity {renderSortIcons("stallQuantity")}</th>
                 <th onClick={() => handleSort("sellingPrice")}>Selling Price {renderSortIcons("sellingPrice")}</th>
                 <th onClick={() => handleSort("branch.name")}>Branch {renderSortIcons("branch.name")}</th>
-                <th className="text-center">Actions</th>
+                {/* <th className="text-center">Actions</th> */}
               </tr>
             </thead>
             <tbody>
@@ -114,16 +111,16 @@ const StockList = () => {
                     <td>{stock.expiryDate}</td>
                     <td>{stock.inventoryQuantity}</td>
                     <td>{stock.stallQuantity}</td>
-                    <td>{stock.sellingPrice}</td>
+                    <td>Rs. {stock.sellingPrice}</td>
                     <td>{stock.branch.name}</td>
-                    <td className="text-center">
+                    {/* <td className="text-center">
                       <Button variant="info" size="sm" className="mx-1" onClick={() => navigate(`/edit-stock/${stock.id}`)}>
                         Edit
                       </Button>
                       <Button variant="danger" size="sm" className="mx-1">
                         Delete
                       </Button>
-                    </td>
+                    </td> */}
                   </tr>
                 ))
               ) : (
