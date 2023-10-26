@@ -4,11 +4,13 @@ import PathConstants from "../../../constants/pathConstants";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_CATEGORIES } from "../../../graphql/items";
 import Skeleton from "react-loading-skeleton";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import DeleteModal from "../../../components/DeleteModal";
 
 const Categories = () => {
   const navigate = useNavigate();
   const { loading, data, error, refetch } = useQuery(GET_ALL_CATEGORIES);
+  const [show, setShow] = useState(false);
   useEffect(() => {
     refetch();
   }, [refetch]);
@@ -55,7 +57,7 @@ const Categories = () => {
                       >
                         Edit
                       </Button>
-                      <Button variant="danger" size="sm" className="mx-1">
+                      <Button variant="danger" size="sm" className="mx-1" onClick={() => setShow(true)}>
                         Delete
                       </Button>
                     </td>
@@ -66,6 +68,7 @@ const Categories = () => {
           </Table>
         </Card.Body>
       </Card>
+      <DeleteModal show={show} onClose={() => setShow(false)} message={"Category"} />
     </Container>
   );
 };

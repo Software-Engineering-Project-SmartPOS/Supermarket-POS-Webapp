@@ -5,6 +5,7 @@ import PathConstants from "../../../constants/pathConstants";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCustomers } from "../../../state/reducers/customer";
 import Skeleton from "react-loading-skeleton";
+import DeleteModal from "../../../components/DeleteModal";
 
 const CustomerList = () => {
   const dispatch = useDispatch();
@@ -16,6 +17,8 @@ const CustomerList = () => {
   const { customers, loading, error } = useSelector((state) => state.customer);
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredCustomers, setFilteredCustomers] = useState([]);
+  const [show, setShow] = useState(false);
+
   if (loading) return <Skeleton count={20} />;
   // Function to handle search
   const handleSearch = (e) => {
@@ -60,9 +63,9 @@ const CustomerList = () => {
                 <th>Contacts</th>
                 <th>First Visit</th>
                 <th>Last Visit</th>
-                <th className="text-right">Total Visits</th>
+                {/* <th className="text-right">Total Visits</th>
                 <th className="text-right">Total Spent</th>
-                <th className="text-right">Points Balance</th>
+                <th className="text-right">Points Balance</th> */}
                 <th className="text-center">Actions</th>
               </tr>
             </thead>
@@ -78,9 +81,9 @@ const CustomerList = () => {
                   <td>{customer.telephone}</td>
                   <td>{customer.firstVisited}</td>
                   <td>{customer.lastVisited}</td>
-                  <td className="text-right">{customer.totalVisits}</td>
+                  {/* <td className="text-right">{customer.totalVisits}</td>
                   <td className="text-right">{customer.totalSpent}</td>
-                  <td className="text-right">{customer.pointsBalance}</td>
+                  <td className="text-right">{customer.pointsBalance}</td> */}
                   <td className="text-center">
                     <Button
                       variant="info"
@@ -92,7 +95,7 @@ const CustomerList = () => {
                     >
                       Edit
                     </Button>
-                    <Button variant="danger" size="sm" className="mx-1">
+                    <Button variant="danger" size="sm" className="mx-1" onClick={() => setShow(true)}>
                       Delete
                     </Button>
                   </td>
@@ -102,6 +105,7 @@ const CustomerList = () => {
           </Table>
         </Card.Body>
       </Card>
+      <DeleteModal show={show} onClose={() => setShow(false)} message={"customer"} />
     </Container>
   );
 };

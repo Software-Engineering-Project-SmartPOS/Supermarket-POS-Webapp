@@ -4,11 +4,13 @@ import PathConstants from "../../../constants/pathConstants";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_SUPPLIERS } from "../../../graphql/inventory";
 import Skeleton from "react-loading-skeleton";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import DeleteModal from "../../../components/DeleteModal";
 
 const Suppliers = () => {
   const navigate = useNavigate();
   const { data, loading, error, refetch } = useQuery(GET_ALL_SUPPLIERS);
+  const [show, setShow] = useState(false);
   useEffect(() => {
     refetch();
   }, [refetch]);
@@ -60,7 +62,7 @@ const Suppliers = () => {
                       >
                         Edit
                       </Button>
-                      <Button variant="danger" size="sm" className="mx-1">
+                      <Button variant="danger" size="sm" className="mx-1" onClick={() => setShow(true)}>
                         Delete
                       </Button>
                     </td>
@@ -71,6 +73,7 @@ const Suppliers = () => {
           </Table>
         </Card.Body>
       </Card>
+      <DeleteModal show={show} onClose={() => setShow(false)} message={"Supplier"} />
     </Container>
   );
 };

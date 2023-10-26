@@ -90,7 +90,7 @@ const PurchaseOrders = () => {
                   <td>{order.expectedDate}</td>
                   <td>Rs. {order.purchaseCost}</td>
                   <td className="text-center">
-                    <Button
+                    {/* <Button
                       variant="info"
                       size="sm"
                       className="mx-1"
@@ -99,7 +99,7 @@ const PurchaseOrders = () => {
                       }}
                     >
                       Edit
-                    </Button>
+                    </Button> */}
                     <Button
                       variant="success"
                       size="sm"

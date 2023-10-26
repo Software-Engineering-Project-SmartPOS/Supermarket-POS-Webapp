@@ -4,10 +4,14 @@ import PathConstants from "../../../constants/pathConstants";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_LOYALTY_PROGRAMS } from "../../../graphql/customers";
 import Skeleton from "react-loading-skeleton";
+import DeleteModal from "../../../components/DeleteModal";
+import { useState } from "react";
 
 const LoyaltyProgramList = () => {
   const navigate = useNavigate();
   const { loading, data, error } = useQuery(GET_ALL_LOYALTY_PROGRAMS);
+  const [show, setShow] = useState(false);
+
   const handlEditLoyaltyProgram = (program) => {
     navigate("/" + PathConstants.EDIT_LOYALTY_PROGRAM, { state: { program } });
   };
@@ -57,7 +61,7 @@ const LoyaltyProgramList = () => {
                     >
                       Edit
                     </Button>
-                    <Button variant="danger" size="sm" className="mx-1">
+                    <Button variant="danger" size="sm" className="mx-1" onClick={() => setShow(true)}>
                       Delete
                     </Button>
                   </td>
@@ -67,6 +71,7 @@ const LoyaltyProgramList = () => {
           </Table>
         </Card.Body>
       </Card>
+      <DeleteModal show={show} onClose={() => setShow(false)} message={"loyalty program"} />
     </Container>
   );
 };

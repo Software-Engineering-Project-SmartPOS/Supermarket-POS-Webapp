@@ -5,12 +5,14 @@ import { useQuery } from "@apollo/client";
 import PathConstants from "../../../constants/pathConstants";
 import { GET_ALL_ITEMS } from "../../../graphql/items";
 import Skeleton from "react-loading-skeleton";
+import DeleteModal from "../../../components/DeleteModal";
 
 const ItemList = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const { data: itemData, loading, error } = useQuery(GET_ALL_ITEMS);
   const [filteredItems, setFilteredItems] = useState([]);
+  const [show, setShow] = useState(false);
 
   // Function to handle search
   const handleSearch = (e) => {
@@ -80,7 +82,7 @@ const ItemList = () => {
                       >
                         Edit
                       </Button>
-                      <Button variant="danger" size="sm" className="mx-1">
+                      <Button variant="danger" size="sm" className="mx-1" onClick={() => setShow(true)}>
                         Delete
                       </Button>
                     </td>
@@ -97,6 +99,7 @@ const ItemList = () => {
           </Table>
         </Card.Body>
       </Card>
+      <DeleteModal show={show} onClose={() => setShow(false)} message={"Item"} />
     </Container>
   );
 };

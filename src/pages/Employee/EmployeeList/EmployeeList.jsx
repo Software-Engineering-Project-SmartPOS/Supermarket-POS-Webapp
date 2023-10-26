@@ -5,6 +5,7 @@ import PathConstants from "../../../constants/pathConstants";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchEmployees } from "../../../state/reducers/employee";
 import Skeleton from "react-loading-skeleton";
+import DeleteModal from "../../../components/DeleteModal";
 
 const EmployeeList = () => {
   const dispatch = useDispatch();
@@ -12,6 +13,7 @@ const EmployeeList = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const { employees, loading, error } = useSelector((state) => state.employee);
   const [filteredEmployees, setFilteredEmployees] = useState([]);
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     dispatch(fetchEmployees());
@@ -83,7 +85,7 @@ const EmployeeList = () => {
                       >
                         Edit
                       </Button>
-                      <Button variant="danger" size="sm" className="mx-1">
+                      <Button variant="danger" size="sm" className="mx-1" onClick={() => setShow(true)}>
                         Delete
                       </Button>
                     </td>
@@ -100,6 +102,7 @@ const EmployeeList = () => {
           </Table>
         </Card.Body>
       </Card>
+      <DeleteModal show={show} onClose={() => setShow(false)} message={"Employee"} />
     </Container>
   );
 };

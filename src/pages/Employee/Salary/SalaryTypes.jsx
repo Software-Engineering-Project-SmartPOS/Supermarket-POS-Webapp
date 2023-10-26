@@ -4,11 +4,14 @@ import PathConstants from "../../../constants/pathConstants";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_SALARY_TYPES } from "../../../graphql/employees";
 import Skeleton from "react-loading-skeleton";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import DeleteModal from "../../../components/DeleteModal";
 
 const SalaryTypes = () => {
   const navigate = useNavigate();
   const { loading, data, error, refetch } = useQuery(GET_ALL_SALARY_TYPES);
+  const [show, setShow] = useState(false);
+
   useEffect(() => {
     refetch();
   }, [refetch]);
@@ -54,7 +57,7 @@ const SalaryTypes = () => {
                       >
                         Edit
                       </Button>
-                      <Button variant="danger" size="sm" className="mx-1">
+                      <Button variant="danger" size="sm" className="mx-1" onClick={() => setShow(true)}>
                         Delete
                       </Button>
                     </td>
@@ -71,6 +74,7 @@ const SalaryTypes = () => {
           </Table>
         </Card.Body>
       </Card>
+      <DeleteModal show={show} onClose={() => setShow(false)} message={"Salary Type"} />
     </Container>
   );
 };
