@@ -135,7 +135,7 @@ export default function SideBar() {
           <SideBarTab mainTab="Account" reactIcon={<FaStore />} nestedTabs={["Stores"]} />
           <SideBarTab mainTab="Sales" reactIcon={<MdOutlineShoppingCartCheckout />} nestedTabs={["Checkout"]} />
           <SideBarTab mainTab="Customers" reactIcon={<FaUsers />} nestedTabs={["Customer List", "Loyalty Programs"]} />
-          <SideBarTab mainTab="Employees" reactIcon={<FaAddressCard />} nestedTabs={["Employee List", "Salary Types"]} />
+          <SideBarTab mainTab="Employees" reactIcon={<FaAddressCard />} nestedTabs={["Employee List", "Salary Types", "Timecards"]} />
           <SideBarTab mainTab="Items" reactIcon={<FaShoppingBasket />} nestedTabs={["Item List", "Categories", "Brands"]} />
           <SideBarTab
             mainTab="Inventory Management"

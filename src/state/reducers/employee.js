@@ -1,6 +1,6 @@
 import { GET_ALL_EMPLOYEES } from "../../graphql/employees";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import client from "../../ApolloClient";
+import client from "../../utils/ApolloClient";
 
 export const fetchEmployees = createAsyncThunk("employee/fetchEmployees", async () => {
   const { data } = await client.query({

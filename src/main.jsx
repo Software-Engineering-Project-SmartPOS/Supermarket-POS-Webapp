@@ -5,7 +5,7 @@ import App from "./App.jsx";
 import "./index.css";
 import { Provider } from "react-redux";
 import store from "./state/store.js";
-import client from "./ApolloClient.js";
+import client from "./utils/ApolloClient";
 import { ApolloProvider } from "@apollo/client";
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file

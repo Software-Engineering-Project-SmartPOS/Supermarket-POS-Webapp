@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import client from "../../ApolloClient";
+import client from "../../utils/ApolloClient";
 import { GET_ALL_SALARY_TYPES } from "../../graphql/employees";
 
 export const fetchSalaryTypes = createAsyncThunk("salaryTypes/fetchSalaryTypes", async () => {
