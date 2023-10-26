@@ -88,7 +88,7 @@ const PurchaseOrders = () => {
                   <td>{order.orderStatus}</td>
                   <td>{calculateReceivedProgress(order)}</td>
                   <td>{order.expectedDate}</td>
-                  <td>Rs. {order. }</td>
+                  <td>Rs. {order.purchaseCost}</td>
                   <td className="text-center">
                     {/* <Button
                       variant="info"
