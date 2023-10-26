@@ -11,10 +11,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { resetCheckout } from "../../state/reducers/checkout";
 const Payment = () => {
-  const [paymentMethod, setPaymentMethod] = useState();
+  const [paymentMethod, setPaymentMethod] = useState("cash");
   const [showModal, setShowModal] = useState(false);
   const [amountReceived, setAmountReceived] = useState("");
   const { customerId, salesItemsInput, paymentType } = useSelector((state) => state.checkout);
+  console.log(salesItemsInput);
   const dispatch = useDispatch();
   const [createSales, { loading }] = useMutation(CREATE_SALE);
 
@@ -44,7 +45,6 @@ const Payment = () => {
   };
 
   const handleDelete = () => {
-    setPaymentMethod("");
     setShowModal(true);
   };
 
@@ -74,7 +74,7 @@ const Payment = () => {
 
   return (
     <Col>
-      <Row className="p-1">
+      {/* <Row className="p-1">
         <span className={`pay-icon ${paymentMethod === "cash" ? "active" : ""}`} onClick={() => handlePaymentMethodClick("cash")}>
           <BsCash />
           <h5>Cash</h5>
@@ -91,7 +91,7 @@ const Payment = () => {
           <MdBookOnline />
           <h5>Online Payment</h5>
         </span>
-      </Row>
+      </Row> */}
       {/* full width checkout button */}
       <Row className="p-2">
         <Button variant="danger" size="lg" onClick={handleDelete}>
@@ -99,7 +99,7 @@ const Payment = () => {
         </Button>
       </Row>
       <Row className="p-2">
-        <Button variant="success" size="lg" disabled={!paymentMethod} onClick={handleChargeClick}>
+        <Button variant="success" size="lg" disabled={salesItemsInput.length === 0} onClick={handleChargeClick}>
           {paymentMethod ? `Charge` : "Select Payment Method"}
         </Button>
       </Row>

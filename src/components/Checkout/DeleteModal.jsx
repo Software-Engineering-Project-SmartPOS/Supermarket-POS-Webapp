@@ -1,14 +1,13 @@
 import { useState } from "react";
+import { resetCheckout } from "../../state/reducers/checkout";
+import { useDispatch } from "react-redux";
 
 const DeleteModal = ({ show, onHide, onCharge }) => {
   const [amountReceived, setAmountReceived] = useState("");
-
-  const handleAmountReceivedChange = (event) => {
-    setAmountReceived(event.target.value);
-  };
-
-  const handleChargeConfirm = () => {
-    onCharge(amountReceived);
+  const dispatch = useDispatch();
+  const handleDelete = () => {
+    dispatch(resetCheckout());
+    onHide();
   };
 
   return (
@@ -27,7 +26,7 @@ const DeleteModal = ({ show, onHide, onCharge }) => {
               <button type="button" className="btn btn-secondary" onClick={onHide}>
                 Cancel
               </button>
-              <button type="button" className="btn btn-success" onClick={handleChargeConfirm}>
+              <button type="button" className="btn btn-success" onClick={handleDelete}>
                 Yes
               </button>
             </div>
