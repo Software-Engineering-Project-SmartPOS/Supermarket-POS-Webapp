@@ -79,6 +79,12 @@ export const UPDATE_ITEM_SUPPLY = gql`
   }
 `;
 
+export const DELETE_ITEM_SUPPLY = gql`
+  mutation DeleteItemSupply($itemSupplyId: ID!) {
+    DeleteItemSupply(id: $itemSupplyId)
+  }
+`;
+
 export const GET_ACTIVE_ITEM_SUPPLIES_BY_SUPPLIER_ID = gql`
   query GetActiveItemSuppliesBySupplierId($supplierId: ID!) {
     GetActiveItemSuppliesBySupplierId(supplierId: $supplierId) {

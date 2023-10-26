@@ -1,12 +1,18 @@
 import React, { useState } from "react";
 import { Container, Table, Button, Card, Form, Alert } from "react-bootstrap";
 import Skeleton from "react-loading-skeleton";
-import { useQuery, useLazyQuery } from "@apollo/client";
-import { GET_ACTIVE_ITEM_SUPPLIES_BY_ITEM_ID, GET_ACTIVE_ITEM_SUPPLIES_BY_SUPPLIER_ID, GET_ALL_SUPPLIERS } from "../../../graphql/inventory";
+import { useQuery, useLazyQuery, useMutation } from "@apollo/client";
+import {
+  DELETE_ITEM_SUPPLY,
+  GET_ACTIVE_ITEM_SUPPLIES_BY_ITEM_ID,
+  GET_ACTIVE_ITEM_SUPPLIES_BY_SUPPLIER_ID,
+  GET_ALL_SUPPLIERS,
+} from "../../../graphql/inventory";
 import { GET_ALL_ITEMS } from "../../../graphql/items";
 import { useNavigate } from "react-router";
 import PathConstants from "../../../constants/pathConstants";
-import { set } from "date-fns";
+import DeleteModal from "../../../components/DeleteModal";
+import { toast } from "react-toastify";
 
 const ItemSupply = () => {
   const [searchType, setSearchType] = useState("supplier");
@@ -17,7 +23,11 @@ const ItemSupply = () => {
   const { data: supplierData, loading: supplierLoading, error: supplierError } = useQuery(GET_ALL_SUPPLIERS);
   const navigate = useNavigate();
 
-  const [loadData, { loading }] = useLazyQuery(
+  const [show, setShow] = useState(false);
+  const [deleteItemSupply, { loading: delLoading }] = useMutation(DELETE_ITEM_SUPPLY);
+  const [itemSupplyId, setItemSupplyId] = useState(null);
+
+  const [loadData, { loading, refetch }] = useLazyQuery(
     searchType === "supplier" ? GET_ACTIVE_ITEM_SUPPLIES_BY_SUPPLIER_ID : GET_ACTIVE_ITEM_SUPPLIES_BY_ITEM_ID
   );
 
@@ -39,6 +49,16 @@ const ItemSupply = () => {
         }
       })
       .finally(() => {});
+  };
+
+  const handleDeleteItemSupply = (itemSupplyId) => {
+    deleteItemSupply({ variables: { itemSupplyId: itemSupplyId } }).then((res) => {
+      setShow(false);
+      if (res.data.DeleteItemSupply) {
+        toast.success("Item supply deleted successfully");
+        refetch();
+      } else toast.error("This item supply cannot be deleted");
+    });
   };
 
   if (itemLoading || supplierLoading) return <Skeleton count={5} />;
@@ -161,7 +181,15 @@ const ItemSupply = () => {
                       >
                         Edit
                       </Button>
-                      <Button variant="danger" size="sm" className="mx-1">
+                      <Button
+                        variant="danger"
+                        size="sm"
+                        className="mx-1"
+                        onClick={() => {
+                          setShow(true);
+                          setItemSupplyId(result.id);
+                        }}
+                      >
                         Delete
                       </Button>
                     </td>
@@ -172,6 +200,13 @@ const ItemSupply = () => {
           </Table>
         </Card.Body>
       </Card>
+      <DeleteModal
+        show={show}
+        onClose={() => setShow(false)}
+        handleYes={() => handleDeleteItemSupply(searchId)}
+        message={"itemsupply"}
+        loading={delLoading}
+      />
     </Container>
   );
 };

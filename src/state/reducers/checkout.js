@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 // Define the initial state
 export const initialState = {
+  selectedCustomer: null,
   customerId: null,
   salesItemsInput: [],
   total: 0.0,
@@ -16,7 +17,6 @@ const checkoutSlice = createSlice({
       state.customerId = action.payload;
     },
     addSalesItem: (state, action) => {
-      console.log(action.payload.item.item.sellingPrice);
       state.salesItemsInput.push(action.payload);
       state.total += action.payload.item.item.sellingPrice;
     },
@@ -43,6 +43,11 @@ const checkoutSlice = createSlice({
     setPaymentType: (state, action) => {
       state.paymentType = action.payload;
     },
+
+    setSelectedCustomer: (state, action) => {
+      state.selectedCustomer = action.payload;
+    },
+
     resetCheckout: (state) => {
       state.barcodeNo = "";
       state.customerId = null;
@@ -53,6 +58,7 @@ const checkoutSlice = createSlice({
   },
 });
 
-export const { setCustomerId, addSalesItem, removeSalesItem, setTotal, setPaymentType, resetCheckout, updateQuantity } = checkoutSlice.actions;
+export const { setCustomerId, addSalesItem, removeSalesItem, setTotal, setPaymentType, resetCheckout, updateQuantity, setSelectedCustomer } =
+  checkoutSlice.actions;
 
 export default checkoutSlice.reducer;

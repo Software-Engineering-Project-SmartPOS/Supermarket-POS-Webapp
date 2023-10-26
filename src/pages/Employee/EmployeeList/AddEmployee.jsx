@@ -91,7 +91,7 @@ export default function AddEmployee() {
     }).then((res) => {
       console.log(res);
       toast.success("Employee added successfully");
-      resetForm();
+      // resetForm();
     });
   };
 

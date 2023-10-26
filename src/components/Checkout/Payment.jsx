@@ -5,10 +5,18 @@ import { MdBookOnline } from "react-icons/md";
 import PaymentModal from "./PaymentModal";
 import GiftCardModal from "./GiftCardModal";
 import DeleteModal from "./DeleteModal";
+import { CREATE_SALE } from "../../graphql/sales";
+import { useMutation } from "@apollo/client";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { resetCheckout } from "../../state/reducers/checkout";
 const Payment = () => {
   const [paymentMethod, setPaymentMethod] = useState();
   const [showModal, setShowModal] = useState(false);
   const [amountReceived, setAmountReceived] = useState("");
+  const { customerId, salesItemsInput, paymentType } = useSelector((state) => state.checkout);
+  const dispatch = useDispatch();
+  const [createSales, { loading }] = useMutation(CREATE_SALE);
 
   const handlePaymentMethodClick = (method) => {
     if (paymentMethod === method) {
@@ -31,14 +39,37 @@ const Payment = () => {
   };
 
   const handleChargeConfirm = (amount) => {
-    // Perform the charge operation here and use the "amount" parameter
-    // For now, just close the modal
     setShowModal(false);
+    createSale();
   };
 
   const handleDelete = () => {
     setPaymentMethod("");
     setShowModal(true);
+  };
+
+  const createSale = () => {
+    // Prepare the salesInput object for the mutation
+    const salesInput = {
+      customerId,
+      salesItemsInput: salesItemsInput.map((item) => ({
+        stockLevelId: item.stockLevelId,
+        quantity: item.quantity,
+      })),
+      paymentType,
+    };
+
+    // Execute the mutation
+    createSales({
+      variables: { salesInput },
+    })
+      .then((result) => {
+        toast.success("Sale created successfully");
+        dispatch(resetCheckout());
+      })
+      .catch((error) => {
+        toast.error("Error creating sale");
+      });
   };
 
   return (

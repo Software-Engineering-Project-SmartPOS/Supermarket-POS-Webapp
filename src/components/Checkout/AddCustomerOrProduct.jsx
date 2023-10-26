@@ -6,28 +6,28 @@ import ReactSearchBox from "react-search-box";
 import ProfileImg from "../../assets/img/profile.png";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_CUSTOMERS } from "../../graphql/customers";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { GET_ALL_STOCK_LEVELS } from "../../graphql/inventory";
-import { addSalesItem } from "../../state/reducers/checkout";
+import { addSalesItem, setCustomerId, setSelectedCustomer } from "../../state/reducers/checkout";
 
 function AddCustomerOrProduct() {
   const dispatch = useDispatch();
   const { data: customers, loading: loadingCustomers, error: errorCustomers } = useQuery(GET_ALL_CUSTOMERS);
   const { data: items, loading: loadingItems, error: errorItems } = useQuery(GET_ALL_STOCK_LEVELS);
+  const { selectedCustomer } = useSelector((state) => state.checkout);
 
-  const [selectedCustomer, setSelectedCustomer] = useState(null);
   if (loadingCustomers || loadingItems) return <p>Loading...</p>;
   if (errorCustomers || errorItems) return <p>Error :</p>;
 
   // Function to handle customer selection
   const handleCustomerSelect = (record) => {
-    // Set the selected customer when a customer is selected
-    setSelectedCustomer(record.item.name);
+    dispatch(setSelectedCustomer(record.item.name));
+    dispatch(setCustomerId(record.item.key));
   };
 
   // Function to clear the selected customer
   const clearSelectedCustomer = () => {
-    setSelectedCustomer(null);
+    dispatch(setSelectedCustomer(null));
   };
 
   return (
@@ -79,16 +79,14 @@ function AddCustomerOrProduct() {
             };
           })}
           onSelect={(record) => {
+            console.log(record);
             dispatch(
               addSalesItem({
                 item: record.item,
-                stockLevelId: record.item.id,
+                stockLevelId: record.item.item.id,
                 quantity: 1,
               })
             );
-          }}
-          onFocus={() => {
-            console.log("This function is called when is focussed");
           }}
           onChange={(value) => console.log(value)}
           clearOnSelect
