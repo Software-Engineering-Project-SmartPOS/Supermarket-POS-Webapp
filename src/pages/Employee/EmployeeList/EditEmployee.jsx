@@ -12,7 +12,7 @@ import {
   faHome,
   faLock,
 } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import PathConstants from "../../../constants/pathConstants";
@@ -21,31 +21,29 @@ import { ADD_EMPLOYEE, GET_ALL_SALARY_TYPES } from "../../../graphql/employees";
 import { GET_ALL_BRANCHES } from "../../../graphql/branch";
 import { toast } from "react-toastify";
 
-export default function AddEmployee() {
+export default function EditEmployee() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const employee = location.state.employee;
   const { data } = useQuery(GET_ALL_SALARY_TYPES);
-  const [addEmployee, { loading, error }] = useMutation(ADD_EMPLOYEE);
-  if (error) {
-    console.log(error);
-    toast.error("Error adding employee");
-  }
   const { data: branchData } = useQuery(GET_ALL_BRANCHES);
+  const [addEmployee, { loading, error }] = useMutation(ADD_EMPLOYEE);
 
   const initialValues = {
-    title: "",
-    firstName: "",
-    middleName: "",
-    lastName: "",
-    email: "",
-    houseNumber: "",
-    jobRole: "",
-    salaryType: "",
-    phoneNumber: "",
-    street: "",
-    city: "",
-    district: "",
-    postalCode: "",
-    branchId: 0,
+    title: employee?.title || "",
+    firstName: employee?.firstName || "",
+    middleName: employee?.middleName || "",
+    lastName: employee?.lastName || "",
+    email: employee?.email || "",
+    jobRole: employee?.jobRole || "",
+    salaryType: employee?.salaryType?.id || "",
+    phoneNumber: employee?.number || "",
+    houseNumber: employee?.address?.houseNumber || "",
+    street: employee?.address?.street || "",
+    city: employee?.address?.city || "",
+    district: employee?.address?.district || "",
+    postalCode: employee?.address?.postalCode || "",
+    branchId: employee?.branch?.id || "",
     password: "",
   };
 
@@ -108,7 +106,7 @@ export default function AddEmployee() {
                   </button>
                 </div>
                 <div className="text-center text-md-center mt-md-0 flex-grow-1">
-                  <h3 className="mb-0">Add Employee</h3>
+                  <h3 className="mb-0">Edit Employee</h3>
                 </div>
               </div>
               <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
@@ -395,7 +393,7 @@ export default function AddEmployee() {
                       </Button>
                     ) : (
                       <Button variant="primary" type="submit" className="button w-100">
-                        Add Employee
+                        Update Employee
                       </Button>
                     )}
                   </Form>

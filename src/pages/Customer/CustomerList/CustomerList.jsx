@@ -31,9 +31,6 @@ const CustomerList = () => {
 
   // Determine the customer data to render based on search
   const displayCustomers = searchTerm.length === 0 ? customers : filteredCustomers;
-  const handleEditCusomer = () => {
-    navigate("/" + PathConstants.EDIT_CUSTOMER);
-  };
 
   const handleCustomerClick = () => {
     navigate("/" + PathConstants.PURCHASE_HISTORY);
@@ -85,7 +82,14 @@ const CustomerList = () => {
                   <td className="text-right">{customer.totalSpent}</td>
                   <td className="text-right">{customer.pointsBalance}</td>
                   <td className="text-center">
-                    <Button variant="info" size="sm" className="mx-1" onClick={handleEditCusomer}>
+                    <Button
+                      variant="info"
+                      size="sm"
+                      className="mx-1"
+                      onClick={() => {
+                        navigate(`/${PathConstants.EDIT_CUSTOMER}`, { state: { customer } });
+                      }}
+                    >
                       Edit
                     </Button>
                     <Button variant="danger" size="sm" className="mx-1">

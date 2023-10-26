@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 const BranchList = () => {
   const navigate = useNavigate();
   const { loading, data, error, refetch } = useQuery(GET_ALL_BRANCHES);
+  const [branchId, setBranchId] = useState(null);
   useEffect(() => {
     refetch();
   }, [refetch]);
@@ -81,16 +82,17 @@ const BranchList = () => {
                       >
                         Edit
                       </Button>
-                      <Button variant="danger" size="sm" className="mx-1" onClick={() => setShow(true)}>
+                      <Button
+                        variant="danger"
+                        size="sm"
+                        className="mx-1"
+                        onClick={() => {
+                          setShow(true);
+                          setBranchId(branch.id);
+                        }}
+                      >
                         Delete
                       </Button>
-                      <DeleteModal
-                        show={show}
-                        onClose={() => setShow(false)}
-                        handleYes={() => handleDeleteBranch(branch.id)}
-                        message={"branch"}
-                        loading={delLoading}
-                      />
                     </td>
                   </tr>
                 ))
@@ -105,6 +107,13 @@ const BranchList = () => {
           </Table>
         </Card.Body>
       </Card>
+      <DeleteModal
+        show={show}
+        onClose={() => setShow(false)}
+        handleYes={() => handleDeleteBranch(branchId)}
+        message={"branch"}
+        loading={delLoading}
+      />
     </Container>
   );
 };

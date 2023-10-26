@@ -1,47 +1,34 @@
-import { useState, useEffect } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faUser,
-  faEnvelope,
-  faPhone,
-  faUsers,
-  faBuilding,
-  faCity,
-  faMapMarker,
-  faLocationArrow,
-  faChevronLeft,
-} from "@fortawesome/free-solid-svg-icons";
-import { Col, Row, Form, Button, Container, InputGroup } from "react-bootstrap";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { useMutation } from "@apollo/client";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser, faEnvelope, faPhone, faUsers, faCity, faMapMarker, faLocationArrow, faHome, faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { Col, Row, Form, Button, Container, InputGroup, Spinner } from "react-bootstrap";
+import { toast } from "react-toastify";
+import { UPDATE_CUSTOMER } from "../../../graphql/customers";
 import PathConstants from "../../../constants/pathConstants";
 
 export default function EditCustomer() {
-  const { customerId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
+  const customer = location.state.customer;
+  const [updateCustomer, { loading }] = useMutation(UPDATE_CUSTOMER);
 
-  // Define a list of loyalty programs
-  const loyaltyPrograms = ["Program A", "Program B", "Program C", "Program D"];
-
-  // Sample customer data (replace with actual customer data retrieval logic)
-  const [customerData, setCustomerData] = useState({
-    name: "John Doe",
-    email: "johndoe@example.com",
-    telephone: "123-456-7890",
-    customer_type: "1",
-    loyalty_program: "Program A",
-    address: "123 Main St",
-    city: "Cityville",
-    district: "District A",
-    postal_code: "12345",
+  const [initialData, setInitialData] = useState({
+    name: "",
+    email: "",
+    telephone: "",
+    customer_type: "",
+    house_number: "",
+    address: "",
+    city: "",
+    district: "",
+    postal_code: "",
   });
-
-  // Effect to fetch customer data when the component mounts
-  useEffect(() => {
-    // Replace this with actual data retrieval logic based on customerId
-    // Example API call: fetchCustomerData(customerId).then((data) => setCustomerData(data));
-  }, [customerId]);
 
   return (
     <section className="d-flex align-items-center my-5 mt-lg-6 mb-lg-5">
@@ -50,7 +37,7 @@ export default function EditCustomer() {
           <Col xs={12} lg={6} className="d-flex align-items-center justify-content-center">
             <div className="bg-white shadow-lg border rounded border-light p-4 p-lg-5 w-100">
               <div className="d-flex">
-                <div className="text-start" onClick={() => navigate(-1)}>
+                <div className="text-start" onClick={() => navigate(`/${PathConstants.CUSTOMER_LIST}`)}>
                   <button type="button" className="btn btn-outline-primary">
                     <FontAwesomeIcon icon={faChevronLeft} /> Back
                   </button>
@@ -60,26 +47,52 @@ export default function EditCustomer() {
                 </div>
               </div>
               <Formik
-                initialValues={customerData}
+                initialValues={{
+                  name: customer.name,
+                  email: customer.email,
+                  telephone: customer.telephone,
+                  customer_type: customer.customerType,
+                  house_number: customer.houseNumber,
+                  address: customer.street,
+                  city: customer.city,
+                  district: customer.district,
+                  postal_code: customer.postalCode,
+                }}
                 validationSchema={Yup.object({
+                  // Define your validation schema
                   name: Yup.string().required("Required"),
                   email: Yup.string().email("Invalid email address"),
                   telephone: Yup.string().required("Required"),
                   customer_type: Yup.string().required("Required"),
-                  loyalty_program: Yup.string().required("Required"),
+                  house_number: Yup.string(),
                   address: Yup.string().required("Required"),
                   city: Yup.string().required("Required"),
                   district: Yup.string().required("Required"),
                   postal_code: Yup.string().required("Required"),
                 })}
                 onSubmit={(values) => {
-                  console.log(values);
-                  // Add your logic to update customer data here
-                  // After updating the customer, you can navigate to a success page or another route
-                  navigate("/" + PathConstants.CUSTOMER_LIST);
+                  updateCustomer({
+                    variables: {
+                      customerUpdateInput: {
+                        id: customer.id,
+                        name: values.name,
+                        email: values.email,
+                        telephone: values.telephone,
+                        customerType: values.customer_type,
+                        houseNumber: values.house_number,
+                        street: values.address,
+                        city: values.city,
+                        district: values.district,
+                        postalCode: values.postal_code,
+                      },
+                    },
+                  }).then((res) => {
+                    console.log(res);
+                    toast.success("Customer updated successfully!");
+                  });
                 }}
               >
-                {({ handleSubmit, handleChange, values, errors, touched }) => (
+                {({ handleSubmit, handleChange, errors, touched, values }) => (
                   <Form className="mt-4" onSubmit={handleSubmit}>
                     <Row>
                       <Col xs={12} lg={6}>
@@ -94,9 +107,9 @@ export default function EditCustomer() {
                               required
                               type="text"
                               placeholder="Enter customer name"
+                              value={values.name}
                               name="name"
                               onChange={handleChange}
-                              value={values.name}
                             />
                           </InputGroup>
                           {touched.name && errors.name && <div className="text-danger">{errors.name}</div>}
@@ -114,9 +127,9 @@ export default function EditCustomer() {
                               required
                               type="email"
                               placeholder="example@company.com"
+                              value={values.email}
                               name="email"
                               onChange={handleChange}
-                              value={values.email}
                             />
                           </InputGroup>
                           {touched.email && errors.email && <div className="text-danger">{errors.email}</div>}
@@ -134,9 +147,9 @@ export default function EditCustomer() {
                               required
                               type="text"
                               placeholder="Enter customer telephone"
+                              value={values.telephone}
                               name="telephone"
                               onChange={handleChange}
-                              value={values.telephone}
                             />
                           </InputGroup>
                           {touched.telephone && errors.telephone && <div className="text-danger">{errors.telephone}</div>}
@@ -150,11 +163,11 @@ export default function EditCustomer() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faUsers} />
                             </InputGroup.Text>
-                            <Form.Control as="select" required name="customer_type" onChange={handleChange} value={values.customer_type}>
+                            <Form.Control as="select" required value={values.customer_type} name="customer_type" onChange={handleChange}>
                               <option value="">Select customer type</option>
-                              <option value="1">Type 1</option>
-                              <option value="2">Type 2</option>
-                              <option value="3">Type 3</option>
+                              <option value="GRADE_A">GRADE_A</option>
+                              <option value="GRADE_B">GRADE_B</option>
+                              <option value="GRADE_C">GRADE_C</option>
                             </Form.Control>
                           </InputGroup>
                           {touched.customer_type && errors.customer_type && <div className="text-danger">{errors.customer_type}</div>}
@@ -163,23 +176,42 @@ export default function EditCustomer() {
                     </Row>
 
                     <Row>
-                      <Col xs={12} lg={6}>
-                        <Form.Group id="loyalty_program" className="mb-4">
-                          <Form.Label>Loyalty Program</Form.Label>
+                      {/* <Col xs={12} lg={6}>
+                       <Form.Group id="loyalty_program" className="mb-4">
+                         <Form.Label>Loyalty Program</Form.Label>
+                         <InputGroup>
+                           <InputGroup.Text>
+                             <FontAwesomeIcon icon={faBuilding} />
+                           </InputGroup.Text>
+                           <Form.Control as="select" required name="loyalty_program" onChange={handleChange}>
+                             <option value="">Select loyalty program</option>
+                             {data?.getAllLoyaltyPrograms.map((program, index) => (
+                               <option key={index} value={program.loyaltyProgramName}>
+                                 {program.loyaltyProgramName}
+                               </option>
+                             ))}
+                           </Form.Control>
+                         </InputGroup>
+                         {touched.loyalty_program && errors.loyalty_program && <div className="text-danger">{errors.loyalty_program}</div>}
+                       </Form.Group>
+                     </Col> */}
+
+                      <Col xs={12} lg={4}>
+                        <Form.Group controlId="houseNumber" className="mb-4">
+                          <Form.Label>House Number</Form.Label>
                           <InputGroup>
                             <InputGroup.Text>
-                              <FontAwesomeIcon icon={faBuilding} />
+                              <FontAwesomeIcon icon={faHome} />
                             </InputGroup.Text>
-                            <Form.Control as="select" required name="loyalty_program" onChange={handleChange} value={values.loyalty_program}>
-                              <option value="">Select loyalty program</option>
-                              {loyaltyPrograms.map((program, index) => (
-                                <option key={index} value={program}>
-                                  {program}
-                                </option>
-                              ))}
-                            </Form.Control>
+                            <Form.Control
+                              type="text"
+                              name="houseNumber"
+                              placeholder="Enter House Number"
+                              value={values.house_number}
+                              onChange={handleChange}
+                            />
                           </InputGroup>
-                          {touched.loyalty_program && errors.loyalty_program && <div className="text-danger">{errors.loyalty_program}</div>}
+                          {touched.houseNumber && errors.houseNumber && <div className="text-danger">{errors.houseNumber}</div>}
                         </Form.Group>
                       </Col>
 
@@ -194,9 +226,9 @@ export default function EditCustomer() {
                               required
                               type="text"
                               placeholder="Enter customer address"
+                              value={values.address}
                               name="address"
                               onChange={handleChange}
-                              value={values.address}
                             />
                           </InputGroup>
                           {touched.address && errors.address && <div className="text-danger">{errors.address}</div>}
@@ -210,7 +242,7 @@ export default function EditCustomer() {
                             <InputGroup.Text>
                               <FontAwesomeIcon icon={faMapMarker} />
                             </InputGroup.Text>
-                            <Form.Control required type="text" placeholder="Enter city" name="city" onChange={handleChange} value={values.city} />
+                            <Form.Control required type="text" placeholder="Enter city" value={values.city} name="city" onChange={handleChange} />
                           </InputGroup>
                           {touched.city && errors.city && <div className="text-danger">{errors.city}</div>}
                         </Form.Group>
@@ -227,9 +259,9 @@ export default function EditCustomer() {
                               required
                               type="text"
                               placeholder="Enter district"
+                              value={values.district}
                               name="district"
                               onChange={handleChange}
-                              value={values.district}
                             />
                           </InputGroup>
                           {touched.district && errors.district && <div className="text-danger">{errors.district}</div>}
@@ -247,9 +279,9 @@ export default function EditCustomer() {
                               required
                               type="text"
                               placeholder="Enter postal code"
-                              name="postal_code"
-                              onChange={values.postal_code}
                               value={values.postal_code}
+                              name="postal_code"
+                              onChange={handleChange}
                             />
                           </InputGroup>
                           {touched.postal_code && errors.postal_code && <div className="text-danger">{errors.postal_code}</div>}
@@ -257,9 +289,16 @@ export default function EditCustomer() {
                       </Col>
                     </Row>
 
-                    <Button variant="primary" type="submit" className="button w-100">
-                      Update Customer
-                    </Button>
+                    {loading ? (
+                      <Button variant="primary" type="submit" className="button w-100" disabled>
+                        <Spinner animation="border" size="sm" className="me-2" />
+                        Loading...
+                      </Button>
+                    ) : (
+                      <Button variant="primary" type="submit" className="button w-100">
+                        Update Customer
+                      </Button>
+                    )}
                   </Form>
                 )}
               </Formik>

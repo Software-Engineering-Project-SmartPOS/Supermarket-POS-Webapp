@@ -45,6 +45,16 @@ export const ADD_CUSTOMER = gql`
   }
 `;
 
+export const UPDATE_CUSTOMER = gql`
+  mutation UpdateCustomer($customerUpdateInput: CustomerInput!) {
+    updateCustomer(customerUpdateInput: $customerUpdateInput) {
+      id
+      name
+      telephone
+    }
+  }
+`;
+
 export const GET_ALL_LOYALTY_PROGRAMS = gql`
   query GetAllLoyaltyPrograms {
     getAllLoyaltyPrograms {

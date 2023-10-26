@@ -2,7 +2,7 @@
 import gql from "graphql-tag";
 
 export const GET_ALL_EMPLOYEES = gql`
-  query GetAllEmployees {
+  query AllEmployees {
     allEmployees {
       id
       title
@@ -13,6 +13,20 @@ export const GET_ALL_EMPLOYEES = gql`
       number
       jobRole
       active
+      branch {
+        id
+      }
+      address {
+        id
+        houseNumber
+        street
+        city
+        district
+        postalCode
+      }
+      salaryType {
+        id
+      }
     }
   }
 `;
