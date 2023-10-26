@@ -36,7 +36,7 @@ export const DELETE_BRANCH = gql`
 
 export const UPDATE_BRANCH = gql`
   mutation UpdateBranch($branchDetails: BranchInput!) {
-    updateBranch(branchDetails: branchDetails) {
+    updateBranch(branchDetails: $branchDetails) {
       id
       name
       telephone

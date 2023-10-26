@@ -6,13 +6,26 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import PathConstants from "../../../constants/pathConstants";
+import { useMutation } from "@apollo/client";
+import { UPDATE_BRANCH } from "../../../graphql/branch";
+import { toast } from "react-toastify";
 
 export default function EditBranch() {
   const navigate = useNavigate();
   const location = useLocation();
   const branch = location.state.branch;
+  const [updateBranch, { loading }] = useMutation(UPDATE_BRANCH);
 
-  const initialValues = branch;
+  const initialValues = {
+    id: branch.id,
+    name: branch.name,
+    telephone: branch.telephone,
+    houseNumber: branch.address.houseNumber,
+    street: branch.address.street,
+    city: branch.address.city,
+    district: branch.address.district,
+    postalCode: branch.address.postalCode,
+  };
 
   const validationSchema = Yup.object({
     name: Yup.string().required("Name is required"),
@@ -26,6 +39,14 @@ export default function EditBranch() {
 
   const handleSubmit = (values) => {
     console.log(values);
+    updateBranch({
+      variables: {
+        branchDetails: values,
+      },
+    }).then((response) => {
+      console.log(response.data.UpdateBranch);
+      toast.success("Branch updated successfully");
+    });
   };
 
   return (
@@ -41,7 +62,7 @@ export default function EditBranch() {
                   </button>
                 </div>
                 <div className="text-center text-md-center mt-md-0 flex-grow-1">
-                  <h3 className="mb-0">Add Branch</h3>
+                  <h3 className="mb-0">Update Branch</h3>
                 </div>
               </div>
               <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
@@ -154,7 +175,7 @@ export default function EditBranch() {
                       </Button>
                     ) : (
                       <Button variant="primary" type="submit" className="button w-100">
-                        Add Branch
+                        Update Branch
                       </Button>
                     )}
                   </Form>
