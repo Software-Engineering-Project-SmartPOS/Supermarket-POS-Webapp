@@ -11,13 +11,14 @@ import { CREATE_PURCHASE_ORDER, GET_ACTIVE_ITEM_SUPPLIES_BY_SUPPLIER_ID, GET_ALL
 import { useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
 import Skeleton from "react-loading-skeleton";
+import { toast } from "react-toastify";
 
 export default function AddPurchaseOrder() {
   const navigate = useNavigate();
-  const { data: suppliersData, loading: suppliersLoading } = useQuery(GET_ALL_SUPPLIERS);
   const [selectedSupplier, setSelectedSupplier] = useState("");
   const [searchSupplier, setSearchSupplier] = useState("");
 
+  const { data: suppliersData, loading: suppliersLoading } = useQuery(GET_ALL_SUPPLIERS);
   const { data: itemSupplies, loading: itemsLoading } = useQuery(GET_ACTIVE_ITEM_SUPPLIES_BY_SUPPLIER_ID, {
     variables: {
       supplierId: Number(selectedSupplier.split("-")[0]),
@@ -83,8 +84,30 @@ export default function AddPurchaseOrder() {
               <Formik
                 initialValues={initialValues}
                 validationSchema={validationSchema}
-                onSubmit={(values) => {
-                  console.log(values);
+                onSubmit={(values, { resetForm }) => {
+                  createPurchaseOrder({
+                    variables: {
+                      purchaseOrderInput: {
+                        SupplierId: values.supplier,
+                        expectedDate: values.expectedDate,
+                        description: values.note,
+                        purchaseOrderItemList: values.orderItems.map((item) => ({
+                          itemId: Number(item.itemId),
+                          itemSupplyId: Number(item.itemSupplyId),
+                          quantity: Number(item.quantity),
+                        })),
+                      },
+                    },
+                  })
+                    .then((res) => {
+                      console.log(res);
+                      toast.success("Purchase order created successfully");
+                      resetForm();
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                      toast.error("Failed to create purchase order");
+                    });
                 }}
               >
                 {({ handleSubmit, handleChange, setFieldValue, values, errors, touched }) => (
@@ -179,7 +202,6 @@ export default function AddPurchaseOrder() {
                                           placeholder="Search Products"
                                           data={items}
                                           onSelect={(selectedItem) => {
-                                            console.log(selectedItem);
                                             const updatedValues = [...values.orderItems];
                                             updatedValues[index].itemId = selectedItem.item.itemId;
                                             updatedValues[index].name = selectedItem.item.value;
