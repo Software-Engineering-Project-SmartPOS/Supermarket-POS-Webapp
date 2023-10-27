@@ -76,7 +76,7 @@ function App() {
         <Route path={PathConstants.OWNER_PROFILE} element={<OwnerProfile />} />
         <Route path="*" element={<PageNotFound />} />
         <Route element={<DashboardLayout />}>
-          <Route element={<ProtectedRoutes roles={["MANAGER", "ADMIN", "CASHIER"]} />}>
+          <Route element={<ProtectedRoutes roles={["OWNER", "MANAGER", "ADMIN", "CASHIER"]} />}>
             {/* Sales */}
             <Route path={PathConstants.CHECKOUT} element={<Checkout />} />
             <Route path={PathConstants.RECEIPTS} element={<Receipts />} />

@@ -39,7 +39,7 @@ export default function SignIn() {
                         if (response.status === 200) {
                           localStorage.setItem("token", response.data.token);
                           localStorage.setItem("user", JSON.stringify(response.data.user));
-                          navigate(PathConstants.CHECKOUT);
+                          navigate(PathConstants.CATEGORIES);
                         } else {
                           toast.error("Invalid signin");
                         }
