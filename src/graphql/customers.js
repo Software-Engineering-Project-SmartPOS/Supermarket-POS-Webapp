@@ -24,12 +24,6 @@ export const ADD_CUSTOMER = gql`
       name
       telephone
       email
-      addressId
-      houseNumber
-      street
-      city
-      district
-      postalCode
       customerType
       loyaltyId
       createdDate

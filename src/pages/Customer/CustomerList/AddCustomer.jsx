@@ -53,6 +53,7 @@ export default function AddCustomer() {
                   postal_code: Yup.string().required("Required"),
                 })}
                 onSubmit={(values, { resetForm }) => {
+                  console.log(values);
                   addCustomer({
                     variables: {
                       customerInput: {
@@ -60,17 +61,18 @@ export default function AddCustomer() {
                         email: values.email,
                         telephone: values.telephone,
                         customerType: values.customer_type,
-                        houseNumber: values.house_number,
-                        street: values.address,
-                        city: values.city,
-                        district: values.district,
-                        postalCode: values.postal_code,
+                        customerAddress: {
+                          address: values.address,
+                          city: values.city,
+                          district: values.district,
+                          postalCode: values.postal_code,
+                        },
                       },
                     },
                   }).then((res) => {
                     console.log(res);
                     toast.success("Customer added successfully!");
-                    resetForm();
+                    // resetForm();
                   });
                 }}
               >
