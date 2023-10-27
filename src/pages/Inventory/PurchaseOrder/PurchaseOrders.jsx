@@ -73,7 +73,7 @@ const PurchaseOrders = () => {
                 <th>Status</th>
                 <th>Received</th>
                 <th>Expected on</th>
-                <th>Total</th>
+                {/* <th>Total</th> */}
                 <th className="text-center">Actions</th>
               </tr>
             </thead>
@@ -88,7 +88,7 @@ const PurchaseOrders = () => {
                   <td>{order.orderStatus}</td>
                   <td>{calculateReceivedProgress(order)}</td>
                   <td>{order.expectedDate}</td>
-                  <td>Rs. {order.purchaseCost}</td>
+                  {/* <td>Rs. {order.purchaseCost}</td> */}
                   <td className="text-center">
                     {/* <Button
                       variant="info"
